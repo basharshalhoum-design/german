@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unregelmäßige Verben – A2 Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+    h1, h2, p {
+      text-align: center;
+    }
+    #verb-card {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .tense-block {
+      margin-top: 15px;
+    }
+    .tense-block h3 {
+      margin-bottom: 10px;
+      font-size: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .answer-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .answer-buttons button {
+      padding: 10px 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      background: #eee;
+      cursor: pointer;
+    }
+    .answer-buttons button.correct {
+      background: #4caf50;
+      color: white;
+    }
+    .answer-buttons button.incorrect {
+      background: #f44336;
+      color: white;
+    }
+    #next-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      background: #007acc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #next-btn:hover {
+      opacity: 0.9;
+    }
+    #verb-arabic {
+      font-size: 18px;
+      color: #555;
+      margin-top: -10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧠 Unregelmäßige Verben Quiz – A2 Niveau</h1>
+<p>Wähle die richtige Präteritum- und Perfektform für das Verb.</p>
+
+<div id="verb-card">
+  <h2 id="verb-title"></h2>
+  <p id="verb-arabic"></p>
+
+  <div class="tense-block">
+    <h3>
+      Präteritum:
+      <button onclick="speak(currentVerb.praeteritum)">🔊</button>
+    </h3>
+    <div id="praeteritum-buttons" class="answer-buttons"></div>
+  </div>
+
+  <div class="tense-block">
+    <h3>
+      Perfekt:
+      <button onclick="speak(currentVerb.perfekt)">🔊</button>
+    </h3>
+    <div id="perfekt-buttons" class="answer-buttons"></div>
+  </div>
+
+  <button id="next-btn" onclick="nextVerb()">Next</button>
+</div>
+
+<script>
+const verbs = [
+  { infinitive: "bringen", praeteritum: "brachte", perfekt: "hat gebracht", arabic: "يجلب" },
+  { infinitive: "denken", praeteritum: "dachte", perfekt: "hat gedacht", arabic: "يفكر" },
+  { infinitive: "kennen", praeteritum: "kannte", perfekt: "hat gekannt", arabic: "يعرف (شخص)" },
+  { infinitive: "wissen", praeteritum: "wusste", perfekt: "hat gewusst", arabic: "يعرف (معلومة)" },
+  { infinitive: "nennen", praeteritum: "nannte", perfekt: "hat genannt", arabic: "يسمي" },
+  { infinitive: "rennen", praeteritum: "rannte", perfekt: "ist gerannt", arabic: "يركض" },
+  { infinitive: "stehen", praeteritum: "stand", perfekt: "hat gestanden", arabic: "يقف" },
+  { infinitive: "tun", praeteritum: "tat", perfekt: "hat getan", arabic: "يفعل" },
+  { infinitive: "gehen", praeteritum: "ging", perfekt: "ist gegangen", arabic: "يذهب" },
+  { infinitive: "kommen", praeteritum: "kam", perfekt: "ist gekommen", arabic: "يأتي" },
+  { infinitive: "finden", praeteritum: "fand", perfekt: "hat gefunden", arabic: "يجد" },
+  { infinitive: "nehmen", praeteritum: "nahm", perfekt: "hat genommen", arabic: "يأخذ" },
+  { infinitive: "vergessen", praeteritum: "vergaß", perfekt: "hat vergessen", arabic: "ينسى" },
+  { infinitive: "bitten", praeteritum: "bat", perfekt: "hat gebeten", arabic: "يطلب" },
+  { infinitive: "abschneiden", praeteritum: "schnitt ab", perfekt: "hat abgeschnitten", arabic: "يقطع / ينجح" },
+  { infinitive: "beginnen", praeteritum: "begann", perfekt: "hat begonnen", arabic: "يبدأ" },
+  { infinitive: "verlieren", praeteritum: "verlor", perfekt: "hat verloren", arabic: "يخسر / يفقد" },
+  { infinitive: "versprechen", praeteritum: "versprach", perfekt: "hat versprochen", arabic: "يَعِد" },
+  { infinitive: "empfehlen", praeteritum: "empfahl", perfekt: "hat empfohlen", arabic: "يُوصي / ينصح" },
+  { infinitive: "bekommen", praeteritum: "bekam", perfekt: "hat bekommen", arabic: "يحصل على" },
+  { infinitive: "schreiben", praeteritum: "schrieb", perfekt: "hat geschrieben", arabic: "يكتب" },
+  { infinitive: "lesen", praeteritum: "las", perfekt: "hat gelesen", arabic: "يقرأ" },
+  { infinitive: "sehen", praeteritum: "sah", perfekt: "hat gesehen", arabic: "يرى" },
+  { infinitive: "sprechen", praeteritum: "sprach", perfekt: "hat gesprochen", arabic: "يتحدث" },
+  { infinitive: "helfen", praeteritum: "half", perfekt: "hat geholfen", arabic: "يساعد" }
+];
+
+let currentIndex = 0;
+let currentVerb = null;
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function speak(text) {
+  const voices = speechSynthesis.getVoices();
+  const germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "de-DE";
+  if (germanVoice) {
+    utterance.voice = germanVoice;
+  }
+  speechSynthesis.speak(utterance);
+}
+
+function loadVerb(index) {
+  currentVerb = verbs[index];
+  const verb = currentVerb;
+  document.getElementById("verb-title").textContent = verb.infinitive;
+  document.getElementById("verb-arabic").textContent = verb.arabic;
+
+  const praeteritumOptions = shuffle([verb.praeteritum, ...verbs.map(v => v.praeteritum).filter(f => f !== verb.praeteritum).slice(0, 3)]);
+  const perfektOptions = shuffle([verb.perfekt, ...verbs.map(v => v.perfekt).filter(f => f !== verb.perfekt).slice(0, 3)]);
+
+  const praeteritumContainer = document.getElementById("praeteritum-buttons");
+  const perfektContainer = document.getElementById("perfekt-buttons");
+
+  praeteritumContainer.innerHTML = "";
+  perfektContainer.innerHTML = "";
+
+  praeteritumOptions.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => {
+      if (opt === verb.praeteritum) {
+        btn.className = "correct";
+      } else {
+        btn.className = "incorrect";
+        highlightCorrect(praeteritumContainer, verb.praeteritum);
+      }
+      disableButtons(praeteritumContainer);
+    };
+    praeteritumContainer.appendChild(btn);
+  });
+
+  perfektOptions.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => {
+      if (opt === verb.perfekt) {
+        btn.className = "correct";
+      } else {
+        btn.className = "incorrect";
+        highlightCorrect(perfektContainer, verb.perfekt);
+      }
+      disableButtons(perfektContainer);
+    };
+    perfektContainer.appendChild(btn);
+  });
+}
+
+function highlightCorrect(container, correctValue) {
+  Array.from(container.children).forEach(btn => {
+    if (btn.textContent === correctValue) {
+      btn.classList.add("correct");
+    }
+  });
+}
+
+function disableButtons(container) {
+  Array.from(container.children).forEach(btn => btn.disabled = true);
+}
+
+function nextVerb() {
+  currentIndex = (currentIndex + 1) % verbs.length;
+  loadVerb(currentIndex);
+}
+
+loadVerb(currentIndex);
+</script>
+
+</body>
+</html>
