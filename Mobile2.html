@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Verb Quiz – Ein Verb pro Seite</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      color: #2c3e50;
+    }
+    h2 {
+      text-align: center;
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    p {
+      text-align: center;
+      font-size: 16px;
+    }
+    #verb-card {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 10px 0;
+      border-radius: 6px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    select {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: white;
+    }
+    button {
+      width: 48%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 15px;
+      margin-right: 2%;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #007acc;
+      color: white;
+    }
+    button:last-child {
+      margin-right: 0;
+      background: #555;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    .feedback {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧩 Verb Quiz – Ein Verb pro Seite</h1>
+<p>Wähle die richtige Präteritum- und Perfektform für das Verb.</p>
+
+<div id="verb-card">
+  <h2 id="verb-title"></h2>
+  <img id="verb-image" src="images/placeholder.jpg" alt="Verb Illustration">
+  
+  <label for="praeteritum-select">Präteritum:</label>
+  <select id="praeteritum-select"></select>
+
+  <label for="perfekt-select">Perfekt:</label>
+  <select id="perfekt-select"></select>
+
+  <div style="display: flex; justify-content: space-between;">
+    <button onclick="checkVerb()">Check</button>
+    <button onclick="nextVerb()">Next</button>
+  </div>
+
+  <div id="verb-feedback" class="feedback"></div>
+</div>
+
+<script>
+const verbs = [
+  { infinitive: "arbeiten", praeteritum: "arbeitete", perfekt: "gearbeitet" },
+  { infinitive: "lernen", praeteritum: "lernte", perfekt: "gelernt" },
+  { infinitive: "spielen", praeteritum: "spielte", perfekt: "gespielt" },
+  { infinitive: "fragen", praeteritum: "fragte", perfekt: "gefragt" },
+  { infinitive: "machen", praeteritum: "machte", perfekt: "gemacht" },
+  { infinitive: "leben", praeteritum: "lebte", perfekt: "gelebt" },
+  { infinitive: "wohnen", praeteritum: "wohnte", perfekt: "gewohnt" },
+  { infinitive: "kaufen", praeteritum: "kaufte", perfekt: "gekauft" },
+  { infinitive: "reisen", praeteritum: "reiste", perfekt: "gereist" },
+  { infinitive: "öffnen", praeteritum: "öffnete", perfekt: "geöffnet" },
+  { infinitive: "kochen", praeteritum: "kochte", perfekt: "gekocht" },
+  { infinitive: "tanzen", praeteritum: "tanzte", perfekt: "getanzt" },
+  { infinitive: "warten", praeteritum: "wartete", perfekt: "gewartet" },
+  { infinitive: "putzen", praeteritum: "putzte", perfekt: "geputzt" },
+  { infinitive: "antworten", praeteritum: "antwortete", perfekt: "geantwortet" },
+  { infinitive: "glauben", praeteritum: "glaubte", perfekt: "geglaubt" },
+  { infinitive: "reden", praeteritum: "redete", perfekt: "geredet" },
+  { infinitive: "sagen", praeteritum: "sagte", perfekt: "gesagt" },
+  { infinitive: "bauen", praeteritum: "baute", perfekt: "gebaut" },
+  { infinitive: "erklären", praeteritum: "erklärte", perfekt: "erklärt" },
+  { infinitive: "hören", praeteritum: "hörte", perfekt: "gehört" },
+  { infinitive: "feiern", praeteritum: "feierte", perfekt: "gefeiert" },
+  { infinitive: "lachen", praeteritum: "lachte", perfekt: "gelacht" },
+  { infinitive: "zeichnen", praeteritum: "zeichnete", perfekt: "gezeichnet" },
+  { infinitive: "telefonieren", praeteritum: "telefonierte", perfekt: "telefoniert" }
+];
+
+let currentIndex = 0;
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function loadVerb(index) {
+  const verb = verbs[index];
+  document.getElementById("verb-title").textContent = verb.infinitive;
+  document.getElementById("verb-image").src = `images/${verb.infinitive}.jpg`;
+
+  const praeteritumOptions = shuffle([verb.praeteritum, ...verbs.map(v => v.praeteritum).filter(f => f !== verb.praeteritum).slice(0, 3)]);
+  const perfektOptions = shuffle([verb.perfekt, ...verbs.map(v => v.perfekt).filter(f => f !== verb.perfekt).slice(0, 3)]);
+
+  document.getElementById("praeteritum-select").innerHTML = praeteritumOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("");
+  document.getElementById("perfekt-select").innerHTML = perfektOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("");
+
+  document.getElementById("verb-feedback").textContent = "";
+  document.getElementById("verb-feedback").className = "feedback";
+}
+
+function checkVerb() {
+  const verb = verbs[currentIndex];
+  const selectedPraeteritum = document.getElementById("praeteritum-select").value;
+  const selectedPerfekt = document.getElementById("perfekt-select").value;
+  const feedback = document.getElementById("verb-feedback");
+
+  if (selectedPraeteritum === verb.praeteritum && selectedPerfekt === verb.perfekt) {
+    feedback.textContent = "✅ Richtig!";
+    feedback.className = "feedback correct";
+  } else {
+    feedback.textContent = `❌ Falsch – ${verb.praeteritum}, ${verb.perfekt}`;
+    feedback.className = "feedback incorrect";
+  }
+}
+
+function nextVerb() {
+  currentIndex = (currentIndex + 1) % verbs.length;
+  loadVerb(currentIndex);
+}
+
+loadVerb(currentIndex);
+</script>
+
+</body>
+</html>
