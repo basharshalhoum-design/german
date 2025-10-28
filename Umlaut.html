@@ -131,8 +131,14 @@ function shuffle(array) {
 }
 
 function speak(text) {
+  const voices = speechSynthesis.getVoices();
+  const germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
+
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "de-DE";
+  if (germanVoice) {
+    utterance.voice = germanVoice;
+  }
   speechSynthesis.speak(utterance);
 }
 
@@ -204,3 +210,4 @@ loadVerb(currentIndex);
 
 </body>
 </html>
+
