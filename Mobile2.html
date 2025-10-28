@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Verb Quiz – Button Auswahl</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
+      padding: 10px;
       background: #f9f9f9;
     }
     h1, h2, p {
       text-align: center;
     }
     #verb-card {
-      max-width: 100%;
-      margin: 0;
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
       background: #fff;
-      padding: 15px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
@@ -41,8 +42,8 @@
       justify-content: center;
     }
     .answer-buttons button {
-      padding: 8px 12px;
-      font-size: 18px;
+      padding: 10px 14px;
+      font-size: 16px;
       border: none;
       border-radius: 4px;
       background: #eee;
@@ -59,8 +60,8 @@
     #next-btn {
       margin-top: 20px;
       width: 100%;
-      padding: 10px;
-      font-size: 16px;
+      padding: 12px;
+      font-size: 18px;
       background: #007acc;
       color: white;
       border: none;
@@ -69,6 +70,12 @@
     }
     #next-btn:hover {
       opacity: 0.9;
+    }
+    #verb-arabic {
+      font-size: 18px;
+      color: #555;
+      margin-top: -10px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -79,6 +86,7 @@
 
 <div id="verb-card">
   <h2 id="verb-title"></h2>
+  <p id="verb-arabic"></p>
   <img id="verb-image" src="images/placeholder.jpg" alt="Verb Illustration">
 
   <div class="tense-block">
@@ -96,31 +104,31 @@
 
 <script>
 const verbs = [
-  { infinitive: "arbeiten", praeteritum: "arbeitete", perfekt: "gearbeitet" },
-  { infinitive: "lernen", praeteritum: "lernte", perfekt: "gelernt" },
-  { infinitive: "spielen", praeteritum: "spielte", perfekt: "gespielt" },
-  { infinitive: "fragen", praeteritum: "fragte", perfekt: "gefragt" },
-  { infinitive: "machen", praeteritum: "machte", perfekt: "gemacht" },
-  { infinitive: "leben", praeteritum: "lebte", perfekt: "gelebt" },
-  { infinitive: "wohnen", praeteritum: "wohnte", perfekt: "gewohnt" },
-  { infinitive: "kaufen", praeteritum: "kaufte", perfekt: "gekauft" },
-  { infinitive: "reisen", praeteritum: "reiste", perfekt: "gereist" },
-  { infinitive: "öffnen", praeteritum: "öffnete", perfekt: "geöffnet" },
-  { infinitive: "kochen", praeteritum: "kochte", perfekt: "gekocht" },
-  { infinitive: "tanzen", praeteritum: "tanzte", perfekt: "getanzt" },
-  { infinitive: "warten", praeteritum: "wartete", perfekt: "gewartet" },
-  { infinitive: "putzen", praeteritum: "putzte", perfekt: "geputzt" },
-  { infinitive: "antworten", praeteritum: "antwortete", perfekt: "geantwortet" },
-  { infinitive: "glauben", praeteritum: "glaubte", perfekt: "geglaubt" },
-  { infinitive: "reden", praeteritum: "redete", perfekt: "geredet" },
-  { infinitive: "sagen", praeteritum: "sagte", perfekt: "gesagt" },
-  { infinitive: "bauen", praeteritum: "baute", perfekt: "gebaut" },
-  { infinitive: "erklären", praeteritum: "erklärte", perfekt: "erklärt" },
-  { infinitive: "hören", praeteritum: "hörte", perfekt: "gehört" },
-  { infinitive: "feiern", praeteritum: "feierte", perfekt: "gefeiert" },
-  { infinitive: "lachen", praeteritum: "lachte", perfekt: "gelacht" },
-  { infinitive: "zeichnen", praeteritum: "zeichnete", perfekt: "gezeichnet" },
-  { infinitive: "telefonieren", praeteritum: "telefonierte", perfekt: "telefoniert" }
+  { infinitive: "arbeiten", praeteritum: "arbeitete", perfekt: "gearbeitet", arabic: "يعمل" },
+  { infinitive: "lernen", praeteritum: "lernte", perfekt: "gelernt", arabic: "يتعلم" },
+  { infinitive: "spielen", praeteritum: "spielte", perfekt: "gespielt", arabic: "يلعب" },
+  { infinitive: "fragen", praeteritum: "fragte", perfekt: "gefragt", arabic: "يسأل" },
+  { infinitive: "machen", praeteritum: "machte", perfekt: "gemacht", arabic: "يفعل / يصنع" },
+  { infinitive: "leben", praeteritum: "lebte", perfekt: "gelebt", arabic: "يعيش" },
+  { infinitive: "wohnen", praeteritum: "wohnte", perfekt: "gewohnt", arabic: "يسكن" },
+  { infinitive: "kaufen", praeteritum: "kaufte", perfekt: "gekauft", arabic: "يشتري" },
+  { infinitive: "reisen", praeteritum: "reiste", perfekt: "gereist", arabic: "يسافر" },
+  { infinitive: "öffnen", praeteritum: "öffnete", perfekt: "geöffnet", arabic: "يفتح" },
+  { infinitive: "kochen", praeteritum: "kochte", perfekt: "gekocht", arabic: "يطبخ" },
+  { infinitive: "tanzen", praeteritum: "tanzte", perfekt: "getanzt", arabic: "يرقص" },
+  { infinitive: "warten", praeteritum: "wartete", perfekt: "gewartet", arabic: "ينتظر" },
+  { infinitive: "putzen", praeteritum: "putzte", perfekt: "geputzt", arabic: "ينظف" },
+  { infinitive: "antworten", praeteritum: "antwortete", perfekt: "geantwortet", arabic: "يجيب" },
+  { infinitive: "glauben", praeteritum: "glaubte", perfekt: "geglaubt", arabic: "يعتقد / يؤمن" },
+  { infinitive: "reden", praeteritum: "redete", perfekt: "geredet", arabic: "يتحدث" },
+  { infinitive: "sagen", praeteritum: "sagte", perfekt: "gesagt", arabic: "يقول" },
+  { infinitive: "bauen", praeteritum: "baute", perfekt: "gebaut", arabic: "يبني" },
+  { infinitive: "erklären", praeteritum: "erklärte", perfekt: "erklärt", arabic: "يشرح" },
+  { infinitive: "hören", praeteritum: "hörte", perfekt: "gehört", arabic: "يسمع" },
+  { infinitive: "feiern", praeteritum: "feierte", perfekt: "gefeiert", arabic: "يحتفل" },
+  { infinitive: "lachen", praeteritum: "lachte", perfekt: "gelacht", arabic: "يضحك" },
+  { infinitive: "zeichnen", praeteritum: "zeichnete", perfekt: "gezeichnet", arabic: "يرسم" },
+  { infinitive: "telefonieren", praeteritum: "telefonierte", perfekt: "telefoniert", arabic: "يتصل هاتفياً" }
 ];
 
 let currentIndex = 0;
@@ -136,6 +144,7 @@ function shuffle(array) {
 function loadVerb(index) {
   const verb = verbs[index];
   document.getElementById("verb-title").textContent = verb.infinitive;
+  document.getElementById("verb-arabic").textContent = verb.arabic;
   document.getElementById("verb-image").src = `images/${verb.infinitive}.jpg`;
 
   const praeteritumOptions = shuffle([verb.praeteritum, ...verbs.map(v => v.praeteritum).filter(f => f !== verb.praeteritum).slice(0, 3)]);
@@ -151,7 +160,12 @@ function loadVerb(index) {
     const btn = document.createElement("button");
     btn.textContent = opt;
     btn.onclick = () => {
-      btn.className = opt === verb.praeteritum ? "correct" : "incorrect";
+      if (opt === verb.praeteritum) {
+        btn.className = "correct";
+      } else {
+        btn.className = "incorrect";
+        highlightCorrect(praeteritumContainer, verb.praeteritum);
+      }
       disableButtons(praeteritumContainer);
     };
     praeteritumContainer.appendChild(btn);
@@ -161,10 +175,24 @@ function loadVerb(index) {
     const btn = document.createElement("button");
     btn.textContent = opt;
     btn.onclick = () => {
-      btn.className = opt === verb.perfekt ? "correct" : "incorrect";
+      if (opt === verb.perfekt) {
+        btn.className = "correct";
+      } else {
+        btn.className = "incorrect";
+        btn.className = "incorrect";
+        highlightCorrect(perfektContainer, verb.perfekt);
+      }
       disableButtons(perfektContainer);
     };
     perfektContainer.appendChild(btn);
+  });
+}
+
+function highlightCorrect(container, correctValue) {
+  Array.from(container.children).forEach(btn => {
+    if (btn.textContent === correctValue) {
+      btn.classList.add("correct");
+    }
   });
 }
 
@@ -182,5 +210,3 @@ loadVerb(currentIndex);
 
 </body>
 </html>
-
-
