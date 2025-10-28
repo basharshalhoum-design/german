@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>German Verb Trainer – Responsive</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 22px;
+      text-align: center;
+    }
+    p {
+      text-align: center;
+      font-size: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+    select, input[type="text"], button {
+      font-size: 16px;
+      padding: 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background: #007acc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .feedback {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+      thead {
+        display: none;
+      }
+      tr {
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background: #fff;
+      }
+      td {
+        text-align: left;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+      }
+      td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🧩 Verb Puzzle Grid – A2 Verben</h1>
+  <p>Wähle die richtige Präteritum- und Perfektform für jedes Verb.</p>
+  <table id="verb-table">
+    <thead>
+      <tr>
+        <th>Infinitiv</th>
+        <th>Präteritum</th>
+        <th>Perfekt</th>
+        <th>Check</th>
+        <th>Feedback</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+<script>
+const verbs = [
+  { infinitive: "arbeiten", praeteritum: "arbeitete", perfekt: "gearbeitet" },
+  { infinitive: "lernen", praeteritum: "lernte", perfekt: "gelernt" },
+  { infinitive: "spielen", praeteritum: "spielte", perfekt: "gespielt" },
+  { infinitive: "fragen", praeteritum: "fragte", perfekt: "gefragt" },
+  { infinitive: "machen", praeteritum: "machte", perfekt: "gemacht" },
+  { infinitive: "leben", praeteritum: "lebte", perfekt: "gelebt" },
+  { infinitive: "wohnen", praeteritum: "wohnte", perfekt: "gewohnt" },
+  { infinitive: "kaufen", praeteritum: "kaufte", perfekt: "gekauft" },
+  { infinitive: "reisen", praeteritum: "reiste", perfekt: "gereist" },
+  { infinitive: "öffnen", praeteritum: "öffnete", perfekt: "geöffnet" },
+  { infinitive: "kochen", praeteritum: "kochte", perfekt: "gekocht" },
+  { infinitive: "tanzen", praeteritum: "tanzte", perfekt: "getanzt" },
+  { infinitive: "warten", praeteritum: "wartete", perfekt: "gewartet" },
+  { infinitive: "putzen", praeteritum: "putzte", perfekt: "geputzt" },
+  { infinitive: "antworten", praeteritum: "antwortete", perfekt: "geantwortet" },
+  { infinitive: "glauben", praeteritum: "glaubte", perfekt: "geglaubt" },
+  { infinitive: "reden", praeteritum: "redete", perfekt: "geredet" },
+  { infinitive: "sagen", praeteritum: "sagte", perfekt: "gesagt" },
+  { infinitive: "bauen", praeteritum: "baute", perfekt: "gebaut" },
+  { infinitive: "erklären", praeteritum: "erklärte", perfekt: "erklärt" },
+  { infinitive: "hören", praeteritum: "hörte", perfekt: "gehört" },
+  { infinitive: "feiern", praeteritum: "feierte", perfekt: "gefeiert" },
+  { infinitive: "lachen", praeteritum: "lachte", perfekt: "gelacht" },
+  { infinitive: "zeichnen", praeteritum: "zeichnete", perfekt: "gezeichnet" },
+  { infinitive: "telefonieren", praeteritum: "telefonierte", perfekt: "telefoniert" }
+];
+
+// Puzzle Grid
+const tbody = document.querySelector("#verb-table tbody");
+
+verbs.forEach((verb, index) => {
+  const row = document.createElement("tr");
+  const praeteritumOptions = shuffle([verb.praeteritum, ...verbs.map(v => v.praeteritum).filter(f => f !== verb.praeteritum).slice(0, 3)]);
+  const perfektOptions = shuffle([verb.perfekt, ...verbs.map(v => v.perfekt).filter(f => f !== verb.perfekt).slice(0, 3)]);
+
+  row.innerHTML = `
+    <td data-label="Infinitiv">${verb.infinitive}</td>
+    <td data-label="Präteritum"><select id="praeteritum-${index}">${praeteritumOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("")}</select></td>
+    <td data-label="Perfekt"><select id="perfekt-${index}">${perfektOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("")}</select></td>
+    <td data-label="Check"><button onclick="check(${index})">Check</button></td>
+    <td data-label="Feedback"><div class="feedback" id="feedback-${index}"></div></td>
+  `;
+  tbody.appendChild(row);
+});
+
+function check(index) {
+  const selectedPraeteritum = document.getElementById(`praeteritum-${index}`).value.trim();
+  const selectedPerfekt = document.getElementById(`perfekt-${index}`).value.trim();
+  const feedback = document.getElementById(`feedback-${index}`);
+  const verb = verbs[index];
+
+  if (selectedPraeteritum === verb.praeteritum && selectedPerfekt === verb.perfekt) {
+    feedback.textContent = "✅ Richtig!";
+    feedback.className = "feedback correct";
+  } else {
+    feedback.textContent = `❌ Falsch – ${verb.praeteritum}, ${verb.perfekt}`;
+    feedback.className = "feedback incorrect";
+  }
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+// Dice Game
+function tenseKey(tense) {
+  return tense === "Präteritum" ? "praeteritum" : "perfekt";
+}
+
+let currentVerb = null;
+let currentTense = null;
+
+function rollDice() {
+  const verbIndex = Math.floor(Math.random() * verbs.length);
+  const tenseIndex = Math.floor(Math.random() * 2);
+  currentVerb = verbs[verbIndex];
+  currentTense = ["Präteritum", "Perfekt"][tenseIndex];
+
+  document.getElementById("verb").textContent = currentVerb.infinitive;
+  document.getElementById("tense").textContent = currentTense;
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("question-area").style.display = "block";
+
+  const correctForm = currentVerb[tenseKey(currentTense)];
+  const distractors = verbs.map(v => v[tenseKey(currentTense)]);
+  const options = shuffle([correctForm, ...distractors.filter(f => f !== correctForm).slice(0, 3)]);
+
+  const select = document.getElementById("answer-options");
+  select.innerHTML = options.map(opt => `<option value="${opt}">${opt}</option>`).join("");
+}
+
+function checkAnswer() {
+  const selected = document.getElementById("answer-options").value;
+  const correct = currentVerb[tenseKey(currentTense)];
+  const feedback = document.getElementById("feedback");
+
+  if (selected === correct) {
+    feedback.textContent = "✅ Richtig!";
+    feedback.className = "feedback correct";
+  } else {
+    feedback.textContent = `❌ Falsch – Richtige Antwort: ${correct}`;
+    feedback.className = "feedback incorrect";
+  }
+}
+</script>
+<h1>🎲 Verb Dice Game – A2 Verben</h1>
+<p>Klicke auf „Würfeln“, um ein Verb und eine Zeitform zu erhalten. Wähle die richtige Form!</p>
+<div class="dice" id="dice-roll">🎲</div>
+<button onclick="rollDice()">🎲 Würfeln</button>
+<div class="question" id="question-area" style="display:none;">
+  <p><strong>Verb:</strong> <span id="verb"></span> | <strong>Zeit:</strong> <span id="tense"></span></p>
+  <select id="answer-options"></select>
+  <button onclick="checkAnswer()">Check</button>
+  <div class="feedback" id="feedback"></div>
+</div>
+
+<h1>✍️ Verb Typing Grid – A2 Verben</h1>
+<p>Gib die richtige Präteritum- und Perfektform für jedes Verb ein.</p>
+<table id="typing-table">
+  <thead>
+    <tr>
+      <th>Infinitiv</th>
+      <th>Präteritum</th>
+      <th>Perfekt</th>
+      <th>Check</th>
+      <th>Feedback</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+  const typingTable = document.querySelector("#typing-table tbody");
+
+  verbs.forEach((verb, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td data-label="Infinitiv">${verb.infinitive}</td>
+      <td data-label="Präteritum"><input type="text" id="type-praeteritum-${index}" /></td>
+      <td data-label="Perfekt"><input type="text" id="type-perfekt-${index}" /></td>
+      <td data-label="Check"><button onclick="checkTyping(${index})">Check</button></td>
+      <td data-label="Feedback"><div class="feedback" id="type-feedback-${index}"></div></td>
+    `;
+    typingTable.appendChild(row);
+  });
+
+  function checkTyping(index) {
+    const inputPraeteritum = document.getElementById(`type-praeteritum-${index}`).value.trim().toLowerCase();
+    const inputPerfekt = document.getElementById(`type-perfekt-${index}`).value.trim().toLowerCase();
+    const feedback = document.getElementById(`type-feedback-${index}`);
+    const verb = verbs[index];
+
+    const correctPraeteritum = verb.praeteritum.toLowerCase();
+    const correctPerfekt = verb.perfekt.toLowerCase();
+
+    if (inputPraeteritum === correctPraeteritum && inputPerfekt === correctPerfekt) {
+      feedback.textContent = "✅ Richtig!";
+      feedback.className = "feedback correct";
+    } else {
+      feedback.textContent = `❌ Falsch – ${verb.praeteritum}, ${verb.perfekt}`;
+      feedback.className = "feedback incorrect";
+    }
+  }
+</script>
+
+</body>
+</html>
