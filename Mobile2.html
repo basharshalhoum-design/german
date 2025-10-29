@@ -77,12 +77,31 @@
       margin-top: -10px;
       margin-bottom: 10px;
     }
+    .home-button {
+  display: block;
+  margin: 20px auto;         /* centers horizontally */
+  max-width: 300px;          /* optional: limits width */
+  padding: 12px 20px;
+  background: #007acc;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.home-button:hover {
+  background: #005fa3;
+}
+
   </style>
 </head>
 <body>
 
 <h1>🧩 Verb Quiz – Ein Verb pro Seite</h1>
 <p>Wähle die richtige Präteritum- und Perfektform für das Verb.</p>
+  <a href="https://basharshalhoum-design.github.io/german/Landing.html" class="home-button">🏠 Zur Startseite</a>
+
 
 <div id="verb-card">
   <h2 id="verb-title"></h2>
@@ -210,3 +229,4 @@ loadVerb(currentIndex);
 
 </body>
 </html>
+
