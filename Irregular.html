@@ -28,10 +28,6 @@
     .tense-block h3 {
       margin-bottom: 10px;
       font-size: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
     }
     .answer-buttons {
       display: flex;
@@ -75,36 +71,48 @@
       margin-top: -10px;
       margin-bottom: 10px;
     }
+.home-button {
+  display: block;
+  margin: 20px auto;         /* centers horizontally */
+  max-width: 150px;          /* optional: limits width */
+  padding: 8px 12px;
+  background: #007acc;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.home-button:hover {
+  background: #005fa3;
+}
+
   </style>
 </head>
 <body>
 
 <h1>🧠 Unregelmäßige Verben Quiz – A2 Niveau</h1>
 <p>Wähle die richtige Präteritum- und Perfektform für das Verb.</p>
+<a href="index.html" class="home-button">🏠 الصفحة الرئيسية</a>
+
 
 <div id="verb-card">
   <h2 id="verb-title"></h2>
   <p id="verb-arabic"></p>
 
   <div class="tense-block">
-    <h3>
-      Präteritum:
-      <button onclick="speak(currentVerb.praeteritum)">🔊</button>
-    </h3>
+    <h3>Präteritum:</h3>
     <div id="praeteritum-buttons" class="answer-buttons"></div>
   </div>
 
   <div class="tense-block">
-    <h3>
-      Perfekt:
-      <button onclick="speak(currentVerb.perfekt)">🔊</button>
-    </h3>
+    <h3>Perfekt:</h3>
     <div id="perfekt-buttons" class="answer-buttons"></div>
   </div>
 
   <button id="next-btn" onclick="nextVerb()">Next</button>
 </div>
-
 <script>
 const verbs = [
   { infinitive: "bringen", praeteritum: "brachte", perfekt: "hat gebracht", arabic: "يجلب" },
@@ -136,18 +144,19 @@ const verbs = [
 
 let currentIndex = 0;
 let currentVerb = null;
+let germanVoice = null;
 
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+function loadVoices() {
+  const voices = speechSynthesis.getVoices();
+  germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
+}
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+} else {
+  loadVoices();
 }
 
 function speak(text) {
-  const voices = speechSynthesis.getVoices();
-  const germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "de-DE";
   if (germanVoice) {
@@ -156,6 +165,13 @@ function speak(text) {
   speechSynthesis.speak(utterance);
 }
 
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 function loadVerb(index) {
   currentVerb = verbs[index];
   const verb = currentVerb;
@@ -177,6 +193,7 @@ function loadVerb(index) {
     btn.onclick = () => {
       if (opt === verb.praeteritum) {
         btn.className = "correct";
+        speak(verb.praeteritum);
       } else {
         btn.className = "incorrect";
         highlightCorrect(praeteritumContainer, verb.praeteritum);
@@ -192,6 +209,7 @@ function loadVerb(index) {
     btn.onclick = () => {
       if (opt === verb.perfekt) {
         btn.className = "correct";
+        speak(verb.perfekt);
       } else {
         btn.className = "incorrect";
         highlightCorrect(perfektContainer, verb.perfekt);
@@ -221,6 +239,5 @@ function nextVerb() {
 
 loadVerb(currentIndex);
 </script>
-
 </body>
 </html>
