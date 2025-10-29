@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjektive Übungen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .menu-card {
+            max-width: 600px;
+            width: 90%;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: 2px solid #e5e7eb;
+        }
+        .menu-item:hover {
+            background-color: #e3f2fd; /* Light blue hover */
+            border-color: #90caf9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        .menu-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: #0056b3;
+        }
+        .back-link {
+            display: block;
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #0056b3;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .back-link:hover {
+            color: #004080;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-card">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Adjektive Übungen (A1/A2)</h1>
+        <p class="text-center text-gray-600 mb-8">Wählen Sie die Verb-Übung, die Sie machen möchten:</p>
+
+        <!-- 1. List View (Flashcards / List) -->
+        <a href="verbs_flashcards.html" class="menu-item bg-blue-50 text-gray-800">
+            <span class="menu-icon">📖</span>
+            <div>
+                <div class="font-semibold text-lg">1. Flashcards & List View</div>
+                <div class="text-sm text-gray-600">Blättern Sie durch die 60 Adjektive in der Listenansicht (mit Audio).</div>
+            </div>
+        </a>
+
+        <!-- 2. Matching Challenge -->
+        <a href="verbs_matching.html" class="menu-item bg-green-50 text-gray-800">
+            <span class="menu-icon">🔗</span>
+            <div>
+                <div class="font-semibold text-lg">2. Matching Challenge</div>
+                <div class="text-sm text-gray-600">Interaktive Paarungsübung: Deutsche Adjektive den Übersetzungen zuordnen.</div>
+            </div>
+        </a>
+
+        <!-- 3. Multiple Choice Quiz -->
+        <a href="verbs_quiz.html" class="menu-item bg-orange-50 text-gray-800">
+            <span class="menu-icon">✅</span>
+            <div>
+                <div class="font-semibold text-lg">3. Multiple Choice Quiz</div>
+                <div class="text-sm text-gray-600">Wählen Sie die richtige Übersetzung aus vier Optionen (mit Audio).</div>
+            </div>
+        </a>
+        
+        <a href="index.html" class="back-link">← Zurück zum Hauptmenü</a>
+    </div>
+</body>
+</html>

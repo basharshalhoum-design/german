@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb Matching Challenge (Paginated)</title>
+    <style>
+        /* Base Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 1.2em;
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        /* Main Content Area */
+        .content-container {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Scoreboard & Controls */
+        .controls {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            color: #444;
+            font-weight: 600;
+        }
+        .info-box span {
+            color: #dc3545; /* Tries in red */
+            font-weight: bold;
+        }
+        
+        /* Verb Matching Container */
+        #matching-list {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden; 
+        }
+
+        /* Individual List Item (The Row) */
+        .verb-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* German and Arabic columns */
+            border-bottom: 1px solid #eee;
+            align-items: stretch; /* Makes both columns fill the height */
+        }
+        .verb-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Clickable Columns */
+        .match-column {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.1s, transform 0.1s;
+            user-select: none;
+            min-height: 50px; /* Ensure a minimum touch target size */
+        }
+        .match-column.german-word {
+            font-weight: bold;
+            color: #0056b3;
+            border-right: 1px solid #eee;
+        }
+        .match-column.arabic-translation {
+            color: #333;
+            text-align: right;
+            direction: rtl; /* Ensures proper Arabic text rendering */
+        }
+        
+        /* State Styles */
+        .match-column:hover:not(.matched):not(.selected) {
+            background-color: #f5f5f5;
+        }
+        
+        .match-column.selected {
+            background-color: #007bff;
+            color: white !important;
+            transform: scale(1.02);
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        
+        .match-column.matched {
+            background-color: #28a745; /* Green for matched */
+            color: white !important;
+            cursor: default;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .match-column.incorrect {
+            background-color: #dc3545; /* Red for incorrect guess */
+            color: white !important;
+            animation: shake 0.5s;
+        }
+        
+        /* Pagination Controls (Reused) */
+        .pagination-controls {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .page-info {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.95em;
+        }
+        .nav-button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .nav-button:hover:not(:disabled) {
+            background-color: #004080;
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .nav-button#next-button:disabled {
+            background-color: #ffc107; /* Highlight next when available */
+            color: #333;
+        }
+        .nav-button#next-button.ready {
+            background-color: #28a745;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .match-column {
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html">🏠 Hauptmenü</a>
+        <span>Nouns: Matching Challenge (2/3)</span>
+    </div>
+
+    <div class="content-container">
+        <!-- Scoreboard -->
+        <div class="controls">
+            <div class="info-box">Matches: <span id="matches-count">0</span> / 5</div>
+            <div class="info-box">Tries: <span id="tries-count">0</span></div>
+        </div>
+
+        <!-- The Matching List -->
+        <div id="matching-list">
+            <!-- Verb items will be injected here -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-controls">
+            <button id="prev-button" class="nav-button" disabled>Previous</button>
+            <div id="page-info" class="page-info">Page 1 of 12</div>
+            <button id="next-button" class="nav-button" disabled>Next</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA (Expanded to 60 verbs) ---
+       const verbData = [
+  { german: "Beruf", arabic: "مهنة" },
+  { german: "Staatsexamen", arabic: "الامتحان الحكومي" },
+  { german: "Hotelfachschule", arabic: "مدرسة إدارة الفنادق" },
+  { german: "Tradition", arabic: "تقاليد" },
+  { german: "Restaurant", arabic: "مطعم" }, // Page 1 (1–5)
+
+  { german: "Märchenbuch", arabic: "كتاب قصص خيالية" },
+  { german: "Erfahrung", arabic: "خبرة" },
+  { german: "Konkurrenz", arabic: "منافسة" },
+  { german: "Kredit", arabic: "قرض" },
+  { german: "Zivildienststelle", arabic: "وظيفة الخدمة المدنية" }, // Page 2 (6–10)
+
+  { german: "Sprachkenntnisse", arabic: "مهارات لغوية" },
+  { german: "Lehrerin", arabic: "معلمة" },
+  { german: "Kind", arabic: "طفل" },
+  { german: "Mann", arabic: "رجل / زوج" },
+  { german: "Sohn", arabic: "ابن" }, // Page 3 (11–15)
+
+  { german: "Mutti", arabic: "أمي" },
+  { german: "Examen", arabic: "امتحان" },
+  { german: "Assistentin", arabic: "مساعدة" },
+  { german: "Stelle", arabic: "وظيفة / منصب" },
+  { german: "Auslandsabteilung", arabic: "قسم الشؤون الخارجية" }, // Page 4 (16–20)
+
+  { german: "Wohnung", arabic: "شقة" },
+  { german: "Erziehungsurlaub", arabic: "إجازة تربية الأطفال" },
+  { german: "Kinderbuch", arabic: "كتاب أطفال" },
+  { german: "Einrichtung", arabic: "تجهيزات / ديكور" },
+  { german: "Küche", arabic: "مطبخ" }, // Page 5 (21–25)
+
+  { german: "Aufzug", arabic: "مصعد" },
+  { german: "Hotel", arabic: "فندق" },
+  { german: "Familie", arabic: "عائلة" },
+  { german: "Blut", arabic: "دم" },
+  { german: "Vater", arabic: "أب" }, // Page 6 (26–30)
+
+  { german: "Studium", arabic: "دراسة جامعية" },
+  { german: "Wirtschaft", arabic: "الاقتصاد" },
+  { german: "Zahl", arabic: "عدد" },
+  { german: "Zimmer", arabic: "غرفة" },
+  { german: "Mädchen", arabic: "فتاة" }, // Page 7 (31–35)
+
+  { german: "Geld", arabic: "مال" } // Page 8 (36)
+];
+
+        
+        // --- GAME STATE ---
+        const VERBS_PER_PAGE = 5;
+        let currentPage = 1;
+        // This is now 60 / 5 = 12
+        const totalPages = Math.ceil(verbData.length / VERBS_PER_PAGE);
+
+        // Selection State
+        let selectedGerman = null; // Stores the DOM element of the selected German word
+        let selectedArabic = null; // Stores the DOM element of the selected Arabic word
+        let isChecking = false; // Flag to prevent rapid clicks during match check
+
+        // Score State (per-page logic simplifies for this challenge)
+        let matchesCount = 0; // Matches on the current page
+        let totalTries = 0;
+
+        // --- DOM ELEMENTS ---
+        const matchingList = document.getElementById('matching-list');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const pageInfo = document.getElementById('page-info');
+        const matchesCountDisplay = document.getElementById('matches-count');
+        const triesCountDisplay = document.getElementById('tries-count');
+        
+        // --- WEB SPEECH API SETUP (TTS ONLY) ---
+        let germanVoice = null;
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
+        }
+
+        if ('speechSynthesis' in window) {
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = loadVoices;
+            }
+            loadVoices();
+        }
+
+        function speak(text) {
+            if (!('speechSynthesis' in window)) return;
+            
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "de-DE";
+            
+            if (germanVoice) {
+                utterance.voice = germanVoice;
+            } else {
+                utterance.lang = "de-DE"; 
+            }
+            
+            speechSynthesis.speak(utterance);
+        }
+        // --- END WEB SPEECH API SETUP ---
+        
+        // --- HELPER FUNCTIONS ---
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function getPageData() {
+            const startIndex = (currentPage - 1) * VERBS_PER_PAGE;
+            const endIndex = startIndex + VERBS_PER_PAGE;
+            return verbData.slice(startIndex, endIndex);
+        }
+        
+        function updateScoreboard() {
+            matchesCountDisplay.textContent = matchesCount;
+            triesCountDisplay.textContent = totalTries;
+
+            // Check if page is complete to enable 'Next' button
+            if (matchesCount === VERBS_PER_PAGE) {
+                nextButton.disabled = (currentPage === totalPages);
+                if (!nextButton.disabled) {
+                    nextButton.classList.add('ready');
+                }
+            } else {
+                nextButton.disabled = true;
+                nextButton.classList.remove('ready');
+            }
+        }
+        
+        function updatePaginationControls() {
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            prevButton.disabled = (currentPage === 1);
+            
+            // Re-check next button status based on page completion
+            updateScoreboard();
+        }
+
+        // --- INTERACTION HANDLERS ---
+        
+        function handleGermanClick(element) {
+            if (isChecking || element.classList.contains('matched')) return;
+
+            // Clear previous German selection if different
+            if (selectedGerman && selectedGerman !== element) {
+                selectedGerman.classList.remove('selected');
+            }
+            
+            // Toggle selection
+            if (selectedGerman === element) {
+                selectedGerman.classList.remove('selected');
+                selectedGerman = null;
+            } else {
+                selectedGerman = element;
+                selectedGerman.classList.add('selected');
+                speak(element.textContent);
+                
+                // If an Arabic word is already selected, attempt match check immediately
+                if (selectedArabic) {
+                    checkMatch();
+                }
+            }
+        }
+        
+        function handleArabicClick(element) {
+            if (isChecking || element.classList.contains('matched')) return;
+
+            // Clear previous Arabic selection if different
+            if (selectedArabic && selectedArabic !== element) {
+                selectedArabic.classList.remove('selected');
+            }
+
+            // Toggle selection
+            if (selectedArabic === element) {
+                selectedArabic.classList.remove('selected');
+                selectedArabic = null;
+            } else {
+                selectedArabic = element;
+                selectedArabic.classList.add('selected');
+
+                // If a German word is already selected, attempt match check immediately
+                if (selectedGerman) {
+                    checkMatch();
+                }
+            }
+        }
+        
+        function checkMatch() {
+            if (!selectedGerman || !selectedArabic) return;
+
+            isChecking = true;
+            totalTries++;
+            
+            const germanKey = selectedGerman.dataset.matchKey;
+            const arabicKey = selectedArabic.dataset.matchKey;
+            
+            if (germanKey === arabicKey) {
+                // SUCCESS
+                matchesCount++;
+                
+                // Mark both as matched
+                selectedGerman.classList.remove('selected');
+                selectedArabic.classList.remove('selected');
+                selectedGerman.classList.add('matched');
+                selectedArabic.classList.add('matched');
+
+                // Clear selection state
+                selectedGerman = null;
+                selectedArabic = null;
+                isChecking = false;
+
+            } else {
+                // FAILURE
+                selectedGerman.classList.add('incorrect');
+                selectedArabic.classList.add('incorrect');
+                
+                // Reset after brief visual cue
+                setTimeout(() => {
+                    selectedGerman.classList.remove('selected', 'incorrect');
+                    selectedArabic.classList.remove('selected', 'incorrect');
+                    
+                    // Clear selection state
+                    selectedGerman = null;
+                    selectedArabic = null;
+                    isChecking = false;
+                }, 750);
+            }
+            
+            updateScoreboard();
+        }
+
+        // --- CORE RENDERING LOGIC ---
+
+        function renderList() {
+            matchingList.innerHTML = ''; // Clear existing list
+            
+            const currentVerbs = getPageData();
+            
+            // 1. Create two arrays for the current page: one for German, one for Arabic
+            const germanColumns = currentVerbs.map((verb, index) => ({
+                text: verb.german,
+                matchKey: verb.german, // Key is the German word itself
+                type: 'german'
+            }));
+            
+            const arabicColumns = currentVerbs.map(verb => ({
+                text: verb.arabic,
+                matchKey: verb.german, // Key is the German word to match against
+                type: 'arabic'
+            }));
+            
+            // 2. SHUFFLE the Arabic column
+            const shuffledArabic = shuffleArray(arabicColumns);
+
+            // 3. Render rows based on the fixed German order
+            germanColumns.forEach((germanData, index) => {
+                const arabicData = shuffledArabic[index];
+
+                const item = document.createElement('div');
+                item.classList.add('verb-item');
+
+                // --- Left Column (German Word) ---
+                const german = document.createElement('div');
+                german.classList.add('match-column', 'german-word');
+                german.textContent = germanData.text;
+                german.dataset.matchKey = germanData.matchKey;
+                german.onclick = () => handleGermanClick(german);
+
+                // --- Right Column (Arabic Translation - SHUFFLED) ---
+                const arabic = document.createElement('div');
+                arabic.classList.add('match-column', 'arabic-translation');
+                arabic.textContent = arabicData.text;
+                arabic.dataset.matchKey = arabicData.matchKey;
+                arabic.onclick = () => handleArabicClick(arabic);
+
+                item.appendChild(german);
+                item.appendChild(arabic);
+                matchingList.appendChild(item);
+            });
+            
+            // Check for already completed page matches (important when navigating back)
+            // This is simplified: if the page was previously completed, all match classes are set.
+            if (matchesCount === VERBS_PER_PAGE) {
+                document.querySelectorAll('.match-column').forEach(el => el.classList.add('matched'));
+            }
+
+            updatePaginationControls();
+        }
+
+        // --- NAVIGATION HANDLERS ---
+        
+        function resetPageState() {
+            selectedGerman = null;
+            selectedArabic = null;
+            isChecking = false;
+        }
+
+        function goToNextPage() {
+            if (currentPage < totalPages && matchesCount === VERBS_PER_PAGE) {
+                currentPage++;
+                matchesCount = 0; // Reset matches for the new page
+                totalTries = 0; // Reset tries for the new page
+                resetPageState();
+                renderList();
+            }
+        }
+        
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                // Note: when going back, matches are *not* automatically restored to 5/5, 
+                // but we rely on the logic in renderList to visually mark previously matched items.
+                matchesCount = 0; // Forces user to re-match if they need to check progress
+                totalTries = 0; 
+                resetPageState();
+                renderList();
+            }
+        }
+
+        // --- INITIALIZATION ---
+        prevButton.addEventListener('click', goToPrevPage);
+        nextButton.addEventListener('click', goToNextPage);
+
+        window.onload = () => {
+             // Initialize current page scores/state (assuming the first page is fresh)
+            updateScoreboard();
+            renderList();
+        }
+
+    </script>
+</body>
+</html>

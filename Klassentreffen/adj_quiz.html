@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verb Translation Quiz (Multiple Choice)</title>
+    <style>
+        /* Base Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 1.2em;
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        /* Main Content Area */
+        .content-container {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center content vertically */
+        }
+
+        /* Quiz Card */
+        #quiz-card {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Question Display */
+        #question-display {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        /* German Verb Container - NEW */
+        #german-verb-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #004080;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        #german-verb-container:hover {
+            color: #0056b3;
+        }
+        
+        /* Speaker Icon - NEW */
+        #audio-icon {
+            margin-left: 10px;
+            font-size: 0.8em;
+            color: #28a745; /* Green icon */
+            user-select: none;
+        }
+
+        #prompt-text {
+            font-size: 1.1em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Options List */
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Individual Option Button */
+        .option-button {
+            background-color: #f8f9fa;
+            border: 2px solid #ced4da;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: right;
+            direction: rtl; /* Arabic text direction */
+            font-size: 1.1em;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-weight: 500;
+        }
+        .option-button:hover:not(.correct):not(.incorrect) {
+            background-color: #e9ecef;
+            border-color: #007bff;
+        }
+        
+        /* Feedback States */
+        .option-button.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28aa4a;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
+        }
+        .option-button.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+            animation: shake 0.5s;
+        }
+        .option-button.disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* Controls and Scoreboard */
+        .controls-bottom {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 18px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .nav-button:hover:not(:disabled) {
+            background-color: #004080;
+        }
+        .nav-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #score-display {
+            font-weight: 600;
+            color: #333;
+            font-size: 1em;
+            text-align: center;
+        }
+        #score-display span {
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        /* Animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            #german-verb-container {
+                font-size: 1.8em;
+            }
+            .option-button {
+                font-size: 1em;
+                padding: 12px;
+            }
+            #quiz-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html">🏠 Hauptmenü</a>
+        <span>Nouns: Multiple Choice Quiz (3/3)</span>
+    </div>
+
+    <div class="content-container">
+        <div id="quiz-card">
+            <div id="question-display">
+                <!-- Clickable container for the verb and speaker icon -->
+                <div id="german-verb-container" onclick="speak(document.getElementById('german-verb-text').textContent)">
+                    <span id="german-verb-text">...</span>
+                    <span id="audio-icon" title="Click to hear the verb">🔊</span>
+                </div>
+                <div id="prompt-text">Choose the correct Arabic translation:</div>
+            </div>
+            
+            <div id="options-container">
+                <!-- Options will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <div class="controls-bottom">
+            <button id="prev-button" class="nav-button" disabled>Previous</button>
+            <div id="score-display">Question <span id="current-q">1</span> of <span id="total-q">60</span> | Score: <span id="correct-score">0</span></div>
+            <button id="next-button" class="nav-button" disabled>Next</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA (60 verbs) ---
+       const verbData = [
+    { german: "interessant", arabic: "مثير للاهتمام" },
+  { german: "international", arabic: "دولي" },
+  { german: "bestimmt", arabic: "محدد / معين" },
+  { german: "fremd", arabic: "أجنبي / غريب" },
+  { german: "privat", arabic: "خاص / شخصي" },
+
+  { german: "geeignet", arabic: "مناسب / ملائم" },
+  { german: "bereit", arabic: "مستعد" },
+  { german: "verheiratet", arabic: "متزوج" },
+  { german: "allein", arabic: "وحيد / بمفرده" },
+  { german: "klein", arabic: "صغير" },
+
+  { german: "groß", arabic: "كبير" },
+  { german: "kaputt", arabic: "تالف / محطم" },
+  { german: "komplett", arabic: "كامل / بالكامل" },
+  { german: "finanziell", arabic: "مالي / اقتصادي" },
+  { german: "traditionell", arabic: "تقليدي" },
+
+  { german: "wirtschaftlich", arabic: "اقتصادي" },
+  { german: "staatlich", arabic: "حكومي" },
+  { german: "zivil", arabic: "مدني" },
+  { german: "sprachlich", arabic: "لغوي" },
+  { german: "kulturell", arabic: "ثقافي" }
+];
+
+
+
+
+        // --- GAME STATE ---
+        const totalQuestions = verbData.length;
+        let currentQuestionIndex = 0; // 0-based index
+        let score = 0;
+        // Stores answer state for each question: null (unanswered), true (correct), false (incorrect)
+        let questionStates = Array(totalQuestions).fill(null); 
+        
+        // --- DOM ELEMENTS ---
+        const germanVerbText = document.getElementById('german-verb-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const currentQDisplay = document.getElementById('current-q');
+        const totalQDisplay = document.getElementById('total-q');
+        const correctScoreDisplay = document.getElementById('correct-score');
+        
+        // --- WEB SPEECH API SETUP (TTS ONLY) ---
+        let germanVoice = null;
+
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
+            
+            if (!germanVoice && voices.length > 0) {
+                 // Fallback: try to select any German voice or the first available
+                germanVoice = voices.find(v => v.lang.includes("de")) || voices[0];
+            }
+        }
+
+        if ('speechSynthesis' in window) {
+            // Wait for voices to load, which can be asynchronous
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = loadVoices;
+            }
+            // Also attempt to load immediately if they are already available
+            loadVoices(); 
+        }
+
+        function speak(text) {
+            if (!('speechSynthesis' in window)) {
+                console.error("Text-to-Speech is not supported in this environment.");
+                return;
+            }
+            
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "de-DE";
+            utterance.volume = 1; // Max volume
+            utterance.rate = 0.9; // Slightly slower than default for clarity
+            
+            if (germanVoice) {
+                utterance.voice = germanVoice;
+            } else {
+                // If specific voice not found, rely on browser default with 'de-DE' tag
+                utterance.lang = "de-DE"; 
+            }
+            
+            speechSynthesis.speak(utterance);
+        }
+        // --- END WEB SPEECH API SETUP ---
+
+        // --- HELPER FUNCTIONS ---
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        /**
+         * Generates a unique list of incorrect translation options (distractors).
+         */
+        function generateOptions(correctAnswer) {
+            const allArabicTranslations = verbData.map(v => v.arabic);
+            let distractors = [];
+            
+            // Filter out the correct answer 
+            const availableDistractors = allArabicTranslations.filter(t => t !== correctAnswer);
+
+            // Select 3 random unique distractors
+            while (distractors.length < 3 && availableDistractors.length > 0) {
+                const randomIndex = Math.floor(Math.random() * availableDistractors.length);
+                const distractor = availableDistractors.splice(randomIndex, 1)[0]; // Pull and remove
+                distractors.push(distractor);
+            }
+            
+            // If we don't have enough distractors (highly unlikely with 60 verbs), just fill what we can
+            if (distractors.length < 3) {
+                 while (distractors.length < 3) {
+                     distractors.push("ترجمة أخرى"); // Add placeholder if needed
+                 }
+            }
+            
+            // Combine and shuffle the options
+            let options = [...distractors, correctAnswer];
+            return shuffleArray(options);
+        }
+
+        // --- CORE LOGIC ---
+
+        function updateScoreboard() {
+            currentQDisplay.textContent = currentQuestionIndex + 1;
+            totalQDisplay.textContent = totalQuestions;
+            correctScoreDisplay.textContent = score;
+
+            // Update navigation buttons
+            prevButton.disabled = (currentQuestionIndex === 0);
+            nextButton.disabled = (currentQuestionIndex === totalQuestions - 1) || (questionStates[currentQuestionIndex] === null);
+            
+            if (currentQuestionIndex === totalQuestions - 1 && questionStates[currentQuestionIndex] !== null) {
+                // If it's the last question and answered, disable next
+                nextButton.disabled = true;
+                if (questionStates.every(state => state !== null)) {
+                    // Quiz finished logic could go here
+                }
+            }
+        }
+
+        function checkAnswer(selectedElement, selectedAnswer, correctAnswer) {
+            if (questionStates[currentQuestionIndex] !== null) return; // Prevent re-answering
+            
+            // Disable all options immediately after selection
+            optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.add('disabled');
+                if (btn.textContent === correctAnswer) {
+                    btn.classList.add('correct');
+                }
+            });
+
+            if (selectedAnswer === correctAnswer) {
+                // Correct answer
+                score++;
+                questionStates[currentQuestionIndex] = true;
+                selectedElement.classList.add('correct');
+            } else {
+                // Incorrect answer
+                questionStates[currentQuestionIndex] = false;
+                selectedElement.classList.add('incorrect');
+            }
+
+            // Update score and enable next button
+            updateScoreboard();
+
+            // Auto-advance if not the last question
+            if (currentQuestionIndex < totalQuestions - 1) {
+                setTimeout(() => {
+                    goToNextQuestion();
+                }, 1500);
+            }
+        }
+        
+        function renderQuestion() {
+            const verb = verbData[currentQuestionIndex];
+            const correctAnswer = verb.arabic;
+            const options = generateOptions(correctAnswer);
+
+            germanVerbText.textContent = verb.german;
+            optionsContainer.innerHTML = ''; // Clear previous options
+
+            // Render options
+            options.forEach(optionText => {
+                const button = document.createElement('button');
+                button.classList.add('option-button');
+                button.textContent = optionText;
+                button.onclick = () => checkAnswer(button, optionText, correctAnswer);
+                optionsContainer.appendChild(button);
+            });
+
+            // If the question was previously answered, re-apply feedback
+            if (questionStates[currentQuestionIndex] !== null) {
+                // Disable all buttons
+                optionsContainer.querySelectorAll('.option-button').forEach(btn => btn.classList.add('disabled'));
+                
+                // Highlight correct answer
+                optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+                    if (btn.textContent === correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+            }
+
+            // Speak the verb automatically when a new question is rendered
+            speak(verb.german);
+
+            updateScoreboard();
+        }
+
+        // --- NAVIGATION ---
+
+        function goToNextQuestion() {
+            if (currentQuestionIndex < totalQuestions - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            }
+        }
+
+        function goToPrevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        // --- INITIALIZATION ---
+        prevButton.addEventListener('click', goToPrevQuestion);
+        nextButton.addEventListener('click', goToNextQuestion);
+
+        window.onload = () => {
+            renderQuestion();
+        }
+
+    </script>
+</body>
+</html>
