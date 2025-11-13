@@ -1,0 +1,18 @@
+I will give a German text, and I need you to deeply extract verbs, nouns, adjectives & adverbs and give me the data array each for: Flashcards, Matching Challenge and Multiple Choice.
+
+for the verbs, three data array: Flashcards, Matching Challenge and Multiple Choice.
+for the nouns, three data array: Flashcards, Matching Challenge and Multiple Choice.
+for the adjectives and adverbs, three data array: Flashcards, Matching Challenge and Multiple Choice.
+
+
+extract all Verbs (in all forms: Perfekt, Präteritum, Präsens, Infinitiv), Adjectives and adverbs,  Nouns (including proper names and compound forms). categorise them into:verbs, nouns, adejectives
+
+create the exercises for the verbs: flash card, Matching Challenge and Multiple Choice
+
+
+create exercises for the verbs as the following forms:
+
+
+
+
+python .\script.py
