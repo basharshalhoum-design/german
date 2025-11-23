@@ -1,0 +1,14 @@
+verbs_flashcards.html;nouns_flashcards.html;adj_flashcards.html;verbs_matching.html;nouns_matching.html;adj_matching.html;verbs_quiz.html;nouns_quiz.html;adj_quiz.html
+;;;;;;;;"const verbData = [
+  { german: ""schön"", arabic: ""????"" },
+  { german: ""gut"", arabic: ""???"" },
+  { german: ""anstrengend"", arabic: ""????"" },
+  { german: ""gefährlich"", arabic: ""????"" },
+  { german: ""toll"", arabic: ""????"" },
+
+  { german: ""komfortabel"", arabic: ""????"" },
+  { german: ""komplett"", arabic: ""???? / ???????"" },
+  { german: ""ungezwungen"", arabic: ""???? ??? ???? / ??????"" },
+  { german: ""problemfrei"", arabic: ""??? ?????"" },
+  { german: ""locker"", arabic: ""??? / ??????"" }
+];"

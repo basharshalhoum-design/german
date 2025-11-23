@@ -1,0 +1,281 @@
+verbs_flashcards.html;nouns_flashcards.html;adj_flashcards.html;verbs_matching.html;nouns_matching.html;adj_matching.html;verbs_quiz.html;nouns_quiz.html;adj_quiz.html
+"const verbData = [
+  { german: ""zurckkommen"", arabic: ""????"", example: ""Wir sind gerade aus den Bergen <strong>zurckgekommen</strong>."" },
+  { german: ""vorstellen"", arabic: ""????? / ?????"", example: ""Ihr k”nnt euch nicht <strong>vorstellen</strong>, wie sch”n es dort war."" },
+  { german: ""sein"", arabic: ""????"", example: ""Es <strong>ist</strong> ja fr die Alpen schon Saisonende."" },
+  { german: ""geben"", arabic: ""???? / ????"", example: ""Deshalb <strong>gab</strong> es berall gute Preise."" },
+  { german: ""kennenlernen"", arabic: ""????? ???"", example: ""Wir haben andere Wintersportarten <strong>kennengelernt</strong>."" },
+
+  { german: ""gefallen"", arabic: ""????"", example: ""Was mir auch <strong>gef„llt</strong>."" },
+  { german: ""ausprobieren"", arabic: ""????"", example: ""Wir haben ?Curling? <strong>ausprobiert</strong>."" },
+  { german: ""rutschen"", arabic: ""?????"", example: ""Die Scheibe <strong>rutscht</strong> auf dem Eis."" },
+  { german: ""kommen"", arabic: ""??? / ????"", example: ""Sie soll m”glichst nah an ein Ziel <strong>kommen</strong>."" },
+  { german: ""probieren"", arabic: ""????"", example: ""Wir haben Schispringen <strong>probiert</strong>."" },
+
+  { german: ""nehmen"", arabic: ""????"", example: ""Wir <strong>nahmen</strong> extra einen Lehrer."" },
+  { german: ""brauchen"", arabic: ""?????"", example: ""Man <strong>braucht</strong> andere Schier und einen Helm."" },
+  { german: ""schtzen"", arabic: ""????"", example: ""Um den Kopf zu <strong>schtzen</strong>."" },
+  { german: ""finden"", arabic: ""???"", example: ""Ich <strong>fand</strong> Schispringen sehr anstrengend."" },
+  { german: ""wohnen"", arabic: ""????"", example: ""Wir <strong>wohnten</strong> in Obertauern."" },
+
+  { german: ""trinken"", arabic: ""????"", example: ""Wir <strong>tranken</strong> Wein oder Bier."" },
+  { german: ""tanzen"", arabic: ""????"", example: ""Wir haben <strong>getanzt</strong>."" },
+  { german: ""quatschen"", arabic: ""?????"", example: ""Wir haben <strong>gequatscht</strong>."" },
+  { german: ""kommen"", arabic: ""??? / ????"", example: ""Man <strong>kommt</strong> leicht ins Gespr„ch."" },
+  { german: ""spielen"", arabic: ""???? ?????"", example: ""Vielleicht <strong>spielt</strong> eine Rolle, dass alle im Urlaub sind."" },
+
+  { german: ""haben"", arabic: ""???? / ????"", example: ""Dieses Jahr <strong>hatten</strong> wir eine Ferienwohnung."" },
+  { german: ""mieten"", arabic: ""??????"", example: ""Wir haben eine Ferienwohnung <strong>gemietet</strong>."" },
+  { german: ""kochen"", arabic: ""????"", example: ""Man kann sich zwischendurch etwas <strong>kochen</strong>."" },
+  { german: ""essen gehen"", arabic: ""???? ?????? ??????"", example: ""Wenn man nicht <strong>essen geht</strong>."" },
+  { german: ""putzen"", arabic: ""????"", example: ""Das <strong>Putzen</strong> mussten wir selbst machen."" },
+
+  { german: ""sehen"", arabic: ""???"", example: ""Ihr <strong>seht</strong> also, wir sind wieder da."" },
+  { german: ""st„rken"", arabic: ""???? / ????"", example: ""Gest„rkt von einem tollen Urlaub."" },
+  { german: ""gehen"", arabic: ""????"", example: ""Und morgen <strong>geht</strong>?s wieder ins Bro."" }
+];";"const verbData = [
+  { german: ""Berge"", arabic: ""????"", example: ""Wir sind gerade aus den <strong>Bergen</strong> zurck."" },
+  { german: ""Alpen"", arabic: ""???? ?????"", example: ""Es ist ja fr die <strong>Alpen</strong> schon Saisonende."" },
+  { german: ""Saisonende"", arabic: ""????? ??????"", example: ""Es ist ja fr die Alpen schon <strong>Saisonende</strong>."" },
+  { german: ""Preis"", arabic: ""???"", example: ""Deshalb gab es berall gute <strong>Preise</strong>."" },
+  { german: ""Lift"", arabic: ""???? ??????"", example: ""Gute Preise beim <strong>Lift</strong>, beim Hotel, beim Schiverleih."" },
+
+  { german: ""Hotel"", arabic: ""????"", example: ""Gute Preise beim Lift, beim <strong>Hotel</strong>, beim Schiverleih."" },
+  { german: ""Schiverleih"", arabic: ""????? ????????"", example: ""Gute Preise beim Lift, beim Hotel, beim <strong>Schiverleih</strong>."" },
+  { german: ""Piste"", arabic: ""????? ??????"", example: ""Wir waren von morgens bis abends auf der <strong>Piste</strong>."" },
+  { german: ""Wintersportarten"", arabic: ""?????? ?????"", example: ""Wir haben andere <strong>Wintersportarten</strong> kennengelernt."" },
+  { german: ""Scheibe"", arabic: ""??? / ???"", example: ""Da hat man so eine riesige <strong>Scheibe</strong> mit Griff."" },
+
+  { german: ""Griff"", arabic: ""????"", example: ""Eine riesige Scheibe mit <strong>Griff</strong>, die man anst”át."" },
+  { german: ""Eis"", arabic: ""????"", example: ""Die Scheibe rutscht auf dem <strong>Eis</strong>."" },
+  { german: ""Ziel"", arabic: ""???"", example: ""Sie soll m”glichst nah an ein bestimmtes <strong>Ziel</strong> kommen."" },
+  { german: ""Olympische Winterspiele"", arabic: ""??????? ????????? ???????"", example: ""Diese Sportart gibt es bei den <strong>Olympischen Winterspielen</strong>."" },
+  { german: ""Kinder"", arabic: ""?????"", example: ""Den <strong>Kindern</strong> hat das gut gefallen."" },
+
+  { german: ""Schispringen"", arabic: ""????? ??? ????????"", example: ""Wir haben <strong>Schispringen</strong> probiert."" },
+  { german: ""Schanze"", arabic: ""???? ?????"", example: ""Von einer kleinen <strong>Schanze</strong> probiert."" },
+  { german: ""Lehrer"", arabic: ""???? / ????"", example: ""Wir hatten extra einen <strong>Lehrer</strong> genommen."" },
+  { german: ""Schier"", arabic: ""??????"", example: ""Man braucht andere <strong>Schier</strong> als frs Schifahren."" },
+  { german: ""Helm"", arabic: ""????"", example: ""Man braucht unbedingt einen <strong>Helm</strong>."" },
+
+  { german: ""Kopf"", arabic: ""???"", example: ""Um den <strong>Kopf</strong> zu schtzen."" },
+  { german: ""Obertauern"", arabic: ""????????? (????)"", example: ""Wir wohnten in <strong>Obertauern</strong>."" },
+  { german: ""Kneipen"", arabic: ""?????"", example: ""Dort gibt es viele tolle <strong>Kneipen</strong>."" },
+  { german: ""Wein"", arabic: ""????"", example: ""Wir tranken einen <strong>Wein</strong> oder ein Bier."" },
+  { german: ""Bier"", arabic: ""????"", example: ""Wir tranken einen Wein oder ein <strong>Bier</strong>."" },
+
+  { german: ""Gespr„ch"", arabic: ""??????"", example: ""Man kommt leicht mit anderen ins <strong>Gespr„ch</strong>."" },
+  { german: ""Alltag"", arabic: ""????? ?????? ???????"", example: ""Alles ist viel ungezwungener als in meinem <strong>Alltag</strong>."" },
+  { german: ""Urlaub"", arabic: ""????"", example: ""Vielleicht spielt eine Rolle, dass alle im <strong>Urlaub</strong> sind."" },
+  { german: ""Stress"", arabic: ""????"", example: ""Weniger <strong>Stress</strong>, Sorgen und Zeitdruck."" },
+  { german: ""Sorgen"", arabic: ""???? / ???"", example: ""Weniger Stress, <strong>Sorgen</strong> und Zeitdruck."" },
+
+  { german: ""Zeitdruck"", arabic: ""??? ?????"", example: ""Weniger Stress, Sorgen und <strong>Zeitdruck</strong>."" },
+  { german: ""Ferienwohnung"", arabic: ""??? ??????"", example: ""Dieses Jahr hatten wir eine <strong>Ferienwohnung</strong> gemietet."" },
+  { german: ""Platz"", arabic: ""?????"", example: ""Man hat da mehr <strong>Platz</strong>."" },
+  { german: ""Kche"", arabic: ""????"", example: ""Unsere Wohnung war komfortabel mit kompletter <strong>Kche</strong>."" },
+  { german: ""Waschmaschine"", arabic: ""?????"", example: ""Mit <strong>Waschmaschine</strong>, Fernseher usw."" },
+
+  { german: ""Fernseher"", arabic: ""?????"", example: ""Mit Waschmaschine, <strong>Fernseher</strong> usw."" },
+  { german: ""Service"", arabic: ""????"", example: ""Der einzige <strong>Service</strong> fehlt: das Putzen."" },
+  { german: ""Zimmer"", arabic: ""????"", example: ""Das Putzen der <strong>Zimmer</strong> und des Bades."" },
+  { german: ""Bad"", arabic: ""????"", example: ""Das Putzen der Zimmer und des <strong>Bades</strong>."" },
+  { german: ""Bro"", arabic: ""????"", example: ""Und morgen geht?s wieder ins <strong>Bro</strong>."" }
+];";"const verbData = [
+  { german: ""sch”n"", arabic: ""????"", example: ""Ihr k”nnt euch nicht vorstellen, wie <strong>sch”n</strong> es dort war."" },
+  { german: ""gut"", arabic: ""???"", example: ""Den Kindern hat das <strong>gut</strong> gefallen."" },
+  { german: ""anstrengend"", arabic: ""????"", example: ""Schispringen fand ich sehr <strong>anstrengend</strong>."" },
+  { german: ""gef„hrlich"", arabic: ""????"", example: ""Ich fand Schispringen auch <strong>gef„hrlich</strong>."" },
+  { german: ""toll"", arabic: ""????"", example: ""Wir sind wieder da, gest„rkt von einem <strong>tollen</strong> Urlaub!"" },
+
+  { german: ""komfortabel"", arabic: ""????"", example: ""Unsere Wohnung war richtig <strong>komfortabel</strong>."" },
+  { german: ""komplett"", arabic: ""???? / ???????"", example: ""Mit <strong>kompletter</strong> Kche, Waschmaschine, Fernseher usw."" },
+  { german: ""ungezwungen"", arabic: ""???? ??? ???? / ??????"", example: ""Alles ist viel <strong>ungezwungener</strong> als in meinem Alltag."" },
+  { german: ""problemfrei"", arabic: ""??? ?????"", example: ""Das ist alles viel <strong>problemfreier</strong> als sonst."" },
+  { german: ""locker"", arabic: ""??? / ??????"", example: ""Oder sind die ™sterreicher einfach <strong>lockerer</strong>?"" }
+];";"const verbData = [
+  { german: ""zurckkommen"", arabic: ""????"" },
+  { german: ""vorstellen"", arabic: ""????? / ?????"" },
+  { german: ""sein"", arabic: ""????"" },
+  { german: ""geben"", arabic: ""???? / ????"" },
+  { german: ""kennenlernen"", arabic: ""????? ???"" }, // Page 1
+
+  { german: ""gefallen"", arabic: ""????"" },
+  { german: ""ausprobieren"", arabic: ""????"" },
+  { german: ""rutschen"", arabic: ""?????"" },
+  { german: ""kommen"", arabic: ""??? / ????"" },
+  { german: ""probieren"", arabic: ""????"" }, // Page 2
+
+  { german: ""nehmen"", arabic: ""????"" },
+  { german: ""brauchen"", arabic: ""?????"" },
+  { german: ""schtzen"", arabic: ""????"" },
+  { german: ""finden"", arabic: ""???"" },
+  { german: ""wohnen"", arabic: ""????"" }, // Page 3
+
+  { german: ""trinken"", arabic: ""????"" },
+  { german: ""tanzen"", arabic: ""????"" },
+  { german: ""quatschen"", arabic: ""?????"" },
+  { german: ""spielen"", arabic: ""???? ?????"" },
+  { german: ""haben"", arabic: ""???? / ????"" }, // Page 4
+
+  { german: ""mieten"", arabic: ""??????"" },
+  { german: ""kochen"", arabic: ""????"" },
+  { german: ""essen gehen"", arabic: ""???? ?????? ??????"" },
+  { german: ""putzen"", arabic: ""????"" },
+  { german: ""sehen"", arabic: ""???"" }, // Page 5
+
+  { german: ""st„rken"", arabic: ""???? / ????"" },
+  { german: ""gehen"", arabic: ""????"" }
+];";"const verbData = [
+  { german: ""Berge"", arabic: ""????"" },
+  { german: ""Alpen"", arabic: ""???? ?????"" },
+  { german: ""Saisonende"", arabic: ""????? ??????"" },
+  { german: ""Preis"", arabic: ""???"" },
+  { german: ""Lift"", arabic: ""???? ??????"" }, // Page 1
+
+  { german: ""Hotel"", arabic: ""????"" },
+  { german: ""Schiverleih"", arabic: ""????? ????????"" },
+  { german: ""Piste"", arabic: ""????? ??????"" },
+  { german: ""Wintersportarten"", arabic: ""?????? ?????"" },
+  { german: ""Scheibe"", arabic: ""??? / ???"" }, // Page 2
+
+  { german: ""Griff"", arabic: ""????"" },
+  { german: ""Eis"", arabic: ""????"" },
+  { german: ""Ziel"", arabic: ""???"" },
+  { german: ""Olympische Winterspiele"", arabic: ""??????? ????????? ???????"" },
+  { german: ""Kinder"", arabic: ""?????"" }, // Page 3
+
+  { german: ""Schispringen"", arabic: ""????? ??? ????????"" },
+  { german: ""Schanze"", arabic: ""???? ?????"" },
+  { german: ""Lehrer"", arabic: ""???? / ????"" },
+  { german: ""Schier"", arabic: ""??????"" },
+  { german: ""Helm"", arabic: ""????"" }, // Page 4
+
+  { german: ""Kopf"", arabic: ""???"" },
+  { german: ""Obertauern"", arabic: ""?????????"" },
+  { german: ""Kneipen"", arabic: ""?????"" },
+  { german: ""Wein"", arabic: ""????"" },
+  { german: ""Bier"", arabic: ""????"" }, // Page 5
+
+   { german: ""Alltag"", arabic: ""????? ?????? ???????"" },
+  { german: ""Urlaub"", arabic: ""????"" },
+  { german: ""Stress"", arabic: ""????"" },
+  { german: ""Sorgen"", arabic: ""???? / ???"" },
+  { german: ""Zeitdruck"", arabic: ""??? ?????"" }, // Page 6
+
+  { german: ""Ferienwohnung"", arabic: ""??? ??????"" },
+  { german: ""Platz"", arabic: ""?????"" },
+  { german: ""Kche"", arabic: ""????"" },
+  { german: ""Waschmaschine"", arabic: ""?????"" },
+  { german: ""Fernseher"", arabic: ""?????"" }, // Page 7
+
+  { german: ""Service"", arabic: ""????"" },
+  { german: ""Zimmer"", arabic: ""????"" },
+  { german: ""Bad"", arabic: ""????"" },
+  { german: ""Bro"", arabic: ""????"" }
+];";"const verbrData = [
+  { german: ""sch”n"", arabic: ""????"" },
+  { german: ""gut"", arabic: ""???"" },
+  { german: ""anstrengend"", arabic: ""????"" },
+  { german: ""gef„hrlich"", arabic: ""????"" },
+  { german: ""toll"", arabic: ""????"" }, // Page 1 (1?5)
+
+  { german: ""komfortabel"", arabic: ""????"" },
+  { german: ""komplett"", arabic: ""???? / ???????"" },
+  { german: ""ungezwungen"", arabic: ""???? ??? ???? / ??????"" },
+  { german: ""problemfrei"", arabic: ""??? ?????"" },
+  { german: ""locker"", arabic: ""??? / ??????"" } // Page 2 (6?10)
+];";"const verbData = [
+  { german: ""zurckkommen"", arabic: ""????"" },
+  { german: ""vorstellen"", arabic: ""????? / ?????"" },
+  { german: ""sein"", arabic: ""????"" },
+  { german: ""geben"", arabic: ""???? / ????"" },
+  { german: ""kennenlernen"", arabic: ""????? ???"" },
+
+  { german: ""gefallen"", arabic: ""????"" },
+  { german: ""ausprobieren"", arabic: ""????"" },
+  { german: ""rutschen"", arabic: ""?????"" },
+  { german: ""kommen"", arabic: ""??? / ????"" },
+  { german: ""probieren"", arabic: ""????"" },
+
+  { german: ""nehmen"", arabic: ""????"" },
+  { german: ""brauchen"", arabic: ""?????"" },
+  { german: ""schtzen"", arabic: ""????"" },
+  { german: ""finden"", arabic: ""???"" },
+  { german: ""wohnen"", arabic: ""????"" },
+
+  { german: ""trinken"", arabic: ""????"" },
+  { german: ""tanzen"", arabic: ""????"" },
+  { german: ""quatschen"", arabic: ""?????"" },
+  { german: ""spielen"", arabic: ""???? ?????"" },
+  { german: ""haben"", arabic: ""???? / ????"" },
+
+  { german: ""mieten"", arabic: ""??????"" },
+  { german: ""kochen"", arabic: ""????"" },
+  { german: ""essen gehen"", arabic: ""???? ?????? ??????"" },
+  { german: ""putzen"", arabic: ""????"" },
+  { german: ""sehen"", arabic: ""???"" },
+
+  { german: ""st„rken"", arabic: ""???? / ????"" },
+  { german: ""gehen"", arabic: ""????"" }
+];";"const verbData = [
+  { german: ""Berge"", arabic: ""????"" },
+  { german: ""Alpen"", arabic: ""???? ?????"" },
+  { german: ""Saisonende"", arabic: ""????? ??????"" },
+  { german: ""Preis"", arabic: ""???"" },
+  { german: ""Lift"", arabic: ""???? ??????"" },
+
+  { german: ""Hotel"", arabic: ""????"" },
+  { german: ""Schiverleih"", arabic: ""????? ????????"" },
+  { german: ""Piste"", arabic: ""????? ??????"" },
+  { german: ""Wintersportarten"", arabic: ""?????? ?????"" },
+  { german: ""Scheibe"", arabic: ""??? / ???"" },
+
+  { german: ""Griff"", arabic: ""????"" },
+  { german: ""Eis"", arabic: ""????"" },
+  { german: ""Ziel"", arabic: ""???"" },
+  { german: ""Olympische Winterspiele"", arabic: ""??????? ????????? ???????"" },
+  { german: ""Kinder"", arabic: ""?????"" },
+
+  { german: ""Schispringen"", arabic: ""????? ??? ????????"" },
+  { german: ""Schanze"", arabic: ""???? ?????"" },
+  { german: ""Lehrer"", arabic: ""???? / ????"" },
+  { german: ""Schier"", arabic: ""??????"" },
+  { german: ""Helm"", arabic: ""????"" },
+
+  { german: ""Kopf"", arabic: ""???"" },
+  { german: ""Obertauern"", arabic: ""?????????"" },
+  { german: ""Kneipen"", arabic: ""?????"" },
+  { german: ""Wein"", arabic: ""????"" },
+  { german: ""Bier"", arabic: ""????"" },
+
+  { german: ""Gespr„ch"", arabic: ""??????"" },
+  { german: ""Alltag"", arabic: ""????? ?????? ???????"" },
+  { german: ""Urlaub"", arabic: ""????"" },
+  { german: ""Stress"", arabic: ""????"" },
+  { german: ""Sorgen"", arabic: ""???? / ???"" },
+
+  { german: ""Zeitdruck"", arabic: ""??? ?????"" },
+  { german: ""Ferienwohnung"", arabic: ""??? ??????"" },
+  { german: ""Platz"", arabic: ""?????"" },
+  { german: ""Kche"", arabic: ""????"" },
+  { german: ""Waschmaschine"", arabic: ""?????"" },
+
+  { german: ""Fernseher"", arabic: ""?????"" },
+  { german: ""Service"", arabic: ""????"" },
+  { german: ""Zimmer"", arabic: ""????"" },
+  { german: ""Bad"", arabic: ""????"" },
+  { german: ""Bro"", arabic: ""????"" }
+];";"const verbData = [
+  { german: ""sch”n"", arabic: ""????"" },
+  { german: ""gut"", arabic: ""???"" },
+  { german: ""anstrengend"", arabic: ""????"" },
+  { german: ""gef„hrlich"", arabic: ""????"" },
+  { german: ""toll"", arabic: ""????"" },
+
+  { german: ""komfortabel"", arabic: ""????"" },
+  { german: ""komplett"", arabic: ""???? / ???????"" },
+  { german: ""ungezwungen"", arabic: ""???? ??? ???? / ??????"" },
+  { german: ""problemfrei"", arabic: ""??? ?????"" },
+  { german: ""locker"", arabic: ""??? / ??????"" }
+];"
