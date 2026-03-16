@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Wenn Maria kommt</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --card-bg: #ffffff;
+      --border: #d0d7de;
+      --accent: #e6f2ff;
+      --popup-bg: #111827;
+      --popup-color: #f9fafb;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+    .page {
+      max-width: 1100px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
+    }
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-bottom: 16px;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+    }
+    .controls label {
+      font-size: 0.9rem;
+      margin-right: 4px;
+    }
+    .controls select,
+    .controls button {
+      font-size: 0.9rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+    }
+    .controls button:hover {
+      background: #f3f4ff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    thead {
+      background: #f3f4f6;
+    }
+    th, td {
+      padding: 10px 12px;
+      vertical-align: top;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+    th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    td.german {
+      width: 60%;
+      position: relative;
+    }
+    td.arabic {
+      width: 40%;
+      direction: rtl;
+      text-align: right;
+      font-size: 0.95rem;
+      color: #111827;
+    }
+
+    .word {
+      cursor: pointer;
+      position: relative;
+      display: inline;
+      padding: 0 2px;
+      border-radius: 4px;
+      line-height: 1.4;
+      pointer-events: auto;
+    }
+    .word:hover { background: var(--accent); }
+
+    .popup {
+      position:absolute;
+      top:-38px;
+      left:50%;
+      transform:translateX(-50%);
+      background:var(--popup-bg);
+      color:var(--popup-color);
+      padding:6px 10px;
+      border-radius:6px;
+      font-size:13px;
+      white-space:nowrap;
+      display:none;
+      z-index:999;
+      box-shadow:0 6px 18px rgba(0,0,0,0.25);
+      min-width:120px;
+      text-align:left;
+      pointer-events:auto;
+    }
+
+    .play-sentence-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      margin-right:8px;
+      padding:4px 8px;
+      font-size:0.85rem;
+      border-radius:6px;
+      border:1px solid #d0d7de;
+      background:#fff;
+      color:#111;
+      cursor:pointer;
+    }
+    .play-sentence-btn:hover { background:#f0f8ff; }
+    .play-sentence-btn:active { transform:translateY(1px); }
+    .play-sentence-btn svg { width:14px; height:14px; vertical-align:middle; }
+
+    @media (max-width: 768px) {
+      td.german, td.arabic {
+        display:block;
+        width:100%;
+      }
+      td.german {
+        border-bottom: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <h1>Wenn Maria kommt</h1>
+  <div class="subtitle">Interaktiver Text mit Wort-Popups, Audio und Satz-Wiedergabe</div>
+
+  <div class="controls">
+    <div>
+      <label for="voiceSelect">Stimme:</label>
+      <select id="voiceSelect"></select>
+    </div>
+    <button id="testBtn" type="button">Test auf Deutsch</button>
+    <button id="stopBtn" type="button">Stopp</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Deutsch</th>
+        <th>Arabisch (Kontextübersetzung)</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Hoffentlich" data-lit="نأمل" data-ar="آمل">Hoffentlich</span>
+          <span class="word" data-de="kommt" data-lit="يأتي" data-ar="أن تأتي">kommt</span>
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          آمل أن تأتي ماريا.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sie" data-lit="هي" data-ar="إنها">Sie</span>
+          <span class="word" data-de="hat" data-lit="تملك" data-ar="لم">hat</span>
+          <span class="word" data-de="es" data-lit="هذا" data-ar="بذلك">es</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="(نفي)">nicht</span>
+          <span class="word" data-de="versprochen" data-lit="وعدت" data-ar="تعد">versprochen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          إنها لم تعد بذلك.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sie" data-lit="هي" data-ar="إنها">Sie</span>
+          <span class="word" data-de="kommt" data-lit="تأتي" data-ar="ستأتي">kommt</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="wenn" data-lit="إذا" data-ar="إذا">wenn</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="es" data-lit="الشيء" data-ar="استطاعت">es</span>
+          <span class="word" data-de="schafft" data-lit="تنجز" data-ar="القيام بذلك">schafft</span>
+          <span class="word" data-de="-" data-lit="-" data-ar="-">-</span>
+          <span class="word" data-de="hat" data-lit="تملك" data-ar="لقد">hat</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="gesagt" data-lit="قالت" data-ar="قالت">gesagt</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          قالت إنها ستأتي إذا استطاعت القيام بذلك.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Nach" data-lit="بعد" data-ar="بعد">Nach</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Probe" data-lit="بروفة" data-ar="البروفة">Probe</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          بعد البروفة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wenn" data-lit="عندما/إذا" data-ar="إذا">Wenn</span>
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="kommt" data-lit="تأتي" data-ar="جاءت">kommt</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="hat" data-lit="تملك" data-ar="فسيكون لديها">hat</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="eine" data-lit="واحدة" data-ar="خبر">eine</span>
+          <span class="word" data-de="Nachricht" data-lit="رسالة/خبر" data-ar="رسالة">Nachricht</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          إذا جاءت ماريا، فسيكون لديها أخبار.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Hoffentlich" data-lit="نأمل" data-ar="آمل ذلك">Hoffentlich</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          آمل ذلك.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="أنا">Ich</span>
+          <span class="word" data-de="habe" data-lit="أملك" data-ar="أشعر بـ">habe</span>
+          <span class="word" data-de="Durst" data-lit="عطش" data-ar="العطش">Durst</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          أنا أشعر بالعطش.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Eigentlich" data-lit="في الواقع" data-ar="في الواقع">Eigentlich</span>
+          <span class="word" data-de="möchte" data-lit="أود" data-ar="أود">möchte</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أن">ich</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="كوب">ein</span>
+          <span class="word" data-de="Bier" data-lit="بيرة" data-ar="بيرة">Bier</span>
+          <span class="word" data-de="trinken" data-lit="أشرب" data-ar="أشرب">trinken</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="aber" data-lit="لكن" data-ar="لكن">aber</span>
+          <span class="word" data-de="das" data-lit="هذا" data-ar="هذا">das</span>
+          <span class="word" data-de="schmeckt" data-lit="يتذوق" data-ar="لا يعجبني طعمه">schmeckt</span>
+          <span class="word" data-de="mir" data-lit="لي" data-ar="لي">mir</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="(نفي)">nicht</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="weil" data-lit="لأن" data-ar="لأنه">weil</span>
+          <span class="word" data-de="es" data-lit="هو" data-ar="يوجد">es</span>
+          <span class="word" data-de="im" data-lit="في الـ" data-ar="في">im</span>
+          <span class="word" data-de="Café" data-lit="مقهى" data-ar="المقهى">Café</span>
+          <span class="word" data-de="nur" data-lit="فقط" data-ar="فقط">nur</span>
+          <span class="word" data-de="Bier" data-lit="بيرة" data-ar="بيرة">Bier</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="Flaschen" data-lit="زجاجات" data-ar="زجاجات">Flaschen</span>
+          <span class="word" data-de="gibt" data-lit="يعطي" data-ar="تتوفر">gibt</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          في الواقع أود شرب بيرة، لكن لا يعجبني طعمها، لأنه في المقهى لا تتوفر البيرة إلا في زجاجات.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Was" data-lit="ماذا" data-ar="ماذا">Was</span>
+          <span class="word" data-de="steht" data-lit="يقف" data-ar="يوجد">steht</span>
+          <span class="word" data-de="auf" data-lit="على" data-ar="في">auf</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Speisekarte" data-lit="قائمة طعام" data-ar="قائمة الطعام">Speisekarte</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          ماذا يوجد في قائمة الطعام؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wasser" data-lit="ماء" data-ar="ماء">Wasser</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="Cola" data-lit="كولا" data-ar="كولا">Cola</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="Limonade" data-lit="ليموناضة" data-ar="ليموناضة">Limonade</span>
+          <span class="word" data-de="..." data-lit="..." data-ar="...">...</span>
+        </td>
+        <td class="arabic">
+          ماء، كولا، ليموناضة...
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Keine" data-lit="لا" data-ar="لا يوجد">Keine</span>
+          <span class="word" data-de="Zeit" data-lit="وقت" data-ar="وقت">Zeit</span>
+          <span class="word" data-de="zum" data-lit="لـ" data-ar="للـ">zum</span>
+          <span class="word" data-de="Überlegen" data-lit="تفكير" data-ar="تفكير">Überlegen</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="weil" data-lit="لأن" data-ar="لأن">weil</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Bedienung" data-lit="خدمة" data-ar="النادلة">Bedienung</span>
+          <span class="word" data-de="schon" data-lit="بالفعل" data-ar="بالفعل">schon</span>
+          <span class="word" data-de="neben" data-lit="بجانب" data-ar="بجانبي">neben</span>
+          <span class="word" data-de="mir" data-lit="أنا" data-ar="تقف">mir</span>
+          <span class="word" data-de="steht" data-lit="تقف" data-ar="تقف">steht</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لا يوجد وقت للتفكير، لأن النادلة تقف بجانبي بالفعل.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="أنا">Ich</span>
+          <span class="word" data-de="bestelle" data-lit="أطلب" data-ar="أطلب">bestelle</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="إبريق">ein</span>
+          <span class="word" data-de="Kännchen" data-lit="إبريق صغير" data-ar="إبريق">Kännchen</span>
+          <span class="word" data-de="Kaffee" data-lit="قهوة" data-ar="قهوة">Kaffee</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="قطعة">ein</span>
+          <span class="word" data-de="Stück" data-lit="قطعة" data-ar="قطعة">Stück</span>
+          <span class="word" data-de="Schwarzwälder" data-lit="الغابة السوداء" data-ar="الغابة السوداء">Schwarzwälder</span>
+          <span class="word" data-de="Kirschtorte" data-lit="كعكة الكرز" data-ar="كعكة كرز">Kirschtorte</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          أطلب إبريق قهوة وقطعة من كعكة كرز الغابة السوداء.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Die" data-lit="هي" data-ar="هي">Die</span>
+          <span class="word" data-de="mag" data-lit="أحب" data-ar="أحبها">mag</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="am" data-lit="في الـ" data-ar="أكثر من">am</span>
+          <span class="word" data-de="liebsten" data-lit="الأحب" data-ar="أي شيء">liebsten</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          هي الأحب إلي.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wenn" data-lit="عندما" data-ar="عندما">Wenn</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="Kaffee" data-lit="قهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="trinke" data-lit="أشرب" data-ar="أشرب">trinke</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="kann" data-lit="أستطيع" data-ar="أستطيع">kann</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="nachts" data-lit="في الليل" data-ar="في الليل">nachts</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="لا">nicht</span>
+          <span class="word" data-de="schlafen" data-lit="أنام" data-ar="النوم">schlafen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          عندما أشرب القهوة، لا أستطيع النوم في الليل.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Aber" data-lit="لكن" data-ar="لكن">Aber</span>
+          <span class="word" data-de="es" data-lit="هو" data-ar="الوقت">es</span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="لا يزال">ist</span>
+          <span class="word" data-de="ja" data-lit="نعم/بالفعل" data-ar="فقط">ja</span>
+          <span class="word" data-de="erst" data-lit="فقط" data-ar="الرابعة">erst</span>
+          <span class="word" data-de="vier" data-lit="أربعة" data-ar="الرابعة">vier</span>
+          <span class="word" data-de="Uhr" data-lit="ساعة" data-ar="الساعة">Uhr</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لكن الساعة لا تزال الرابعة فقط.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Und" data-lit="و" data-ar="و">Und</span>
+          <span class="word" data-de="schlafen" data-lit="أنام" data-ar="أنام">schlafen</span>
+          <span class="word" data-de="kann" data-lit="أستطيع" data-ar="لن أستطيع">kann</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="heute" data-lit="اليوم" data-ar="اليوم">heute</span>
+          <span class="word" data-de="Nacht" data-lit="ليل" data-ar="الليلة">Nacht</span>
+          <span class="word" data-de="sicher" data-lit="بالتأكيد" data-ar="بالتأكيد">sicher</span>
+          <span class="word" data-de="sowieso" data-lit="على أي حال" data-ar="على أي حال">sowieso</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="(نفي)">nicht</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          وبالتأكيد لن أستطيع النوم هذه الليلة على أي حال.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Die" data-lit="الـ" data-ar="الـ">Die</span>
+          <span class="word" data-de="Frau" data-lit="امرأة" data-ar="المرأة">Frau</span>
+          <span class="word" data-de="am" data-lit="على الـ" data-ar="على">am</span>
+          <span class="word" data-de="Nachbartisch" data-lit="طاولة مجاورة" data-ar="الطاولة المجاورة">Nachbartisch</span>
+          <span class="word" data-de="isst" data-lit="تأكل" data-ar="تأكل">isst</span>
+          <span class="word" data-de="einen" data-lit="واحد" data-ar="كأس">einen</span>
+          <span class="word" data-de="Eisbecher" data-lit="كأس آيس كريم" data-ar="آيس كريم">Eisbecher</span>
+          <span class="word" data-de="mit" data-lit="مع" data-ar="مع">mit</span>
+          <span class="word" data-de="viel" data-lit="كثير" data-ar="الكثير من">viel</span>
+          <span class="word" data-de="Sahne" data-lit="كريمة" data-ar="الكريمة">Sahne</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          المرأة على الطاولة المجاورة تأكل كأس آيس كريم مع الكثير من الكريمة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sie" data-lit="هي" data-ar="هي">Sie</span>
+          <span class="word" data-de="trägt" data-lit="ترتدي" data-ar="ترتدي">trägt</span>
+          <span class="word" data-de="einen" data-lit="واحد" data-ar="قبعة">einen</span>
+          <span class="word" data-de="Hut" data-lit="قبعة" data-ar="قبعة">Hut</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="hat" data-lit="تملك" data-ar="وضعت">hat</span>
+          <span class="word" data-de="ihre" data-lit="خاصتها" data-ar="حقيبتها">ihre</span>
+          <span class="word" data-de="Handtasche" data-lit="حقيبة يد" data-ar="اليدوية">Handtasche</span>
+          <span class="word" data-de="auf" data-lit="على" data-ar="على">auf</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="الـ">den</span>
+          <span class="word" data-de="Tisch" data-lit="طاولة" data-ar="الطاولة">Tisch</span>
+          <span class="word" data-de="gestellt" data-lit="وضعت" data-ar="وضعت">gestellt</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          إنها ترتدي قبعة ووضعت حقيبتها اليدوية على الطاولة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="أنا">Ich</span>
+          <span class="word" data-de="trinke" data-lit="أشرب" data-ar="أشرب">trinke</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="الـ">den</span>
+          <span class="word" data-de="Kaffee" data-lit="قهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="vorsichtig" data-lit="بحذر" data-ar="بحذر">vorsichtig</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="بـ">in</span>
+          <span class="word" data-de="kleinen" data-lit="صغيرة" data-ar="صغيرة">kleinen</span>
+          <span class="word" data-de="Schlucken" data-lit="رشفات" data-ar="رشفات">Schlucken</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="weil" data-lit="لأن" data-ar="لأنها">weil</span>
+          <span class="word" data-de="er" data-lit="هو" data-ar="هي">er</span>
+          <span class="word" data-de="sehr" data-lit="جداً" data-ar="جداً">sehr</span>
+          <span class="word" data-de="heiß" data-lit="ساخن" data-ar="ساخنة">heiß</span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="تكون">ist</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          أشرب القهوة بحذر برشفات صغيرة لأنها ساخنة جداً.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="أنا">Ich</span>
+          <span class="word" data-de="habe" data-lit="أملك" data-ar="أشعر بـ">habe</span>
+          <span class="word" data-de="immer" data-lit="دائماً" data-ar="لا أزال">immer</span>
+          <span class="word" data-de="noch" data-lit="بعد" data-ar="لا أزال">noch</span>
+          <span class="word" data-de="Durst" data-lit="عطش" data-ar="العطش">Durst</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لا أزال أشعر بالعطش.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Warum" data-lit="لماذا" data-ar="لماذا">Warum</span>
+          <span class="word" data-de="habe" data-lit="أملك" data-ar="لم">habe</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="keinen" data-lit="لا" data-ar="أطلب">keinen</span>
+          <span class="word" data-de="Eistee" data-lit="شاي مثلج" data-ar="شاياً مثلجاً">Eistee</span>
+          <span class="word" data-de="bestellt" data-lit="طلبت" data-ar="أطلب">bestellt</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          لماذا لم أطلب شاياً مثلجاً؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Neben" data-lit="بجانب" data-ar="بجانب">Neben</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Garderobe" data-lit="خزانة ملابس" data-ar="مكان تعليق الملابس">Garderobe</span>
+          <span class="word" data-de="sitzt" data-lit="تجلس" data-ar="تجلس">sitzt</span>
+          <span class="word" data-de="eine" data-lit="واحدة" data-ar="أم">eine</span>
+          <span class="word" data-de="Mutter" data-lit="أم" data-ar="أم">Mutter</span>
+          <span class="word" data-de="mit" data-lit="مع" data-ar="مع">mit</span>
+          <span class="word" data-de="einem" data-lit="واحد" data-ar="طفل">einem</span>
+          <span class="word" data-de="Kleinkind" data-lit="طفل صغير" data-ar="طفل صغير">Kleinkind</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          بجانب مكان تعليق الملابس تجلس أم مع طفل صغير.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sie" data-lit="هي" data-ar="إنها">Sie</span>
+          <span class="word" data-de="redet" data-lit="تتحدث" data-ar="تتحدث">redet</span>
+          <span class="word" data-de="ohne" data-lit="بدون" data-ar="بدون">ohne</span>
+          <span class="word" data-de="Pause" data-lit="استراحة" data-ar="توقف">Pause</span>
+          <span class="word" data-de="mit" data-lit="مع" data-ar="مع">mit</span>
+          <span class="word" data-de="einer" data-lit="واحدة" data-ar="صديقة">einer</span>
+          <span class="word" data-de="Freundin" data-lit="صديقة" data-ar="صديقة">Freundin</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          إنها تتحدث بدون توقف مع صديقة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Das" data-lit="الـ" data-ar="الـ">Das</span>
+          <span class="word" data-de="Kind" data-lit="طفل" data-ar="الطفل">Kind</span>
+          <span class="word" data-de="malt" data-lit="يرسم" data-ar="يرسم">malt</span>
+          <span class="word" data-de="mit" data-lit="بـ" data-ar="بـ">mit</span>
+          <span class="word" data-de="einem" data-lit="واحد" data-ar="قلم">einem</span>
+          <span class="word" data-de="Buntstift" data-lit="قلم تلوين" data-ar="قلم تلوين">Buntstift</span>
+          <span class="word" data-de="auf" data-lit="على" data-ar="على">auf</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="ـ">die</span>
+          <span class="word" data-de="Tischdecke" data-lit="غطاء طاولة" data-ar="مفرش الطاولة">Tischdecke</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          الطفل يرسم بقلم تلوين على مفرش الطاولة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Alle" data-lit="كل" data-ar="كل">Alle</span>
+          <span class="word" data-de="Tische" data-lit="طاولات" data-ar="الطاولات">Tische</span>
+          <span class="word" data-de="haben" data-lit="تملك" data-ar="عليها">haben</span>
+          <span class="word" data-de="Decken" data-lit="أغطية" data-ar="مفارش">Decken</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          كل الطاولات عليها مفارش.
+        </td>
+      </tr>
+<tr>
+        <td class="german">
+          <span class="word" data-de="Einige" data-lit="البعض" data-ar="البعض">Einige</span>
+          <span class="word" data-de="haben" data-lit="يملك" data-ar="عليه">haben</span>
+          <span class="word" data-de="Kaffeeflecken" data-lit="بقع قهوة" data-ar="بقع قهوة">Kaffeeflecken</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          البعض عليه بقع قهوة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Die" data-lit="هذه" data-ar="تلك (المفارش)">Die</span>
+          <span class="word" data-de="da" data-lit="هناك" data-ar="التي هناك">da</span>
+          <span class="word" data-de="bekommt" data-lit="تحصل" data-ar="تتلقى">bekommt</span>
+          <span class="word" data-de="jetzt" data-lit="الآن" data-ar="الآن">jetzt</span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضًا">auch</span>
+          <span class="word" data-de="noch" data-lit="علاوة على ذلك" data-ar="بالإضافة">noch</span>
+          <span class="word" data-de="rote" data-lit="حمراء" data-ar="حمراء">rote</span>
+          <span class="word" data-de="Striche" data-lit="خطوط" data-ar="خطوطًا">Striche</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          وتلك التي هناك تتلقى الآن خطوطًا حمراء أيضًا.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Was" data-lit="ماذا" data-ar="ماذا">Was</span>
+          <span class="word" data-de="macht" data-lit="تفعل" data-ar="ستفعل">macht</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Bedienung" data-lit="نادلة" data-ar="النادلة">Bedienung</span>
+          <span class="word" data-de="wohl" data-lit="يا ترى" data-ar="يا ترى">wohl</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="wenn" data-lit="عندما" data-ar="عندما">wenn</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="das" data-lit="هذا" data-ar="ذلك">das</span>
+          <span class="word" data-de="sieht" data-lit="ترى" data-ar="ترى">sieht</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          ماذا ستفعل النادلة يا ترى عندما ترى ذلك؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wenn" data-lit="عندما" data-ar="عندما">Wenn</span>
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="kommt" data-lit="تأتي" data-ar="تأتي">kommt</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="bestellt" data-lit="تطلب" data-ar="ستطلب">bestellt</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="sicher" data-lit="بالتأكيد" data-ar="بالتأكيد">sicher</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="كوب">ein</span>
+          <span class="word" data-de="Glas" data-lit="كأس/كوب" data-ar="كوب">Glas</span>
+          <span class="word" data-de="Tee" data-lit="شاي" data-ar="شاي">Tee</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          عندما تأتي ماريا، ستطلب بالتأكيد كوباً من الشاي.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sie" data-lit="هي" data-ar="إنها">Sie</span>
+          <span class="word" data-de="trinkt" data-lit="تشرب" data-ar="تشرب">trinkt</span>
+          <span class="word" data-de="immer" data-lit="دائمًا" data-ar="دائمًا">immer</span>
+          <span class="word" data-de="Tee" data-lit="شاي" data-ar="الشاي">Tee</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          إنها تشرب الشاي دائمًا.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Der" data-lit="هو (الشاي)" data-ar="إنه">Der</span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="يكون">ist</span>
+          <span class="word" data-de="gut" data-lit="جيد" data-ar="جيدًا">gut</span>
+          <span class="word" data-de="für" data-lit="لـ" data-ar="لـ">für</span>
+          <span class="word" data-de="ihre" data-lit="خاصتها" data-ar="صوتها">ihre</span>
+          <span class="word" data-de="Stimme" data-lit="صوت" data-ar="صوتها">Stimme</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="sagt" data-lit="تقول" data-ar="تقول">sagt</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          تقول إنه جيد لصوتها.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Mein" data-lit="خاصتي" data-ar="جاري">Mein</span>
+          <span class="word" data-de="Tischnachbar" data-lit="جار الطاولة" data-ar="جاري في الطاولة">Tischnachbar</span>
+          <span class="word" data-de="liest" data-lit="يقرأ" data-ar="يقرأ">liest</span>
+          <span class="word" data-de="Zeitung" data-lit="جريدة" data-ar="الجريدة">Zeitung</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          جاري في الطاولة يقرأ الجريدة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sicher" data-lit="بالتأكيد" data-ar="من المؤكد">Sicher</span>
+          <span class="word" data-de="hat" data-lit="ملك" data-ar="أنه">hat</span>
+          <span class="word" data-de="er" data-lit="هو" data-ar="هو">er</span>
+          <span class="word" data-de="seine" data-lit="خاصته" data-ar="نظارته">seine</span>
+          <span class="word" data-de="Brille" data-lit="نظارة" data-ar="نظارته">Brille</span>
+          <span class="word" data-de="vergessen" data-lit="نسي" data-ar="نسي">vergessen</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="weil" data-lit="لأن" data-ar="لأنه">weil</span>
+          <span class="word" data-de="er" data-lit="هو" data-ar="هو">er</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Zeitung" data-lit="جريدة" data-ar="الجريدة">Zeitung</span>
+          <span class="word" data-de="so" data-lit="هكذا" data-ar="جداً">so</span>
+          <span class="word" data-de="dicht" data-lit="كثيف/قريب" data-ar="قريباً">dicht</span>
+          <span class="word" data-de="vor" data-lit="أمام" data-ar="أمام">vor</span>
+          <span class="word" data-de="seine" data-lit="خاصته" data-ar="أنفه">seine</span>
+          <span class="word" data-de="Nase" data-lit="أنف" data-ar="أنفه">Nase</span>
+          <span class="word" data-de="hält" data-lit="يمسك" data-ar="يمسك">hält</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          من المؤكد أنه نسي نظارته لأنه يمسك الجريدة قريباً جداً من أنفه.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Halb" data-lit="نصف" data-ar="النصف">Halb</span>
+          <span class="word" data-de="fünf" data-lit="خمسة" data-ar="الرابعة و">fünf</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          الرابعة والنصف.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="ist" data-lit="تكون" data-ar="لم">ist</span>
+          <span class="word" data-de="immer" data-lit="دائمًا" data-ar="تصل">immer</span>
+          <span class="word" data-de="noch" data-lit="بعد" data-ar="بعد">noch</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="(نفي)">nicht</span>
+          <span class="word" data-de="da" data-lit="هنا" data-ar="هنا">da</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          ماريا لم تصل بعد.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Am" data-lit="على الـ" data-ar="على">Am</span>
+          <span class="word" data-de="Tisch" data-lit="طاولة" data-ar="الطاولة">Tisch</span>
+          <span class="word" data-de="vor" data-lit="أمام" data-ar="أمام">vor</span>
+          <span class="word" data-de="dem" data-lit="الـ" data-ar="الـ">dem</span>
+          <span class="word" data-de="Fenster" data-lit="نافذة" data-ar="النافذة">Fenster</span>
+          <span class="word" data-de="sitzt" data-lit="تجلس" data-ar="تجلس">sitzt</span>
+          <span class="word" data-de="ein" data-lit="واحدة" data-ar="فتاة">ein</span>
+          <span class="word" data-de="Mädchen" data-lit="فتاة" data-ar="فتاة">Mädchen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          على الطاولة أمام النافذة تجلس فتاة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wie" data-lit="كم" data-ar="كم">Wie</span>
+          <span class="word" data-de="alt" data-lit="عمر" data-ar="عمرها">alt</span>
+          <span class="word" data-de="mag" data-lit="قد" data-ar="قد">mag</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="sein" data-lit="تكون" data-ar="يكون">sein</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          كم قد يكون عمرها؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="أنا">Ich</span>
+          <span class="word" data-de="sehe" data-lit="أرى" data-ar="لا أرى سوى">sehe</span>
+          <span class="word" data-de="ihr" data-lit="خاصتها" data-ar="وجهها">ihr</span>
+          <span class="word" data-de="Gesicht" data-lit="وجه" data-ar="وجهها">Gesicht</span>
+          <span class="word" data-de="nur" data-lit="فقط" data-ar="فقط">nur</span>
+          <span class="word" data-de="halb" data-lit="نصف" data-ar="نصف">halb</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لا أرى سوى نصف وجهها.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sind" data-lit="هل تكون" data-ar="هل">Sind</span>
+          <span class="word" data-de="das" data-lit="تلك" data-ar="تلك">das</span>
+          <span class="word" data-de="Tränen" data-lit="دموع" data-ar="دموع">Tränen</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="ihren" data-lit="خاصتها" data-ar="عينيها">ihren</span>
+          <span class="word" data-de="Augen" data-lit="عينين" data-ar="عينيها">Augen</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          هل تلك دموع في عينيها؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Schaut" data-lit="هل تنظر" data-ar="هل تنظر">Schaut</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="aus" data-lit="من" data-ar="من">aus</span>
+          <span class="word" data-de="dem" data-lit="الـ" data-ar="الـ">dem</span>
+          <span class="word" data-de="Fenster" data-lit="نافذة" data-ar="النافذة">Fenster</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="weil" data-lit="لأن" data-ar="لأنها">weil</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضاً">auch</span>
+          <span class="word" data-de="wartet" data-lit="تنتظر" data-ar="تنتظر">wartet</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          هل تنظر من النافذة لأنها تنتظر أيضاً؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="أنا">Ich</span>
+          <span class="word" data-de="rufe" data-lit="أنادي" data-ar="أنادي">rufe</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Kellnerin" data-lit="نادلة" data-ar="النادلة">Kellnerin</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          أنادي النادلة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Noch" data-lit="بعد" data-ar="أخرى">„Noch</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="قطعة">ein</span>
+          <span class="word" data-de="Stück" data-lit="قطعة" data-ar="قطعة">Stück</span>
+          <span class="word" data-de="bitte" data-lit="من فضلك" data-ar="من فضلك">bitte</span>
+          <span class="word" data-de="!“" data-lit="!“" data-ar="!“">!“</span>
+        </td>
+        <td class="arabic">
+          "قطعة أخرى من فضلك!"
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Oh" data-lit="أوه" data-ar="أوه">„Oh</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="Ihnen" data-lit="لكم" data-ar="يبدو أنه">Ihnen</span>
+          <span class="word" data-de="schmeckt" data-lit="يعجب" data-ar="يعجبك">schmeckt</span>
+          <span class="word" data-de="es" data-lit="هو" data-ar="(طعمها)">es</span>
+          <span class="word" data-de="aber" data-lit="لكن" data-ar="جداً">aber</span>
+          <span class="word" data-de="!“" data-lit="!“" data-ar="!“">!“</span>
+        </td>
+        <td class="arabic">
+          "أوه، يبدو أنه يعجبك جداً!"
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Wie" data-lit="كما" data-ar="كما">„Wie</span>
+          <span class="word" data-de="immer" data-lit="دائمًا" data-ar="دائماً">immer</span>
+          <span class="word" data-de="!“," data-lit="!“," data-ar="!“">!“,</span>
+          <span class="word" data-de="antworte" data-lit="أجيب" data-ar="أجيب">antworte</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          أجيب: "كالعادة!".
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Stimmt" data-lit="صحيح" data-ar="صحيح">Stimmt</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Kirschtorte" data-lit="كعكة الكرز" data-ar="كعكة الكرز">Kirschtorte</span>
+          <span class="word" data-de="ist" data-lit="تكون" data-ar="تكون">ist</span>
+          <span class="word" data-de="heute" data-lit="اليوم" data-ar="اليوم">heute</span>
+          <span class="word" data-de="besonders" data-lit="بشكل خاص" data-ar="بشكل خاص">besonders</span>
+          <span class="word" data-de="gut" data-lit="جيدة" data-ar="جيدة">gut</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          صحيح، كعكة الكرز جيدة بشكل خاص اليوم.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Aber" data-lit="لكن" data-ar="لكن">Aber</span>
+          <span class="word" data-de="am" data-lit="في الـ" data-ar="الأفضل">am</span>
+          <span class="word" data-de="besten" data-lit="الأفضل" data-ar="الأفضل">besten</span>
+          <span class="word" data-de="schmeckt" data-lit="تتذوق" data-ar="طعمها">schmeckt</span>
+          <span class="word" data-de="es" data-lit="هي" data-ar="يكون">es</span>
+          <span class="word" data-de="mir" data-lit="لي" data-ar="لي">mir</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="wenn" data-lit="عندما" data-ar="عندما">wenn</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="لا">nicht</span>
+          <span class="word" data-de="allein" data-lit="وحيدًا" data-ar="وحيداً">allein</span>
+          <span class="word" data-de="essen" data-lit="آكل" data-ar="تناولها">essen</span>
+          <span class="word" data-de="muss" data-lit="يجب" data-ar="أضطر">muss</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لكن طعمها يكون أفضل عندما لا أضطر لتناولها وحيداً.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Eigentlich" data-lit="في الواقع" data-ar="في الواقع">Eigentlich</span>
+          <span class="word" data-de="habe" data-lit="أملك" data-ar="لم أعد">habe</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أشعر">ich</span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضاً">auch</span>
+          <span class="word" data-de="keinen" data-lit="لا" data-ar="بالجوع">keinen</span>
+          <span class="word" data-de="Hunger" data-lit="جوع" data-ar="بالجوع">Hunger</span>
+          <span class="word" data-de="mehr" data-lit="أكثر" data-ar="بعد الآن">mehr</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="aber" data-lit="لكن" data-ar="لكن">aber</span>
+          <span class="word" data-de="vielleicht" data-lit="ربما" data-ar="ربما">vielleicht</span>
+          <span class="word" data-de="kommt" data-lit="تأتي" data-ar="تأتي">kommt</span>
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="ja" data-lit="نعم/بالفعل" data-ar="بالفعل">ja</span>
+          <span class="word" data-de="..." data-lit="..." data-ar="...">...</span>
+        </td>
+        <td class="arabic">
+          في الواقع لم أعد أشعر بالجوع، لكن ربما تأتي ماريا...
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Viertel" data-lit="ربع" data-ar="الخامسة إلا">Viertel</span>
+          <span class="word" data-de="vor" data-lit="قبل" data-ar="إلا">vor</span>
+          <span class="word" data-de="fünf" data-lit="خمسة" data-ar="ربعاً">fünf</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          الخامسة إلا ربعاً.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Mein" data-lit="خاصتي" data-ar="نظري">Mein</span>
+          <span class="word" data-de="Blick" data-lit="نظرة" data-ar="نظري">Blick</span>
+          <span class="word" data-de="wandert" data-lit="يتجول" data-ar="يتجه">wandert</span>
+          <span class="word" data-de="zur" data-lit="إلى الـ" data-ar="نحو">zur</span>
+          <span class="word" data-de="Tür" data-lit="باب" data-ar="الباب">Tür</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          يتجه نظري نحو الباب.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Nichts" data-lit="لا شيء" data-ar="لا شيء">Nichts</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لا شيء.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Immer" data-lit="دائمًا" data-ar="لا يزال">Immer</span>
+          <span class="word" data-de="noch" data-lit="بعد" data-ar="لا يزال">noch</span>
+          <span class="word" data-de="nichts" data-lit="لا شيء" data-ar="لا شيء">nichts</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لا يزال لا شيء.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wenn" data-lit="إذا" data-ar="إذا">Wenn</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="لم">sie</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="تأتِ">nicht</span>
+          <span class="word" data-de="bald" data-lit="قريبًا" data-ar="قريباً">bald</span>
+          <span class="word" data-de="kommt" data-lit="تأتي" data-ar="تأتِ">kommt</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="سينتهي">ist</span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضاً">auch</span>
+          <span class="word" data-de="mein" data-lit="خاصتي" data-ar="حلمي">mein</span>
+          <span class="word" data-de="Traum" data-lit="حلم" data-ar="حلمي">Traum</span>
+          <span class="word" data-de="zu" data-lit="إلى" data-ar="إلى">zu</span>
+          <span class="word" data-de="Ende" data-lit="نهاية" data-ar="النهاية">Ende</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          إذا لم تأتِ قريباً، سينتهي حلمي أيضاً.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Dann" data-lit="إذن" data-ar="حينها">Dann</span>
+          <span class="word" data-de="gehe" data-lit="أذهب" data-ar="سأذهب">gehe</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          حينها سأذهب.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Dann" data-lit="إذن" data-ar="حينها">Dann</span>
+          <span class="word" data-de="sollen" data-lit="يجب" data-ar="عليهم">sollen</span>
+          <span class="word" data-de="sie" data-lit="هم" data-ar="هم">sie</span>
+          <span class="word" data-de="es" data-lit="هو" data-ar="القيام بذلك">es</span>
+          <span class="word" data-de="ohne" data-lit="بدون" data-ar="بدوني">ohne</span>
+          <span class="word" data-de="mich" data-lit="أنا" data-ar="بدوني">mich</span>
+          <span class="word" data-de="machen" data-lit="يفعلون" data-ar="يفعلون">machen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          حينها عليهم القيام بذلك بدوني.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Was" data-lit="ماذا" data-ar="ماذا">Was</span>
+          <span class="word" data-de="denkt" data-lit="تفكر" data-ar="ستفكر">denkt</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Bedienung" data-lit="نادلة" data-ar="النادلة">Bedienung</span>
+          <span class="word" data-de="wohl" data-lit="يا ترى" data-ar="يا ترى">wohl</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="wenn" data-lit="عندما" data-ar="إذا">wenn</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="jetzt" data-lit="الآن" data-ar="الآن">jetzt</span>
+          <span class="word" data-de="noch" data-lit="علاوة على ذلك" data-ar="أيضاً">noch</span>
+          <span class="word" data-de="einen" data-lit="واحد" data-ar="كأساً من">einen</span>
+          <span class="word" data-de="Kognak" data-lit="كونياك" data-ar="الكونياك">Kognak</span>
+          <span class="word" data-de="bestelle" data-lit="أطلب" data-ar="طلبت">bestelle</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          ماذا ستفكر النادلة يا ترى إذا طلبت كأساً من الكونياك الآن؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Egal" data-lit="لا يهم" data-ar="لا يهم">Egal</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لا يهم.
+        </td>
+      </tr>
+<tr>
+        <td class="german">
+          <span class="word" data-de="Da" data-lit="هناك" data-ar="ها هو">Da</span>
+          <span class="word" data-de="kommt" data-lit="يأتي" data-ar="يأتي">kommt</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Kognak" data-lit="كونياك" data-ar="الكونياك">Kognak</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          ها هو الكونياك يأتي.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Und" data-lit="و" data-ar="و">Und</span>
+          <span class="word" data-de="da" data-lit="هناك" data-ar="ها هي">da</span>
+          <span class="word" data-de="kommt" data-lit="يأتي" data-ar="تأتي">kommt</span>
+          <span class="word" data-de="-" data-lit="-" data-ar="-">-</span>
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          وها هي ماريا تأتي.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="أنا">Ich</span>
+          <span class="word" data-de="habe" data-lit="أملك" data-ar="لم">habe</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="أرها">sie</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="(نفي)">nicht</span>
+          <span class="word" data-de="gesehen" data-lit="رأيت" data-ar="أرها">gesehen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لم أرها.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Nur" data-lit="فقط" data-ar="فقط">Nur</span>
+          <span class="word" data-de="einen" data-lit="واحد" data-ar="لحظة">einen</span>
+          <span class="word" data-de="Augenblick" data-lit="لحظة" data-ar="واحدة">Augenblick</span>
+          <span class="word" data-de="habe" data-lit="أملك" data-ar="لم">habe</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أراقب">ich</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Tür" data-lit="باب" data-ar="الباب">Tür</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="(نفي)">nicht</span>
+          <span class="word" data-de="beobachtet" data-lit="راقبت" data-ar="أراقب">beobachtet</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لمدة لحظة واحدة فقط لم أراقب الباب.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Aber" data-lit="لكن" data-ar="لكنها">Aber</span>
+          <span class="word" data-de="jetzt" data-lit="الآن" data-ar="الآن">jetzt</span>
+          <span class="word" data-de="ist" data-lit="تكون" data-ar="هنا">ist</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="da" data-lit="هنا" data-ar="هنا">da</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لكنها الآن هنا.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Nur" data-lit="فقط" data-ar="فقط">Nur</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="لا">nicht</span>
+          <span class="word" data-de="nervös" data-lit="متوتر" data-ar="تتوتر">nervös</span>
+          <span class="word" data-de="werden" data-lit="يصبح" data-ar="تتوتر">werden</span>
+          <span class="word" data-de="!" data-lit="!" data-ar="!">!</span>
+        </td>
+        <td class="arabic">
+          فقط لا تتوتر!
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Jetzt" data-lit="الآن" data-ar="الآن">Jetzt</span>
+          <span class="word" data-de="ruhig" data-lit="هادئ" data-ar="هادئاً">ruhig</span>
+          <span class="word" data-de="bleiben" data-lit="يبقى" data-ar="ابقَ">bleiben</span>
+          <span class="word" data-de="!" data-lit="!" data-ar="!">!</span>
+        </td>
+        <td class="arabic">
+          ابقَ هادئاً الآن!
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wenn" data-lit="إذا" data-ar="إذا">Wenn</span>
+          <span class="word" data-de="ihre" data-lit="خاصتها" data-ar="أخبارها">ihre</span>
+          <span class="word" data-de="Nachricht" data-lit="رسالة/خبر" data-ar="أخبارها">Nachricht</span>
+          <span class="word" data-de="schlecht" data-lit="سيء" data-ar="سيئة">schlecht</span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="كانت">ist</span>
+          <span class="word" data-de="-" data-lit="-" data-ar="-">-</span>
+          <span class="word" data-de="dann" data-lit="إذن" data-ar="إذن">dann</span>
+          <span class="word" data-de="war's" data-lit="كان هو" data-ar="انتهى الأمر">war's</span>
+          <span class="word" data-de="das" data-lit="ذلك" data-ar="ذلك">das</span>
+          <span class="word" data-de="eben" data-lit="بالضبط" data-ar="بالضبط">eben</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          إذا كانت أخبارها سيئة - فهذا كل شيء إذن.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Dann" data-lit="إذن" data-ar="حينها">Dann</span>
+          <span class="word" data-de="kann" data-lit="يستطيع" data-ar="يمكن">kann</span>
+          <span class="word" data-de="man" data-lit="المرء" data-ar="المرء">man</span>
+          <span class="word" data-de="nichts" data-lit="لا شيء" data-ar="فعل شيء">nichts</span>
+          <span class="word" data-de="machen" data-lit="يفعل" data-ar="فعل">machen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          حينها لا يمكن للمرء فعل شيء.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Irgendwie" data-lit="بطريقة ما" data-ar="بطريقة ما">Irgendwie</span>
+          <span class="word" data-de="geht" data-lit="يسير" data-ar="تستمر">geht</span>
+          <span class="word" data-de="es" data-lit="هو" data-ar="الأمور">es</span>
+          <span class="word" data-de="trotzdem" data-lit="رغم ذلك" data-ar="رغم ذلك">trotzdem</span>
+          <span class="word" data-de="weiter" data-lit="أبعد" data-ar="تستمر">weiter</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          بطريقة ما، ستستمر الأمور رغم ذلك.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Hallo" data-lit="مرحباً" data-ar="مرحباً">„Hallo</span>
+          <span class="word" data-de="!“," data-lit="!“," data-ar="!“">!“,</span>
+          <span class="word" data-de="sage" data-lit="أقول" data-ar="أقول">sage</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="stehe" data-lit="أقف" data-ar="أنهض">stehe</span>
+          <span class="word" data-de="auf" data-lit="إلى أعلى" data-ar="أنهض">auf</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          "مرحباً!"، أقول وأنهض.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sie" data-lit="هي" data-ar="هي">Sie</span>
+          <span class="word" data-de="lächelt" data-lit="تبتسم" data-ar="تبتسم">lächelt</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="küsst" data-lit="تقبل" data-ar="تقبلني">küsst</span>
+          <span class="word" data-de="mich" data-lit="أنا" data-ar="أنا">mich</span>
+          <span class="word" data-de="flüchtig" data-lit="عابر/سريع" data-ar="بسرعة">flüchtig</span>
+          <span class="word" data-de="auf" data-lit="على" data-ar="على">auf</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Wange" data-lit="خد" data-ar="خدي">Wange</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          تبتسم وتقبلني بسرعة على خدي.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Tut" data-lit="يفعل" data-ar="أنا">„Tut</span>
+          <span class="word" data-de="mir" data-lit="لي" data-ar="آسفة">mir</span>
+          <span class="word" data-de="leid“" data-lit="ألم" data-ar="آسفة">leid“</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="sagt" data-lit="تقول" data-ar="تقول">sagt</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="„die" data-lit="الـ" data-ar="الـ">„die</span>
+          <span class="word" data-de="Probe" data-lit="بروفة" data-ar="البروفة">Probe</span>
+          <span class="word" data-de="hat" data-lit="تملك" data-ar="لقد">hat</span>
+          <span class="word" data-de="so" data-lit="هكذا" data-ar="هكذا">so</span>
+          <span class="word" data-de="lange" data-lit="طويل" data-ar="وقتاً طويلاً">lange</span>
+          <span class="word" data-de="gedauert" data-lit="استغرقت" data-ar="استغرقت">gedauert</span>
+          <span class="word" data-de=".“" data-lit=".“" data-ar=".“">.“</span>
+        </td>
+        <td class="arabic">
+          "أنا آسفة"، تقول، "لقد استغرقت البروفة وقتاً طويلاً."
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Macht" data-lit="يفعل" data-ar="لا">„Macht</span>
+          <span class="word" data-de="nichts“" data-lit="لا شيء" data-ar="يهم">nichts“</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="höre" data-lit="أسمع" data-ar="أسمع">höre</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="نفسي">ich</span>
+          <span class="word" data-de="mich" data-lit="أنا" data-ar="أقول">mich</span>
+          <span class="word" data-de="ganz" data-lit="تماماً" data-ar="تماماً">ganz</span>
+          <span class="word" data-de="ruhig" data-lit="هادئ" data-ar="بهدوء">ruhig</span>
+          <span class="word" data-de="sagen" data-lit="أقول" data-ar="أقول">sagen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          "لا يهم"، أسمع نفسي أقول بهدوء تام.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Wie" data-lit="كيف" data-ar="كيف">„Wie</span>
+          <span class="word" data-de="war's" data-lit="كان الأمر" data-ar="كان الأمر">war's</span>
+          <span class="word" data-de="denn" data-lit="إذن" data-ar="إذن">denn</span>
+          <span class="word" data-de="?“" data-lit="?“" data-ar="?“">?“</span>
+        </td>
+        <td class="arabic">
+          "كيف كان الأمر إذن؟"
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Mein" data-lit="خاصتي" data-ar="نبضي">Mein</span>
+          <span class="word" data-de="Puls" data-lit="نبض" data-ar="نبضي">Puls</span>
+          <span class="word" data-de="schlägt" data-lit="يضرب" data-ar="يضرب">schlägt</span>
+          <span class="word" data-de="150" data-lit="150" data-ar="150">150</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          نبضي يضرب 150.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Was" data-lit="ماذا" data-ar="ماذا">„Was</span>
+          <span class="word" data-de="?“" data-lit="?“" data-ar="?“">?“</span>
+          <span class="word" data-de="-" data-lit="-" data-ar="-">-</span>
+          <span class="word" data-de="„Na" data-lit="حسناً" data-ar="حسناً">„Na</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Probe" data-lit="بروفة" data-ar="البروفة">Probe</span>
+          <span class="word" data-de=".“" data-lit=".“" data-ar=".“">.“</span>
+        </td>
+        <td class="arabic">
+          "ماذا؟" - "حسناً، البروفة."
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Ach" data-lit="آه" data-ar="آه">„Ach</span>
+          <span class="word" data-de="so" data-lit="هكذا" data-ar="هكذا">so</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+          <span class="word" data-de="Gut" data-lit="جيد" data-ar="جيد">Gut</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+          <span class="word" data-de="Prima" data-lit="ممتاز" data-ar="ممتاز">Prima</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+          <span class="word" data-de="Also" data-lit="إذن" data-ar="إذن">Also</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="das" data-lit="الـ" data-ar="الـ">das</span>
+          <span class="word" data-de="Stück" data-lit="قطعة/مسرحية" data-ar="المسرحية">Stück</span>
+          <span class="word" data-de="ist" data-lit="تكون" data-ar="تكون">ist</span>
+          <span class="word" data-de="toll" data-lit="رائع" data-ar="رائعة">toll</span>
+          <span class="word" data-de="!“" data-lit="!“" data-ar="!“">!“</span>
+        </td>
+        <td class="arabic">
+          "آه هكذا. جيد. ممتاز. إذن، المسرحية رائعة!"
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Das" data-lit="هذا" data-ar="هذا">Das</span>
+          <span class="word" data-de="weiß" data-lit="أعرف" data-ar="أعرفه">weiß</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="aber" data-lit="لكن" data-ar="لكن">aber</span>
+          <span class="word" data-de="das" data-lit="هذا" data-ar="هذا">das</span>
+          <span class="word" data-de="will" data-lit="أريد" data-ar="أريد">will</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أنا">ich</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="لا">nicht</span>
+          <span class="word" data-de="hören" data-lit="أسمع" data-ar="سماعه">hören</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          أنا أعرف ذلك، لكن هذا ما لا أريد سماعه.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wenn" data-lit="إذا" data-ar="إذا">Wenn</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="jetzt" data-lit="الآن" data-ar="الآن">jetzt</span>
+          <span class="word" data-de="nichts" data-lit="لا شيء" data-ar="شيئاً">nichts</span>
+          <span class="word" data-de="sagt" data-lit="تقول" data-ar="لم تقل">sagt</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="dann" data-lit="إذن" data-ar="فـ">dann</span>
+          <span class="word" data-de="..." data-lit="..." data-ar="...">...</span>
+        </td>
+        <td class="arabic">
+          إذا لم تقل شيئاً الآن، فـ...
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="أنا">Ich</span>
+          <span class="word" data-de="schaue" data-lit="أنظر" data-ar="أنظر">schaue</span>
+          <span class="word" data-de="ihr" data-lit="لها" data-ar="في">ihr</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="عينيها">in</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Augen" data-lit="عينين" data-ar="عينين">Augen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          أنظر في عينيها.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Aber" data-lit="لكن" data-ar="لكن">„Aber</span>
+          <span class="word" data-de="nimm" data-lit="خذ" data-ar="تفضلي">nimm</span>
+          <span class="word" data-de="doch" data-lit="بالتأكيد" data-ar="بالتأكيد">doch</span>
+          <span class="word" data-de="erst" data-lit="أولاً" data-ar="أولاً">erst</span>
+          <span class="word" data-de="mal" data-lit="مرة" data-ar="(للتأكيد)">mal</span>
+          <span class="word" data-de="Platz" data-lit="مكان" data-ar="بالجلوس">Platz</span>
+          <span class="word" data-de="!“" data-lit="!“" data-ar="!“">!“</span>
+        </td>
+        <td class="arabic">
+          "لكن تفضلي بالجلوس أولاً!"
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Wieder" data-lit="مجدداً" data-ar="مجدداً">Wieder</span>
+          <span class="word" data-de="kommt" data-lit="يأتي" data-ar="تأتي">kommt</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Bedienung" data-lit="نادلة" data-ar="النادلة">Bedienung</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          تأتي النادلة مجدداً.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="bestellt" data-lit="تطلب" data-ar="تطلب">bestellt</span>
+          <span class="word" data-de="einen" data-lit="واحد" data-ar="كأس">einen</span>
+          <span class="word" data-de="Becher" data-lit="كأس" data-ar="كأس">Becher</span>
+          <span class="word" data-de="Eis" data-lit="آيس كريم" data-ar="آيس كريم">Eis</span>
+          <span class="word" data-de="mit" data-lit="مع" data-ar="مع">mit</span>
+          <span class="word" data-de="Sahne" data-lit="كريمة" data-ar="الكريمة">Sahne</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          ماريا تطلب كأس آيس كريم مع الكريمة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Aber" data-lit="لكن" data-ar="لكنها">Aber</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="sagt" data-lit="تقول" data-ar="لا تقول">sagt</span>
+          <span class="word" data-de="nichts" data-lit="لا شيء" data-ar="شيئاً">nichts</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لكنها لا تقول شيئاً.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Na" data-lit="حسناً" data-ar="حسناً">Na</span>
+          <span class="word" data-de="gut" data-lit="جيد" data-ar="جيد">gut</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="es" data-lit="هو" data-ar="الأمر">es</span>
+          <span class="word" data-de="hat" data-lit="يملك" data-ar="لم">hat</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="ينجح">nicht</span>
+          <span class="word" data-de="geklappt" data-lit="نجح" data-ar="ينجح">geklappt</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          حسناً، لم ينجح الأمر.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Es" data-lit="هناك" data-ar="هناك">Es</span>
+          <span class="word" data-de="gibt" data-lit="يوجد" data-ar="يوجد">gibt</span>
+          <span class="word" data-de="auch" data-lit="أيضاً" data-ar="أيضاً">auch</span>
+          <span class="word" data-de="noch" data-lit="علاوة على ذلك" data-ar="بعد">noch</span>
+          <span class="word" data-de="andere" data-lit="أخرى" data-ar="مدن أخرى">andere</span>
+          <span class="word" data-de="Städte" data-lit="مدن" data-ar="مدن">Städte</span>
+          <span class="word" data-de="für" data-lit="لـ" data-ar="بالنسبة لي">für</span>
+          <span class="word" data-de="mich" data-lit="أنا" data-ar="لي">mich</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          هناك أيضاً مدن أخرى بالنسبة لي.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Und" data-lit="و" data-ar="و">Und</span>
+          <span class="word" data-de="andere" data-lit="أخرى" data-ar="أخرى">andere</span>
+          <span class="word" data-de="Theater" data-lit="مسارح" data-ar="مسارح">Theater</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          ومسارح أخرى.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Jetzt" data-lit="الآن" data-ar="الآن">Jetzt</span>
+          <span class="word" data-de="winkt" data-lit="تلوح" data-ar="تلوح">winkt</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="der" data-lit="لـ" data-ar="للـ">der</span>
+          <span class="word" data-de="Kellnerin" data-lit="نادلة" data-ar="النادلة">Kellnerin</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="bezahlt" data-lit="تدفع" data-ar="تدفع">bezahlt</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          الآن تلوح للنادلة وتدفع.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Stimmt" data-lit="صحيح" data-ar="الباقي">„Stimmt</span>
+          <span class="word" data-de="so“" data-lit="هكذا" data-ar="لك">so“</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="sagt" data-lit="تقول" data-ar="تقول">sagt</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="steht" data-lit="تقف" data-ar="تنهض">steht</span>
+          <span class="word" data-de="langsam" data-lit="ببطء" data-ar="ببطء">langsam</span>
+          <span class="word" data-de="auf" data-lit="إلى أعلى" data-ar="تنهض">auf</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="nimmt" data-lit="تأخذ" data-ar="تأخذ">nimmt</span>
+          <span class="word" data-de="langsam" data-lit="ببطء" data-ar="ببطء">langsam</span>
+          <span class="word" data-de="ihren" data-lit="خاصتها" data-ar="معطفها">ihren</span>
+          <span class="word" data-de="Mantel" data-lit="معطف" data-ar="معطفها">Mantel</span>
+          <span class="word" data-de="von" data-lit="من" data-ar="من">von</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Garderobe" data-lit="خزانة" data-ar="الخزانة">Garderobe</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="geht" data-lit="تمشي" data-ar="تمشي">geht</span>
+          <span class="word" data-de="langsam" data-lit="ببطء" data-ar="ببطء">langsam</span>
+          <span class="word" data-de="zur" data-lit="نحو הـ" data-ar="نحو">zur</span>
+          <span class="word" data-de="Tür" data-lit="باب" data-ar="الباب">Tür</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="schaut" data-lit="تنظر" data-ar="تنظر">schaut</span>
+          <span class="word" data-de="noch" data-lit="مجدداً" data-ar="مجدداً">noch</span>
+          <span class="word" data-de="einmal" data-lit="مرة" data-ar="مرة">einmal</span>
+          <span class="word" data-de="zurück" data-lit="للخلف" data-ar="إلى">zurück</span>
+          <span class="word" data-de="zum" data-lit="إلى הـ" data-ar="الطاولة">zum</span>
+          <span class="word" data-de="Tisch" data-lit="طاولة" data-ar="الطاولة">Tisch</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          "الباقي لك"، تقول، وتنهض ببطء، وتأخذ معطفها ببطء من الخزانة، وتمشي ببطء نحو الباب، وتنظر مرة أخرى إلى الطاولة.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Er" data-lit="هو" data-ar="إنها">Er</span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="فارغة">ist</span>
+          <span class="word" data-de="jetzt" data-lit="الآن" data-ar="الآن">jetzt</span>
+          <span class="word" data-de="leer" data-lit="فارغ" data-ar="فارغة">leer</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          إنها فارغة الآن.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Weil" data-lit="لأن" data-ar="لأنه">Weil</span>
+          <span class="word" data-de="er" data-lit="هو" data-ar="هو">er</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="لم">nicht</span>
+          <span class="word" data-de="gekommen" data-lit="أتى" data-ar="يأتِ">gekommen</span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="يأتِ">ist</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          لأنه لم يأتِ؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Weil" data-lit="لأن" data-ar="لأنها">Weil</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="jetzt" data-lit="الآن" data-ar="الآن">jetzt</span>
+          <span class="word" data-de="gehen" data-lit="تذهب" data-ar="أن تذهب">gehen</span>
+          <span class="word" data-de="muss" data-lit="يجب" data-ar="يجب">muss</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          لأنها يجب أن تذهب الآن؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Weil" data-lit="لأن" data-ar="لأن">Weil</span>
+          <span class="word" data-de="seine" data-lit="خاصته" data-ar="حبه">seine</span>
+          <span class="word" data-de="Liebe" data-lit="حب" data-ar="حبه">Liebe</span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="لم">nicht</span>
+          <span class="word" data-de="groß" data-lit="كبير" data-ar="كبيراً">groß</span>
+          <span class="word" data-de="genug" data-lit="كفاية" data-ar="بما يكفي">genug</span>
+          <span class="word" data-de="war" data-lit="كان" data-ar="يكن">war</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          لأن حبه لم يكن كبيراً بما يكفي؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Weil" data-lit="لأن" data-ar="لأن">Weil</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="حلماً">ein</span>
+          <span class="word" data-de="Traum" data-lit="حلم" data-ar="حلماً">Traum</span>
+          <span class="word" data-de="zu" data-lit="إلى" data-ar="قد">zu</span>
+          <span class="word" data-de="Ende" data-lit="نهاية" data-ar="انتهى">Ende</span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="انتهى">ist</span>
+          <span class="word" data-de="..." data-lit="..." data-ar="...">...</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          لأن حلماً قد انتهى...؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Was" data-lit="ماذا" data-ar="ما الذي">Was</span>
+          <span class="word" data-de="ich" data-lit="أنا" data-ar="أحبه">ich</span>
+          <span class="word" data-de="am" data-lit="في الـ" data-ar="أكثر">am</span>
+          <span class="word" data-de="meisten" data-lit="معظم" data-ar="أكثر">meisten</span>
+          <span class="word" data-de="an" data-lit="في" data-ar="في">an</span>
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="mag" data-lit="أحب" data-ar="أحبه">mag</span>
+          <span class="word" data-de="?" data-lit="?" data-ar="؟">?</span>
+        </td>
+        <td class="arabic">
+          ما الذي أحبه أكثر في ماريا؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ihre" data-lit="خاصتها" data-ar="عيناها">Ihre</span>
+          <span class="word" data-de="Augen" data-lit="عينين" data-ar="عيناها">Augen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          عيناها.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Graublau" data-lit="أزرق رمادي" data-ar="أزرق رمادي">Graublau</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="immer" data-lit="دائماً" data-ar="دائماً">immer</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="قليلاً">ein</span>
+          <span class="word" data-de="bisschen" data-lit="قليلاً" data-ar="قليلاً">bisschen</span>
+          <span class="word" data-de="traurig" data-lit="حزين" data-ar="حزينة">traurig</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          أزرق رمادي، دائماً حزينة قليلاً.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Aber" data-lit="لكن" data-ar="لكن">Aber</span>
+          <span class="word" data-de="plötzlich" data-lit="فجأة" data-ar="فجأة">plötzlich</span>
+          <span class="word" data-de="funkeln" data-lit="تتألق" data-ar="تتألق">funkeln</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لكن فجأة تتألق.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Am" data-lit="في الـ" data-ar="في أجمل حالاتها">Am</span>
+          <span class="word" data-de="schönsten" data-lit="أجمل" data-ar="في أجمل حالاتها">schönsten</span>
+          <span class="word" data-de="ist" data-lit="تكون" data-ar="تكون">ist</span>
+          <span class="word" data-de="Maria" data-lit="ماريا" data-ar="ماريا">Maria</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="wenn" data-lit="عندما" data-ar="عندما">wenn</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="هي">sie</span>
+          <span class="word" data-de="aufgeregt" data-lit="متحمسة" data-ar="متحمسة">aufgeregt</span>
+          <span class="word" data-de="ist" data-lit="تكون" data-ar="تكون">ist</span>
+          <span class="word" data-de=":" data-lit=":" data-ar=":">:</span>
+        </td>
+        <td class="arabic">
+          ماريا تكون في أجمل حالاتها عندما تكون متحمسة:
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="„Weißt" data-lit="تعرف" data-ar="هل تعلم">„Weißt</span>
+          <span class="word" data-de="du" data-lit="أنت" data-ar="أنت">du</span>
+          <span class="word" data-de="was" data-lit="ماذا" data-ar="ماذا">was</span>
+          <span class="word" data-de="," data-lit="," data-ar=",">,</span>
+          <span class="word" data-de="mein" data-lit="خاصتي" data-ar="عزيزي">mein</span>
+          <span class="word" data-de="lieber" data-lit="عزيزي" data-ar="عزيزي">lieber</span>
+          <span class="word" data-de="Curt" data-lit="كيرت" data-ar="كيرت">Curt</span>
+          <span class="word" data-de="?“" data-lit="?“" data-ar="?“">?“</span>
+        </td>
+        <td class="arabic">
+          "هل تعلم ماذا يا عزيزي كيرت؟
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Ich" data-lit="أنا" data-ar="لقد">Ich</span>
+          <span class="word" data-de="habe" data-lit="أملك" data-ar="تحدثت">habe</span>
+          <span class="word" data-de="mit" data-lit="مع" data-ar="مع">mit</span>
+          <span class="word" data-de="dem" data-lit="الـ" data-ar="الـ">dem</span>
+          <span class="word" data-de="Regisseur" data-lit="مخرج" data-ar="المخرج">Regisseur</span>
+          <span class="word" data-de="gesprochen" data-lit="تحدثت" data-ar="تحدثت">gesprochen</span>
+          <span class="word" data-de="." data-lit="." data-ar=".">.</span>
+        </td>
+        <td class="arabic">
+          لقد تحدثت مع المخرج.
+        </td>
+      </tr>
+
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Alles" data-lit="كل شيء" data-ar="كل شيء">Alles</span>
+          <span class="word" data-de="klar" data-lit="واضح" data-ar="واضح">klar</span>
+          <span class="word" data-de="-" data-lit="-" data-ar="-">-</span>
+          <span class="word" data-de="du" data-lit="أنت" data-ar="لقد">du</span>
+          <span class="word" data-de="bekommst" data-lit="تحصل" data-ar="حصلت على">bekommst</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Rolle" data-lit="دور" data-ar="الدور">Rolle</span>
+          <span class="word" data-de="!“" data-lit="!“" data-ar="!“">!“</span>
+        </td>
+        <td class="arabic">
+          كل شيء واضح - لقد حصلت على الدور!"
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const voiceSelect = document.getElementById('voiceSelect');
+  const stopBtn = document.getElementById('stopBtn');
+  const testBtn = document.getElementById('testBtn');
+  let voices = [];
+  let currentPopup = null;
+  let lastWordClickTime = 0;
+  const WORD_CLICK_SUPPRESSION_MS = 600;
+
+  function loadVoices() {
+    voices = speechSynthesis.getVoices() || [];
+    voiceSelect.innerHTML = '';
+    voices.forEach((v, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = `${v.name} (${v.lang})`;
+      voiceSelect.appendChild(opt);
+    });
+    const deIndex = voices.findIndex(v => /^de(-|_)?/i.test(v.lang));
+    if (deIndex >= 0) voiceSelect.value = deIndex;
+  }
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+
+  function speakText(text, lang='de-DE') {
+    if (!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const idx = parseInt(voiceSelect.value);
+    if (!isNaN(idx) && voices[idx]) {
+      u.voice = voices[idx];
+      u.lang = voices[idx].lang || lang;
+    } else {
+      u.lang = lang;
+    }
+    u.rate = 1.0;
+    u.pitch = 1.0;
+    speechSynthesis.speak(u);
+  }
+
+  function setupWordPopups() {
+    document.querySelectorAll('.word').forEach(word => {
+      const de = word.dataset.de || word.textContent.trim();
+      const lit = word.dataset.lit || '';
+      const ar = word.dataset.ar || '';
+
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.setAttribute('role','dialog');
+      popup.setAttribute('aria-live','polite');
+      popup.innerHTML =
+        `<b>${escapeHtml(de)}</b>` +
+        `<span style="font-size:12px;opacity:0.9;display:block;margin-bottom:4px;">wörtlich: ${escapeHtml(lit)}</span>` +
+        `<span style="font-size:12px;opacity:0.95;display:block;">Kontext: ${escapeHtml(ar)}</span>`;
+      word.appendChild(popup);
+
+      word.addEventListener('click', (e) => {
+        e.stopPropagation();
+        speakText(de, 'de-DE');
+        lastWordClickTime = Date.now();
+        if (currentPopup && currentPopup !== popup) currentPopup.style.display = 'none';
+        popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+        currentPopup = popup;
+      });
+    });
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, function(m) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+  }
+
+  document.addEventListener('click', () => {
+    if (currentPopup) { currentPopup.style.display = 'none'; currentPopup = null; }
+  });
+
+  stopBtn.addEventListener('click', () => speechSynthesis.cancel());
+  testBtn.addEventListener('click', () => speakText('Dies ist ein Audiotest auf Deutsch.', 'de-DE'));
+
+  /* Build clean sentence text from each td.german */
+  (function() {
+    function buildSentenceFromCell(td) {
+      const parts = [];
+      td.childNodes.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          parts.push(node.nodeValue);
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const el = node;
+          if (el.classList && el.classList.contains('play-sentence-btn')) return;
+          if (el.classList && el.classList.contains('word')) {
+            const w = (el.dataset && el.dataset.de) ? el.dataset.de : el.textContent.trim();
+            parts.push(w);
+          } else {
+            parts.push(el.textContent);
+          }
+        }
+      });
+      const raw = parts.join('');
+      return (raw || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function initSentenceButtonsAndSentences() {
+      const germanCells = document.querySelectorAll('td.german');
+      germanCells.forEach(td => {
+        td.dataset.sentence = buildSentenceFromCell(td);
+
+        if (td.querySelector('.play-sentence-btn')) return;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'play-sentence-btn';
+        btn.setAttribute('aria-label', 'Play sentence');
+        btn.title = 'Play sentence';
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M8 5v14l11-7z"></path>
+          </svg>
+          <span style="font-size:0.9rem;line-height:1;">Play</span>
+        `;
+        td.insertBefore(btn, td.firstChild);
+
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if ('speechSynthesis' in window) speechSynthesis.cancel();
+          const sentence = td.dataset.sentence || buildSentenceFromCell(td);
+          if (!sentence) return;
+          if (typeof speakText === 'function') {
+            speakText(sentence, 'de-DE');
+          } else {
+            const u = new SpeechSynthesisUtterance(sentence);
+            u.lang = 'de-DE';
+            speechSynthesis.speak(u);
+          }
+        });
+      });
+    }
+
+    function attachRobustSentenceHandlers() {
+      document.querySelectorAll('td.german').forEach(td => {
+        td.addEventListener('pointerdown', (ev) => {
+          td._lastPointer = { x: ev.clientX, y: ev.clientY };
+        });
+
+        td.addEventListener('click', (ev) => {
+          const now = Date.now();
+          if (now - lastWordClickTime < WORD_CLICK_SUPPRESSION_MS) return;
+
+          const coords = td._lastPointer || { x: ev.clientX, y: ev.clientY };
+          const el = document.elementFromPoint(coords.x, coords.y);
+          if (el && el.closest && el.closest('.word')) return;
+
+          const sentence = td.dataset.sentence || buildSentenceFromCell(td);
+          if (!sentence) return;
+          if (typeof speakText === 'function') {
+            speakText(sentence, 'de-DE');
+          } else {
+            const u = new SpeechSynthesisUtterance(sentence);
+            u.lang = 'de-DE';
+            speechSynthesis.speak(u);
+          }
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupWordPopups();
+      initSentenceButtonsAndSentences();
+      attachRobustSentenceHandlers();
+      setTimeout(loadVoices, 500);
+    });
+  })();
+</script>
+</body>
+</html>

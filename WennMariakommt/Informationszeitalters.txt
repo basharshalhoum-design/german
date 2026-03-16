@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Gedächtnistraining — Deutsch ↔ العربية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; margin:20px; background:#f7f7f9; color:#222; }
+    h2 { margin-bottom:8px; }
+    p.hint { color:#555; margin-bottom:14px; }
+    table { width:100%; border-collapse:collapse; background:#fff; }
+    th, td { border:1px solid #ddd; padding:12px; vertical-align:top; }
+    th { background:#fafafa; font-weight:600; text-align:left; }
+    td.german { cursor:pointer; }
+    td.german:hover { background:#eef7ff; }
+    .controls { margin:12px 0; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    select, button { padding:8px 10px; font-size:0.95rem; }
+  </style>
+</head>
+<body>
+  <h2>Gedächtnistraining — Deutsch ↔ العربية</h2>
+  <p class="hint">Klicke auf einen deutschen Satz, um ihn anzuhören.</p>
+
+  <div class="controls">
+    <label for="voiceSelect">German voice:</label>
+    <select id="voiceSelect"></select>
+    <button id="stopBtn">Stop</button>
+    <button id="testBtn">Test audio</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Deutsch</th><th>العربية</th></tr>
+    </thead>
+    <tbody>
+
+      <tr><td class="german">Susana Winkler ist Gedächtnistrainerin.</td>
+      <td>سوزانا وينكلر مدربة للذاكرة.</td></tr>
+
+      <tr><td class="german">Seit fast zehn Jahren bietet sie Seminare an Volkshochschulen, in Altenheimen, Banken und Industriebetrieben an.</td>
+      <td>منذ ما يقرب من عشر سنوات تقدم دورات في مراكز التعليم، ودور المسنين، والبنوك، والمؤسسات الصناعية.</td></tr>
+
+      <tr><td class="german">Die Teilnehmer sollen lernen, wie sie Informationen besser im Gedächtnis behalten.</td>
+      <td>يهدف المشاركون إلى تعلم كيفية الاحتفاظ بالمعلومات بشكل أفضل في الذاكرة.</td></tr>
+
+      <tr><td class="german">Jenny Helfer ist 30 Jahre alt, Bürokauffrau und eine der Seminarteilnehmerinnen.</td>
+      <td>جيني هيلفر تبلغ 30 عامًا، موظفة مكتب، وهي إحدى المشاركات في الدورة.</td></tr>
+
+      <tr><td class="german">An meinem Arbeitsplatz bekomme ich ständig Massen von neuen Informationen.</td>
+      <td>في مكان عملي أتلقى باستمرار كميات كبيرة من المعلومات الجديدة.</td></tr>
+
+      <tr><td class="german">Diese Informationsflut zu bewältigen und nichts zu vergessen, ist fast ausgeschlossen.</td>
+      <td>التعامل مع هذا السيل من المعلومات وعدم نسيان شيء يكاد يكون مستحيلاً.</td></tr>
+
+      <tr><td class="german">So geht es vielen Menschen in unserer Informationsgesellschaft.</td>
+      <td>وهذا حال الكثير من الناس في مجتمع المعلومات.</td></tr>
+
+      <tr><td class="german">Sie fühlen sich den Anforderungen an ihr Gedächtnis nicht mehr gewachsen.</td>
+      <td>يشعرون أنهم لم يعودوا قادرين على تلبية متطلبات الذاكرة.</td></tr>
+
+      <tr><td class="german">Während jeder Sekunde nimmt Jenny Helfer über ihre Sinne rund zwei Millionen kleinste Informationen unbewusst auf.</td>
+      <td>في كل ثانية تستقبل جيني هيلفر عبر حواسها حوالي مليوني معلومة صغيرة دون وعي.</td></tr>
+
+      <tr><td class="german">Jede Schwankung in Licht, Farbe, Geräuschen, Gerüchen oder Berührungen wird wahrgenommen.</td>
+      <td>كل تغير في الضوء أو اللون أو الأصوات أو الروائح أو اللمسات يتم إدراكه.</td></tr>
+
+      <tr><td class="german">Würde sie all diese Informationen bewusst speichern wollen, wäre der Speicher sofort voll.</td>
+      <td>لو حاولت تخزين كل هذه المعلومات بوعي لامتلأت الذاكرة فورًا.</td></tr>
+
+      <tr><td class="german">Deshalb vergisst man fast alle Informationen innerhalb der nächsten 20 Sekunden.</td>
+      <td>لذلك ينسى الإنسان معظم المعلومات خلال العشرين ثانية التالية.</td></tr>
+
+      <tr><td class="german">Erst nach etwa 20 Minuten behalten wir etwas langfristig.</td>
+      <td>فقط بعد حوالي 20 دقيقة نبدأ بتخزين المعلومات على المدى الطويل.</td></tr>
+
+      <tr><td class="german">Dann haben die Nervenzellen eine neue Verbindung hergestellt – eine Synapse.</td>
+      <td>عندها تكون الخلايا العصبية قد أنشأت اتصالًا جديدًا — مشبكًا عصبيًا.</td></tr>
+
+      <tr><td class="german">Starke Sinneseindrücke, die mit Emotionen verbunden sind, behalten wir besonders gut.</td>
+      <td>الانطباعات الحسية القوية المرتبطة بالمشاعر نتذكرها بشكل أفضل.</td></tr>
+
+      <tr><td class="german">Ein Kind, das eine heiße Herdplatte berührt hat, vergisst nie, was „heiß“ bedeutet.</td>
+      <td>الطفل الذي يلمس موقدًا ساخنًا لا ينسى أبدًا معنى «ساخن».</td></tr>
+
+      <tr><td class="german">Ein Hobbyastronom kennt schnell die Namen vieler Sterne.</td>
+      <td>هاوي الفلك يتعلم بسرعة أسماء العديد من النجوم.</td></tr>
+
+      <tr><td class="german">Niemand vergisst, was am 11. September 2001 in New York passiert ist.</td>
+      <td>لا أحد ينسى ما حدث في 11 سبتمبر 2001 في نيويورك.</td></tr>
+
+      <tr><td class="german">In unserer Informationsgesellschaft ist es wichtig, die Informationsflut zu bündeln.</td>
+      <td>في مجتمع المعلومات من المهم تنظيم سيل المعلومات.</td></tr>
+
+      <tr><td class="german">Man sollte Daten gruppieren oder mit Bildern verknüpfen, um Eselsbrücken zu bauen.</td>
+      <td>يجب تجميع البيانات أو ربطها بصور لتكوين «جسور ذاكرة».</td></tr>
+
+      <tr><td class="german">Jenny Helfer sortiert jetzt alle wichtigen Informationen in gedankliche Schubladen ihres Aktenschrankes.</td>
+      <td>جيني هيلفر ترتب الآن المعلومات المهمة في «أدراج ذهنية» داخل خزانة ملفاتها.</td></tr>
+
+      <tr><td class="german">Sie hat Zahlensymbole erfunden, mit denen sie neue Informationen verknüpft.</td>
+      <td>لقد اخترعت رموزًا للأرقام تربط بها المعلومات الجديدة.</td></tr>
+
+      <tr><td class="german">Die Eins wird zur Kerze, die Zwei zum Schwan.</td>
+      <td>الرقم واحد يصبح شمعة، والرقم اثنان يصبح بجعة.</td></tr>
+
+      <tr><td class="german">Wenn sie um zwei Uhr eine Konferenz vorbereiten muss, stellt sie sich die Mappe im Schnabel des Schwans vor.</td>
+      <td>إذا كان عليها إعداد مؤتمر في الساعة الثانية، تتخيل ملف المؤتمر في منقار البجعة.</td></tr>
+
+      <tr><td class="german">Und es funktioniert: Sie vergisst viel weniger.</td>
+      <td>وهي تقول إن الطريقة ناجحة: فهي تنسى أقل بكثير.</td></tr>
+
+    </tbody>
+  </table>
+
+  <script>
+    const voiceSelect = document.getElementById('voiceSelect');
+    const stopBtn = document.getElementById('stopBtn');
+    const testBtn = document.getElementById('testBtn');
+    let voices = [];
+
+    function loadVoices() {
+      voices = speechSynthesis.getVoices();
+      voiceSelect.innerHTML = '';
+      voices.forEach((v, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${v.name} (${v.lang})`;
+        voiceSelect.appendChild(opt);
+      });
+      const deIndex = voices.findIndex(v => /^de/.test(v.lang));
+      if (deIndex >= 0) voiceSelect.value = deIndex;
+    }
+
+    speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+
+    function speak(text) {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      const v = voices[voiceSelect.value];
+      if (v) u.voice = v;
+      u.lang = v ? v.lang : 'de-DE';
+      u.rate = 1.0;
+      u.pitch = 1.0;
+      speechSynthesis.speak(u);
+    }
+
+    document.querySelectorAll('td.german').forEach(td => {
+      td.addEventListener('click', () => speak(td.textContent.trim()));
+    });
+
+    stopBtn.addEventListener('click', () => speechSynthesis.cancel());
+    testBtn.addEventListener('click', () => speak('Dies ist ein Audiotest auf Deutsch.'));
+  </script>
+
+</body>
+</html>

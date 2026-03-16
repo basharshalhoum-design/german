@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Deutsche Sehnsucht nach dem Einzelbüro</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --card-bg: #ffffff;
+      --border: #d0d7de;
+      --accent: #e6f2ff;
+      --popup-bg: #111827;
+      --popup-color: #f9fafb;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+    }
+    .page {
+      max-width: 1100px;
+      margin: 24px auto 40px;
+      padding: 0 16px;
+    }
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-bottom: 16px;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+    }
+    .controls label {
+      font-size: 0.9rem;
+      margin-right: 4px;
+    }
+    .controls select,
+    .controls button {
+      font-size: 0.9rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+    }
+    .controls button:hover {
+      background: #f3f4ff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    thead {
+      background: #f3f4f6;
+    }
+    th, td {
+      padding: 10px 12px;
+      vertical-align: top;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+    th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    td.german {
+      width: 60%;
+      position: relative;
+    }
+    td.arabic {
+      width: 40%;
+      direction: rtl;
+      text-align: right;
+      font-size: 0.95rem;
+      color: #111827;
+    }
+
+    .word {
+      cursor: pointer;
+      position: relative;
+      display: inline;
+      padding: 0 2px;
+      border-radius: 4px;
+      line-height: 1.4;
+      pointer-events: auto;
+    }
+    .word:hover { background: var(--accent); }
+
+    .popup {
+      position:absolute;
+      top:-38px;
+      left:50%;
+      transform:translateX(-50%);
+      background:var(--popup-bg);
+      color:var(--popup-color);
+      padding:6px 10px;
+      border-radius:6px;
+      font-size:13px;
+      white-space:nowrap;
+      display:none;
+      z-index:999;
+      box-shadow:0 6px 18px rgba(0,0,0,0.25);
+      min-width:120px;
+      text-align:left;
+      pointer-events:auto;
+    }
+
+    .play-sentence-btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      margin-right:8px;
+      padding:4px 8px;
+      font-size:0.85rem;
+      border-radius:6px;
+      border:1px solid #d0d7de;
+      background:#fff;
+      color:#111;
+      cursor:pointer;
+    }
+    .play-sentence-btn:hover { background:#f0f8ff; }
+    .play-sentence-btn:active { transform:translateY(1px); }
+    .play-sentence-btn svg { width:14px; height:14px; vertical-align:middle; }
+
+    @media (max-width: 768px) {
+      td.german, td.arabic {
+        display:block;
+        width:100%;
+      }
+      td.german {
+        border-bottom: none;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <h1>Die deutsche Sehnsucht nach dem Einzelbüro</h1>
+  <div class="subtitle">Interaktiver Text mit Wort-Popups, Audio und Satz-Wiedergabe</div>
+
+  <div class="controls">
+    <div>
+      <label for="voiceSelect">Stimme:</label>
+      <select id="voiceSelect"></select>
+    </div>
+    <button id="testBtn" type="button">Test auf Deutsch</button>
+    <button id="stopBtn" type="button">Stopp</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Deutsch</th>
+        <th>Arabisch (Kontextübersetzung)</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- Satz 1 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Mein" data-lit="خاصتي" data-ar="لي">
+            Mein
+          </span>
+          <span class="word" data-de="Schreibtisch" data-lit="مكتب كتابة" data-ar="مكتب العمل">
+            Schreibtisch
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          مكتبي.
+        </td>
+      </tr>
+
+      <!-- Satz 2 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Mein" data-lit="خاصتي" data-ar="لي">
+            Mein
+          </span>
+          <span class="word" data-de="Computer" data-lit="كمبيوتر" data-ar="الكمبيوتر الخاص بي">
+            Computer
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          جهازي الكمبيوتر.
+        </td>
+      </tr>
+
+      <!-- Satz 3 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Mein" data-lit="خاصتي" data-ar="لي">
+            Mein
+          </span>
+          <span class="word" data-de="Büro" data-lit="مكتب" data-ar="مكتبي">
+            Büro
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          مكتبي الخاص.
+        </td>
+      </tr>
+
+      <!-- Satz 4 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Das" data-lit="ذلك" data-ar="ذلك">
+            Das
+          </span>
+          <span class="word" data-de="Einzelzimmer" data-lit="غرفة فردية" data-ar="المكتب الفردي">
+            Einzelzimmer
+          </span>
+          <span class="word" data-de="war" data-lit="كان" data-ar="كان">
+            war
+          </span>
+          <span class="word" data-de="fester" data-lit="ثابت" data-ar="جزء ثابت">
+            fester
+          </span>
+          <span class="word" data-de="Bestandteil" data-lit="جزء مكوّن" data-ar="جزء أساسي">
+            Bestandteil
+          </span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="من">
+            der
+          </span>
+          <span class="word" data-de="deutschen" data-lit="الألمانية" data-ar="الألمانية">
+            deutschen
+          </span>
+          <span class="word" data-de="Bürokultur" data-lit="ثقافة المكتب" data-ar="ثقافة المكاتب الألمانية">
+            Bürokultur
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          كان المكتب الفردي جزءًا ثابتًا من ثقافة المكاتب الألمانية.
+        </td>
+      </tr>
+
+      <!-- Satz 5 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Aber" data-lit="لكن" data-ar="لكن">
+            Aber
+          </span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="حتى اليوم أيضًا">
+            auch
+          </span>
+          <span class="word" data-de="heute" data-lit="اليوم" data-ar="اليوم">
+            heute
+          </span>
+          <span class="word" data-de="haben" data-lit="يملكون" data-ar="لا يزال كثيرون يملكونه">
+            haben
+          </span>
+          <span class="word" data-de="es" data-lit="إياه" data-ar="ذلك">
+            es
+          </span>
+          <span class="word" data-de="noch" data-lit="بعد" data-ar="ما زال">
+            noch
+          </span>
+          <span class="word" data-de="viele" data-lit="كثيرون" data-ar="كثيرون">
+            viele
+          </span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">
+            und
+          </span>
+          <span class="word" data-de="wer" data-lit="من" data-ar="ومن لا يملكه">
+            wer
+          </span>
+          <span class="word" data-de="keines" data-lit="لا واحدًا" data-ar="لا مكتبًا فرديًا">
+            keines
+          </span>
+          <span class="word" data-de="hat" data-lit="يملك" data-ar="يملك">
+            hat
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="träumt" data-lit="يحلم" data-ar="يحلم">
+            träumt
+          </span>
+          <span class="word" data-de="zumindest" data-lit="على الأقل" data-ar="على الأقل">
+            zumindest
+          </span>
+          <span class="word" data-de="davon" data-lit="به" data-ar="به">
+            davon
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          وحتى اليوم لا يزال كثيرون يملكونه، ومن لا يملكه يحلم به على الأقل.
+        </td>
+      </tr>
+
+      <!-- Satz 6 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Diese" data-lit="هذه" data-ar="هذه">
+            Diese
+          </span>
+          <span class="word" data-de="Sehnsucht" data-lit="حنين" data-ar="الحنين / الشوق">
+            Sehnsucht
+          </span>
+          <span class="word" data-de="ist" data-lit="هي" data-ar="هي">
+            ist
+          </span>
+          <span class="word" data-de="typisch" data-lit="نموذجي" data-ar="نموذجية">
+            typisch
+          </span>
+          <span class="word" data-de="deutsch" data-lit="ألماني" data-ar="ألمانية">
+            deutsch
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          هذا الشوق نموذجي للألمان.
+        </td>
+      </tr>
+
+      <!-- Satz 7 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Verglichen" data-lit="مقارنًا" data-ar="بالمقارنة">
+            Verglichen
+          </span>
+          <span class="word" data-de="mit" data-lit="مع" data-ar="مع">
+            mit
+          </span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="ـ">
+            den
+          </span>
+          <span class="word" data-de="Beschäftigten" data-lit="الموظفين" data-ar="الموظفين">
+            Beschäftigten
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="anderen" data-lit="أخرى" data-ar="بلدان أخرى">
+            anderen
+          </span>
+          <span class="word" data-de="Ländern" data-lit="بلدان" data-ar="البلدان">
+            Ländern
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="sitzen" data-lit="يجلسون" data-ar="نجلس">
+            sitzen
+          </span>
+          <span class="word" data-de="wir" data-lit="نحن" data-ar="نحن">
+            wir
+          </span>
+          <span class="word" data-de="sehr" data-lit="جداً" data-ar="بشكل مريح جدًا">
+            sehr
+          </span>
+          <span class="word" data-de="bequem" data-lit="مريح" data-ar="بشكل مريح">
+            bequem
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          مقارنة بالموظفين في بلدان أخرى، نجلس نحن في ظروف مريحة جدًا.
+        </td>
+      </tr>
+
+      <!-- Satz 8 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Auch" data-lit="أيضًا" data-ar="حتى لو">
+            Auch
+          </span>
+          <span class="word" data-de="wenn" data-lit="عندما" data-ar="حتى إذا">
+            wenn
+          </span>
+          <span class="word" data-de="alle" data-lit="جميع" data-ar="كل">
+            alle
+          </span>
+          <span class="word" data-de="Mitarbeiter" data-lit="موظفين" data-ar="الموظفين">
+            Mitarbeiter
+          </span>
+          <span class="word" data-de="die" data-lit="الذين" data-ar="الذين">
+            die
+          </span>
+          <span class="word" data-de="gleiche" data-lit="نفس" data-ar="نفس">
+            gleiche
+          </span>
+          <span class="word" data-de="Möblierung" data-lit="تأثيث" data-ar="الأثاث نفسه">
+            Möblierung
+          </span>
+          <span class="word" data-de="haben" data-lit="لديهم" data-ar="لديهم">
+            haben
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="sitzen" data-lit="يجلسون" data-ar="نجلس">
+            sitzen
+          </span>
+          <span class="word" data-de="wir" data-lit="نحن" data-ar="نحن">
+            wir
+          </span>
+          <span class="word" data-de="alle" data-lit="جميع" data-ar="جميعًا">
+            alle
+          </span>
+          <span class="word" data-de="doch" data-lit="مع ذلك" data-ar="مع ذلك">
+            doch
+          </span>
+          <span class="word" data-de="an" data-lit="على" data-ar="على">
+            an
+          </span>
+          <span class="word" data-de="unseren" data-lit="خاصة بنا" data-ar="مكاتبنا الخاصة">
+            unseren
+          </span>
+          <span class="word" data-de="eigenen" data-lit="خاصة" data-ar="الخاصة">
+            eigenen
+          </span>
+          <span class="word" data-de="Schreibtischen" data-lit="مكاتب" data-ar="مكاتب العمل">
+            Schreibtischen
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="benutzen" data-lit="نستخدم" data-ar="نستخدم">
+            benutzen
+          </span>
+          <span class="word" data-de="unsere" data-lit="خاصة بنا" data-ar="خزائن الملفات الخاصة بنا">
+            unsere
+          </span>
+          <span class="word" data-de="eigenen" data-lit="الخاصة" data-ar="الخاصة">
+            eigenen
+          </span>
+          <span class="word" data-de="Aktenschränke" data-lit="خزائن ملفات" data-ar="خزائن الملفات">
+            Aktenschränke
+          </span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">
+            und
+          </span>
+          <span class="word" data-de="möchten" data-lit="نرغب" data-ar="نرغب">
+            möchten
+          </span>
+          <span class="word" data-de="am" data-lit="في الـ" data-ar="في الغالب">
+            am
+          </span>
+          <span class="word" data-de="liebsten" data-lit="الأحب" data-ar="بكل سرور">
+            liebsten
+          </span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">
+            die
+          </span>
+          <span class="word" data-de="Tür" data-lit="باب" data-ar="الباب">
+            Tür
+          </span>
+          <span class="word" data-de="zumachen" data-lit="إغلاق" data-ar="إغلاق الباب">
+            zumachen
+          </span>
+          <span class="word" data-de="können" data-lit="يمكن" data-ar="أن نتمكن من إغلاقه">
+            können
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          حتى إذا كان جميع الموظفين يملكون نفس الأثاث، فإننا نجلس جميعًا على مكاتبنا الخاصة، نستخدم خزائن ملفاتنا الخاصة، ونرغب قبل كل شيء في أن نتمكن من إغلاق الباب.
+        </td>
+      </tr>
+
+      <!-- Satz 9 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Die" data-lit="هي" data-ar="هذه الشركة">
+            Die
+          </span>
+          <span class="word" data-de="hat" data-lit="لديها" data-ar="نشرت">
+            hat
+          </span>
+          <span class="word" data-de="eine" data-lit="دراسة" data-ar="دراسة">
+            eine
+          </span>
+          <span class="word" data-de="Studie" data-lit="دراسة" data-ar="دراسة">
+            Studie
+          </span>
+          <span class="word" data-de="veröffentlicht" data-lit="نشرت" data-ar="نشرت">
+            veröffentlicht
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="wonach" data-lit="وفقًا لها" data-ar="التي تفيد بأن">
+            wonach
+          </span>
+          <span class="word" data-de="deutsche" data-lit="ألمانية" data-ar="الألمان">
+            deutsche
+          </span>
+          <span class="word" data-de="Angestellte" data-lit="موظفون" data-ar="الموظفون الألمان">
+            Angestellte
+          </span>
+          <span class="word" data-de="im" data-lit="في الـ" data-ar="في">
+            im
+          </span>
+          <span class="word" data-de="internationalen" data-lit="دولي" data-ar="الدولي">
+            internationalen
+          </span>
+          <span class="word" data-de="Vergleich" data-lit="مقارنة" data-ar="مقارنة دولية">
+            Vergleich
+          </span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="ـ">
+            den
+          </span>
+          <span class="word" data-de="meisten" data-lit="الأكثر" data-ar="أكبر قدر من">
+            meisten
+          </span>
+          <span class="word" data-de="Platz" data-lit="مساحة" data-ar="المساحة">
+            Platz
+          </span>
+          <span class="word" data-de="haben" data-lit="لديهم" data-ar="يملكون">
+            haben
+          </span>
+          <span class="word" data-de=":" data-lit=":" data-ar=":">
+            :
+          </span>
+          <span class="word" data-de="durchschnittlich" data-lit="بالمتوسط" data-ar="بمعدل">
+            durchschnittlich
+          </span>
+          <span class="word" data-de="30" data-lit="٣٠" data-ar="٣٠">
+            30
+          </span>
+          <span class="word" data-de="Quadratmeter" data-lit="متر مربع" data-ar="مترًا مربعًا">
+            Quadratmeter
+          </span>
+          <span class="word" data-de="Mietfläche" data-lit="مساحة إيجار" data-ar="مساحة مستأجرة">
+            Mietfläche
+          </span>
+          <span class="word" data-de="pro" data-lit="لكل" data-ar="لكل">
+            pro
+          </span>
+          <span class="word" data-de="Kopf" data-lit="رأس" data-ar="شخص">
+            Kopf
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          نشرت هذه الشركة دراسة تفيد بأن الموظفين الألمان يملكون في المقارنة الدولية أكبر مساحة: في المتوسط ٣٠ مترًا مربعًا من المساحة المستأجرة لكل شخص.
+        </td>
+      </tr>
+
+      <!-- Satz 10 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Damit" data-lit="بهذا" data-ar="بهذا">
+            Damit
+          </span>
+          <span class="word" data-de="ist" data-lit="يكون" data-ar="لا يُقصد">
+            ist
+          </span>
+          <span class="word" data-de="natürlich" data-lit="طبيعيًا" data-ar="طبعًا">
+            natürlich
+          </span>
+          <span class="word" data-de="nicht" data-lit="ليس" data-ar="ليس">
+            nicht
+          </span>
+          <span class="word" data-de="nur" data-lit="فقط" data-ar="فقط">
+            nur
+          </span>
+          <span class="word" data-de="das" data-lit="ذلك" data-ar="مساحة المكتب">
+            das
+          </span>
+          <span class="word" data-de="Schreibtisch-Areal" data-lit="منطقة المكتب" data-ar="منطقة المكتب">
+            Schreibtisch-Areal
+          </span>
+          <span class="word" data-de="gemeint" data-lit="مقصود" data-ar="المقصود">
+            gemeint
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="بل أيضًا">
+            auch
+          </span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="ـ">
+            der
+          </span>
+          <span class="word" data-de="Flur" data-lit="ممر" data-ar="الممر">
+            Flur
+          </span>
+          <span class="word" data-de="oder" data-lit="أو" data-ar="أو">
+            oder
+          </span>
+          <span class="word" data-de="Küchenzeilen" data-lit="صفوف مطبخ" data-ar="زوايا المطبخ">
+            Küchenzeilen
+          </span>
+          <span class="word" data-de="sind" data-lit="هي" data-ar="تُحتسب">
+            sind
+          </span>
+          <span class="word" data-de="-" data-lit="-" data-ar="-">
+            -
+          </span>
+          <span class="word" data-de="falls" data-lit="إذا" data-ar="إذا كانت">
+            falls
+          </span>
+          <span class="word" data-de="vorhanden" data-lit="موجودة" data-ar="موجودة">
+            vorhanden
+          </span>
+          <span class="word" data-de="-" data-lit="-" data-ar="-">
+            -
+          </span>
+          <span class="word" data-de="eingerechnet" data-lit="محسوبة" data-ar="مشمولة في الحساب">
+            eingerechnet
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          ولا يُقصد بذلك فقط مساحة المكتب نفسه، بل تُحتسب أيضًا الممرات وزوايا المطبخ إن وُجدت.
+        </td>
+      </tr>
+
+      <!-- Satz 11 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Doch" data-lit="لكن" data-ar="لكن">
+            Doch
+          </span>
+          <span class="word" data-de="umso" data-lit="كلما" data-ar="كلما">
+            umso
+          </span>
+          <span class="word" data-de="erstaunlicher" data-lit="أكثر إدهاشًا" data-ar="أكثر إدهاشًا">
+            erstaunlicher
+          </span>
+          <span class="word" data-de="sind" data-lit="هي" data-ar="هي">
+            sind
+          </span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="ـ">
+            die
+          </span>
+          <span class="word" data-de="Quadratmeterzahlen" data-lit="أرقام الأمتار المربعة" data-ar="أرقام المساحات">
+            Quadratmeterzahlen
+          </span>
+          <span class="word" data-de="am" data-lit="في الـ" data-ar="في">
+            am
+          </span>
+          <span class="word" data-de="anderen" data-lit="الآخر" data-ar="الطرف الآخر">
+            anderen
+          </span>
+          <span class="word" data-de="Ende" data-lit="نهاية" data-ar="نهاية">
+            Ende
+          </span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="ـ">
+            der
+          </span>
+          <span class="word" data-de="Statistik" data-lit="إحصائية" data-ar="الإحصائية">
+            Statistik
+          </span>
+          <span class="word" data-de=":" data-lit=":" data-ar=":">
+            :
+          </span>
+          <span class="word" data-de="In" data-lit="في" data-ar="في">
+            In
+          </span>
+          <span class="word" data-de="einigen" data-lit="بعض" data-ar="بعض">
+            einigen
+          </span>
+          <span class="word" data-de="osteuropäischen" data-lit="أوروبا الشرقية" data-ar="بلدان أوروبا الشرقية">
+            osteuropäischen
+          </span>
+          <span class="word" data-de="Ländern" data-lit="بلدان" data-ar="البلدان">
+            Ländern
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="aber" data-lit="لكن" data-ar="لكن">
+            aber
+          </span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضًا">
+            auch
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="Schottland" data-lit="اسكتلندا" data-ar="اسكتلندا">
+            Schottland
+          </span>
+          <span class="word" data-de="kommt" data-lit="يصل" data-ar="لا يحصل">
+            kommt
+          </span>
+          <span class="word" data-de="jeder" data-lit="كل" data-ar="كل موظف">
+            jeder
+          </span>
+          <span class="word" data-de="Beschäftigte" data-lit="موظف" data-ar="موظف">
+            Beschäftigte
+          </span>
+          <span class="word" data-de="gerade" data-lit="فقط" data-ar="فقط">
+            gerade
+          </span>
+          <span class="word" data-de="mal" data-lit="مرة" data-ar="فقط">
+            mal
+          </span>
+          <span class="word" data-de="auf" data-lit="على" data-ar="على">
+            auf
+          </span>
+          <span class="word" data-de="10" data-lit="١٠" data-ar="١٠">
+            10
+          </span>
+          <span class="word" data-de="Quadratmeter" data-lit="متر مربع" data-ar="أمتار مربعة">
+            Quadratmeter
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="selbst" data-lit="حتى" data-ar="حتى">
+            selbst
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="Österreich" data-lit="النمسا" data-ar="النمسا">
+            Österreich
+          </span>
+          <span class="word" data-de="sind" data-lit="هي" data-ar="هي">
+            sind
+          </span>
+          <span class="word" data-de="es" data-lit="هي" data-ar="هي">
+            es
+          </span>
+          <span class="word" data-de="nur" data-lit="فقط" data-ar="فقط">
+            nur
+          </span>
+          <span class="word" data-de="zwölf" data-lit="اثنا عشر" data-ar="١٢">
+            zwölf
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          لكن الأرقام في الطرف الآخر من الإحصائية مدهشة أكثر: ففي بعض بلدان أوروبا الشرقية، وكذلك في اسكتلندا، لا يحصل كل موظف إلا على ١٠ أمتار مربعة، وحتى في النمسا لا تتجاوز المساحة ١٢ مترًا مربعًا.
+        </td>
+      </tr>
+
+      <!-- Satz 12 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Im" data-lit="في الـ" data-ar="في">
+            Im
+          </span>
+          <span class="word" data-de="angelsächsischen" data-lit="أنجلوساكسوني" data-ar="الأنجلوساكسوني">
+            angelsächsischen
+          </span>
+          <span class="word" data-de="Raum" data-lit="منطقة" data-ar="العالم الأنجلوساكسوني">
+            Raum
+          </span>
+          <span class="word" data-de="gibt" data-lit="يوجد" data-ar="يوجد">
+            gibt
+          </span>
+          <span class="word" data-de="es" data-lit="هناك" data-ar="هناك">
+            es
+          </span>
+          <span class="word" data-de="viel" data-lit="كثير" data-ar="الكثير من">
+            viel
+          </span>
+          <span class="word" data-de="mehr" data-lit="أكثر" data-ar="المزيد من">
+            mehr
+          </span>
+          <span class="word" data-de="Großraumbüros" data-lit="مكاتب كبيرة" data-ar="المكاتب المفتوحة الكبيرة">
+            Großraumbüros
+          </span>
+          <span class="word" data-de="als" data-lit="من" data-ar="مقارنة بـ">
+            als
+          </span>
+          <span class="word" data-de="bei" data-lit="عند" data-ar="لدينا">
+            bei
+          </span>
+          <span class="word" data-de="uns" data-lit="نحن" data-ar="عندنا">
+            uns
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          في العالم الأنجلوساكسوني يوجد عدد أكبر بكثير من المكاتب المفتوحة مقارنة بما هو عندنا.
+        </td>
+      </tr>
+
+      <!-- Satz 13 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="In" data-lit="في" data-ar="في">
+            In
+          </span>
+          <span class="word" data-de="London" data-lit="لندن" data-ar="لندن">
+            London
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="wo" data-lit="حيث" data-ar="حيث">
+            wo
+          </span>
+          <span class="word" data-de="Büroraum" data-lit="مساحة مكاتب" data-ar="مساحة المكاتب">
+            Büroraum
+          </span>
+          <span class="word" data-de="weltweit" data-lit="على مستوى العالم" data-ar="على مستوى العالم">
+            weltweit
+          </span>
+          <span class="word" data-de="mit" data-lit="مع" data-ar="من بين">
+            mit
+          </span>
+          <span class="word" data-de="am" data-lit="من الأكثر" data-ar="الأغلى">
+            am
+          </span>
+          <span class="word" data-de="teuersten" data-lit="الأغلى" data-ar="الأغلى">
+            teuersten
+          </span>
+          <span class="word" data-de="ist" data-lit="هو" data-ar="يُعد">
+            ist
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="ist" data-lit="هي" data-ar="يُعد">
+            ist
+          </span>
+          <span class="word" data-de="etwa" data-lit="تقريبًا" data-ar="مثلًا">
+            etwa
+          </span>
+          <span class="word" data-de="eine" data-lit="واحدة" data-ar="مساحة عمل مشتركة">
+            eine
+          </span>
+          <span class="word" data-de="Zusammenarbeit" data-lit="تعاون" data-ar="العمل المشترك">
+            Zusammenarbeit
+          </span>
+          <span class="word" data-de="auf" data-lit="على" data-ar="على">
+            auf
+          </span>
+          <span class="word" data-de="eine" data-lit="مساحة" data-ar="مساحة">
+            eine
+          </span>
+          <span class="word" data-de="Fläche" data-lit="مساحة" data-ar="مساحة">
+            Fläche
+          </span>
+          <span class="word" data-de="von" data-lit="من" data-ar="من">
+            von
+          </span>
+          <span class="word" data-de="600" data-lit="٦٠٠" data-ar="٦٠٠">
+            600
+          </span>
+          <span class="word" data-de="Quadratmetern" data-lit="متر مربع" data-ar="متر مربع">
+            Quadratmetern
+          </span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">
+            und
+          </span>
+          <span class="word" data-de="mehr" data-lit="أكثر" data-ar="أكثر">
+            mehr
+          </span>
+          <span class="word" data-de="ganz" data-lit="تمامًا" data-ar="أمرًا">
+            ganz
+          </span>
+          <span class="word" data-de="normal" data-lit="عادي" data-ar="عاديًا">
+            normal
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          في لندن، حيث تُعد مساحة المكاتب من الأغلى في العالم، يُعتبر العمل المشترك على مساحة تبلغ ٦٠٠ متر مربع أو أكثر أمرًا عاديًا تمامًا.
+        </td>
+      </tr>
+
+      <!-- Satz 14 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Häufig" data-lit="كثيرًا" data-ar="غالبًا">
+            Häufig
+          </span>
+          <span class="word" data-de="teilen" data-lit="يقسمون" data-ar="يتقاسم">
+            teilen
+          </span>
+          <span class="word" data-de="sich" data-lit="أنفسهم" data-ar="يتقاسم">
+            sich
+          </span>
+          <span class="word" data-de="sogar" data-lit="حتى" data-ar="حتى">
+            sogar
+          </span>
+          <span class="word" data-de="mehrere" data-lit="عدة" data-ar="عدة">
+            mehrere
+          </span>
+          <span class="word" data-de="Mitarbeiter" data-lit="موظفين" data-ar="موظفين">
+            Mitarbeiter
+          </span>
+          <span class="word" data-de="einen" data-lit="واحدًا" data-ar="مكان عمل واحدًا">
+            einen
+          </span>
+          <span class="word" data-de="Arbeitsplatz" data-lit="مكان عمل" data-ar="مكان عمل">
+            Arbeitsplatz
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          وغالبًا ما يتقاسم عدة موظفين مكان عمل واحدًا.
+        </td>
+      </tr>
+
+      <!-- Satz 15 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Statt" data-lit="بدلًا من" data-ar="بدلًا من">
+            Statt
+          </span>
+          <span class="word" data-de="eines" data-lit="واحد" data-ar="مكتب ثابت">
+            eines
+          </span>
+          <span class="word" data-de="festen" data-lit="ثابت" data-ar="ثابت">
+            festen
+          </span>
+          <span class="word" data-de="Schreibtisches" data-lit="مكتب" data-ar="مكتب ثابت">
+            Schreibtisches
+          </span>
+          <span class="word" data-de="verfügt" data-lit="يمتلك" data-ar="يملك">
+            verfügt
+          </span>
+          <span class="word" data-de="dann" data-lit="عندئذ" data-ar="عندئذ">
+            dann
+          </span>
+          <span class="word" data-de="jeder" data-lit="كل" data-ar="كل موظف">
+            jeder
+          </span>
+          <span class="word" data-de="über" data-lit="عن" data-ar="على">
+            über
+          </span>
+          <span class="word" data-de="einen" data-lit="واحدًا" data-ar="حاوية متحركة">
+            einen
+          </span>
+          <span class="word" data-de="Rollcontainer" data-lit="حاوية بعجلات" data-ar="خزانة متحركة بعجلات">
+            Rollcontainer
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          وبدلًا من مكتب ثابت، يملك كل موظف خزانة متحركة بعجلات.
+        </td>
+      </tr>
+
+      <!-- Satz 16 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Der" data-lit="الـ" data-ar="هذا">
+            Der
+          </span>
+          <span class="word" data-de="wird" data-lit="يُصبح" data-ar="يتم">
+            wird
+          </span>
+          <span class="word" data-de="immer" data-lit="دائمًا" data-ar="دائمًا">
+            immer
+          </span>
+          <span class="word" data-de="dorthin" data-lit="إلى هناك" data-ar="إلى المكان">
+            dorthin
+          </span>
+          <span class="word" data-de="mitgenommen" data-lit="مأخوذ معه" data-ar="يُؤخذ معه">
+            mitgenommen
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="wo" data-lit="حيث" data-ar="حيث">
+            wo
+          </span>
+          <span class="word" data-de="gerade" data-lit="حاليًا" data-ar="حاليًا">
+            gerade
+          </span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="مكان عمل">
+            ein
+          </span>
+          <span class="word" data-de="Arbeitsplatz" data-lit="مكان عمل" data-ar="مكان عمل">
+            Arbeitsplatz
+          </span>
+          <span class="word" data-de="frei" data-lit="حر" data-ar="متاح">
+            frei
+          </span>
+          <span class="word" data-de="ist" data-lit="هو" data-ar="متاح">
+            ist
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          ويتم أخذ هذه الخزانة دائمًا إلى المكان الذي يتوفر فيه حاليًا مكان عمل.
+        </td>
+      </tr>
+
+      <!-- Satz 17 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Das" data-lit="ذلك" data-ar="هذا">
+            Das
+          </span>
+          <span class="word" data-de="geht" data-lit="يسير" data-ar="يُطبق">
+            geht
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="ـ">
+            der
+          </span>
+          <span class="word" data-de="Regel" data-lit="عادة" data-ar="عادةً">
+            Regel
+          </span>
+          <span class="word" data-de="über" data-lit="عبر" data-ar="عبر">
+            über
+          </span>
+          <span class="word" data-de="alle" data-lit="كل" data-ar="جميع">
+            alle
+          </span>
+          <span class="word" data-de="Hierarchiestufen" data-lit="مستويات هرمية" data-ar="المستويات الوظيفية">
+            Hierarchiestufen
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          ويُطبق ذلك عادةً على جميع المستويات الوظيفية.
+        </td>
+      </tr>
+
+      <!-- Satz 18 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Robert" data-lit="روبرت" data-ar="روبرت">
+            Robert
+          </span>
+          <span class="word" data-de="Menke" data-lit="منكه" data-ar="منكه">
+            Menke
+          </span>
+          <span class="word" data-de="erkennt" data-lit="يتعرف" data-ar="يرى">
+            erkennt
+          </span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضًا">
+            auch
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="Deutschland" data-lit="ألمانيا" data-ar="ألمانيا">
+            Deutschland
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="einigen" data-lit="بعض" data-ar="بعض">
+            einigen
+          </span>
+          <span class="word" data-de="Bereichen" data-lit="مجالات" data-ar="المجالات">
+            Bereichen
+          </span>
+          <span class="word" data-de="eine" data-lit="واحدة" data-ar="نوعًا من">
+            eine
+          </span>
+          <span class="word" data-de="Amerikanisierung" data-lit="أمركة" data-ar="أمركة">
+            Amerikanisierung
+          </span>
+          <span class="word" data-de="des" data-lit="لـ" data-ar="لـ">
+            des
+          </span>
+          <span class="word" data-de="Büroraumes" data-lit="مساحة المكتب" data-ar="مساحة المكاتب">
+            Büroraumes
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          ويرى روبرت منكه أيضًا نوعًا من أمركة مساحة المكاتب في بعض المجالات في ألمانيا.
+        </td>
+      </tr>
+
+      <!-- Satz 19 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Banken" data-lit="بنوك" data-ar="البنوك">
+            Banken
+          </span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">
+            und
+          </span>
+          <span class="word" data-de="Unternehmer" data-lit="رواد أعمال" data-ar="الشركات">
+            Unternehmer
+          </span>
+          <span class="word" data-de="im" data-lit="في الـ" data-ar="في">
+            im
+          </span>
+          <span class="word" data-de="Telekommunikationssektor" data-lit="قطاع الاتصالات" data-ar="قطاع الاتصالات">
+            Telekommunikationssektor
+          </span>
+          <span class="word" data-de="wären" data-lit="سيكونون" data-ar="يُعتبرون">
+            wären
+          </span>
+          <span class="word" data-de="da" data-lit="هناك" data-ar="هناك">
+            da
+          </span>
+          <span class="word" data-de="vorne" data-lit="في المقدمة" data-ar="في المقدمة">
+            vorne
+          </span>
+          <span class="word" data-de="dabei" data-lit="مع ذلك" data-ar="في الطليعة">
+            dabei
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          فالبنوك وشركات قطاع الاتصالات في طليعة هذا التطور.
+        </td>
+      </tr>
+
+      <!-- Satz 20 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Doch" data-lit="لكن" data-ar="لكن">
+            Doch
+          </span>
+          <span class="word" data-de="das" data-lit="ذلك" data-ar="ذلك">
+            das
+          </span>
+          <span class="word" data-de="sind" data-lit="هي" data-ar="هي">
+            sind
+          </span>
+          <span class="word" data-de="noch" data-lit="ما زالت" data-ar="ما تزال">
+            noch
+          </span>
+          <span class="word" data-de="Ausnahmen" data-lit="استثناءات" data-ar="استثناءات">
+            Ausnahmen
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          لكن هذه الحالات ما تزال استثناءً.
+        </td>
+      </tr>
+
+      <!-- Satz 21 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Nach" data-lit="بعد" data-ar="ما يزال">
+            Nach
+          </span>
+          <span class="word" data-de="wie" data-lit="كما" data-ar="كما">
+            wie
+          </span>
+          <span class="word" data-de="vor" data-lit="من قبل" data-ar="من قبل">
+            vor
+          </span>
+          <span class="word" data-de="arbeiten" data-lit="يعملون" data-ar="يعمل">
+            arbeiten
+          </span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="ـ">
+            die
+          </span>
+          <span class="word" data-de="meisten" data-lit="الأغلبية" data-ar="معظم">
+            meisten
+          </span>
+          <span class="word" data-de="Angestellten" data-lit="موظفين" data-ar="الموظفين">
+            Angestellten
+          </span>
+          <span class="word" data-de="entweder" data-lit="إما" data-ar="إما">
+            entweder
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="kleinen" data-lit="صغيرة" data-ar="مجموعات صغيرة">
+            kleinen
+          </span>
+          <span class="word" data-de="Gruppen" data-lit="مجموعات" data-ar="مجموعات">
+            Gruppen
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="etwas" data-lit="قليلًا" data-ar="أكبر قليلًا">
+            etwas
+          </span>
+          <span class="word" data-de="größeren" data-lit="أكبر" data-ar="أكبر">
+            größeren
+          </span>
+          <span class="word" data-de="Büros" data-lit="مكاتب" data-ar="مكاتب">
+            Büros
+          </span>
+          <span class="word" data-de="oder" data-lit="أو" data-ar="أو">
+            oder
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="Einzelzellen" data-lit="خلايا فردية" data-ar="مكاتب فردية">
+            Einzelzellen
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="wie" data-lit="كما" data-ar="كما">
+            wie
+          </span>
+          <span class="word" data-de="Büros" data-lit="مكاتب" data-ar="مكاتب">
+            Büros
+          </span>
+          <span class="word" data-de="für" data-lit="لـ" data-ar="لـ">
+            für
+          </span>
+          <span class="word" data-de="eine" data-lit="واحدة" data-ar="شخص واحد">
+            eine
+          </span>
+          <span class="word" data-de="Person" data-lit="شخص" data-ar="شخص">
+            Person
+          </span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">
+            in
+          </span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="ـ">
+            der
+          </span>
+          <span class="word" data-de="Sprache" data-lit="لغة" data-ar="لغة">
+            Sprache
+          </span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="ـ">
+            der
+          </span>
+          <span class="word" data-de="Immobilienmakler" data-lit="وسطاء عقارات" data-ar="وسطاء العقارات">
+            Immobilienmakler
+          </span>
+          <span class="word" data-de="heißen" data-lit="تُسمى" data-ar="تُسمى">
+            heißen
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          وما يزال معظم الموظفين يعملون إما في مجموعات صغيرة في مكاتب أكبر قليلًا، أو في مكاتب فردية تُسمى في لغة الوسطاء العقاريين "خلايا فردية".
+        </td>
+      </tr>
+
+      <!-- Satz 22 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Laut" data-lit="وفقًا لـ" data-ar="وفقًا لـ">
+            Laut
+          </span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="ـ">
+            der
+          </span>
+          <span class="word" data-de="Studie" data-lit="دراسة" data-ar="الدراسة">
+            Studie
+          </span>
+          <span class="word" data-de="überlegen" data-lit="يفكرون" data-ar="يفكر">
+            überlegen
+          </span>
+          <span class="word" data-de="zwar" data-lit="صحيح أن" data-ar="صحيح أن">
+            zwar
+          </span>
+          <span class="word" data-de="40%" data-lit="٤٠٪" data-ar="٤٠٪">
+            40%
+          </span>
+          <span class="word" data-de="der" data-lit="من الـ" data-ar="من">
+            der
+          </span>
+          <span class="word" data-de="befragten" data-lit="المستَطلَعين" data-ar="أصحاب الشركات المستَطلَعين">
+            befragten
+          </span>
+          <span class="word" data-de="Unternehmer" data-lit="رواد أعمال" data-ar="أصحاب الشركات">
+            Unternehmer
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="ihre" data-lit="خاصة بهم" data-ar="مساحاتهم">
+            ihre
+          </span>
+          <span class="word" data-de="Großraumflächen" data-lit="مساحات كبيرة" data-ar="مساحات المكاتب المفتوحة">
+            Großraumflächen
+          </span>
+          <span class="word" data-de="zu" data-lit="لـ" data-ar="أن">
+            zu
+          </span>
+          <span class="word" data-de="erweitern" data-lit="يوسعون" data-ar="يوسعوها">
+            erweitern
+          </span>
+          <span class="word" data-de="oder" data-lit="أو" data-ar="أو">
+            oder
+          </span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="ـ">
+            die
+          </span>
+          <span class="word" data-de="Arbeitsplätze" data-lit="أماكن العمل" data-ar="أماكن العمل">
+            Arbeitsplätze
+          </span>
+          <span class="word" data-de="flexibel" data-lit="مرن" data-ar="بشكل مرن">
+            flexibel
+          </span>
+          <span class="word" data-de="zu" data-lit="لـ" data-ar="أن">
+            zu
+          </span>
+          <span class="word" data-de="gestalten" data-lit="يصمموا" data-ar="يصمموها">
+            gestalten
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="aber" data-lit="لكن" data-ar="لكن">
+            aber
+          </span>
+          <span class="word" data-de="richtige" data-lit="حقيقية" data-ar="مكاتب مفتوحة حقيقية">
+            richtige
+          </span>
+          <span class="word" data-de="Großraumbüros" data-lit="مكاتب كبيرة" data-ar="مكاتب مفتوحة كبيرة">
+            Großraumbüros
+          </span>
+          <span class="word" data-de="gibt" data-lit="يوجد" data-ar="توجد">
+            gibt
+          </span>
+          <span class="word" data-de="es" data-lit="هناك" data-ar="هناك">
+            es
+          </span>
+          <span class="word" data-de="eher" data-lit="إلى حد ما" data-ar="إلى حد ما">
+            eher
+          </span>
+          <span class="word" data-de="selten" data-lit="نادرًا" data-ar="نادرًا">
+            selten
+          </span>
+          <span class="word" data-de="," data-lit="," data-ar=",">
+            ,
+          </span>
+          <span class="word" data-de="sagt" data-lit="يقول" data-ar="يقول">
+            sagt
+          </span>
+          <span class="word" data-de="Menke" data-lit="منكه" data-ar="منكه">
+            Menke
+          </span>
+          <span class="word" data-de="." data-lit="." data-ar=".">
+            .
+          </span>
+        </td>
+        <td class="arabic">
+          ووفقًا للدراسة، يفكر ٤٠٪ من أصحاب الشركات المستَطلَعين في توسيع مساحات المكاتب المفتوحة أو جعل أماكن العمل مرنة، لكن المكاتب المفتوحة الحقيقية ما تزال نادرة، كما يقول منكه.
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const voiceSelect = document.getElementById('voiceSelect');
+  const stopBtn = document.getElementById('stopBtn');
+  const testBtn = document.getElementById('testBtn');
+  let voices = [];
+  let currentPopup = null;
+  let lastWordClickTime = 0;
+  const WORD_CLICK_SUPPRESSION_MS = 600;
+
+  function loadVoices() {
+    voices = speechSynthesis.getVoices() || [];
+    voiceSelect.innerHTML = '';
+    voices.forEach((v, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = `${v.name} (${v.lang})`;
+      voiceSelect.appendChild(opt);
+    });
+    const deIndex = voices.findIndex(v => /^de(-|_)?/i.test(v.lang));
+    if (deIndex >= 0) voiceSelect.value = deIndex;
+  }
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+
+  function speakText(text, lang='de-DE') {
+    if (!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const idx = parseInt(voiceSelect.value);
+    if (!isNaN(idx) && voices[idx]) {
+      u.voice = voices[idx];
+      u.lang = voices[idx].lang || lang;
+    } else {
+      u.lang = lang;
+    }
+    u.rate = 1.0;
+    u.pitch = 1.0;
+    speechSynthesis.speak(u);
+  }
+
+  function setupWordPopups() {
+    document.querySelectorAll('.word').forEach(word => {
+      const de = word.dataset.de || word.textContent.trim();
+      const lit = word.dataset.lit || '';
+      const ar = word.dataset.ar || '';
+
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.setAttribute('role','dialog');
+      popup.setAttribute('aria-live','polite');
+      popup.innerHTML =
+        `<b>${escapeHtml(de)}</b>` +
+        `<span style="font-size:12px;opacity:0.9;display:block;margin-bottom:4px;">wörtlich: ${escapeHtml(lit)}</span>` +
+        `<span style="font-size:12px;opacity:0.95;display:block;">Kontext: ${escapeHtml(ar)}</span>`;
+      word.appendChild(popup);
+
+      word.addEventListener('click', (e) => {
+        e.stopPropagation();
+        speakText(de, 'de-DE');
+        lastWordClickTime = Date.now();
+        if (currentPopup && currentPopup !== popup) currentPopup.style.display = 'none';
+        popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+        currentPopup = popup;
+      });
+    });
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, function(m) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+  }
+
+  document.addEventListener('click', () => {
+    if (currentPopup) { currentPopup.style.display = 'none'; currentPopup = null; }
+  });
+
+  stopBtn.addEventListener('click', () => speechSynthesis.cancel());
+  testBtn.addEventListener('click', () => speakText('Dies ist ein Audiotest auf Deutsch.', 'de-DE'));
+
+  /* Build clean sentence text from each td.german */
+  (function() {
+    function buildSentenceFromCell(td) {
+      const parts = [];
+      td.childNodes.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          parts.push(node.nodeValue);
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          const el = node;
+          if (el.classList && el.classList.contains('play-sentence-btn')) return;
+          if (el.classList && el.classList.contains('word')) {
+            const w = (el.dataset && el.dataset.de) ? el.dataset.de : el.textContent.trim();
+            parts.push(w);
+          } else {
+            parts.push(el.textContent);
+          }
+        }
+      });
+      const raw = parts.join('');
+      return (raw || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function initSentenceButtonsAndSentences() {
+      const germanCells = document.querySelectorAll('td.german');
+      germanCells.forEach(td => {
+        td.dataset.sentence = buildSentenceFromCell(td);
+
+        if (td.querySelector('.play-sentence-btn')) return;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'play-sentence-btn';
+        btn.setAttribute('aria-label', 'Play sentence');
+        btn.title = 'Play sentence';
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M8 5v14l11-7z"></path>
+          </svg>
+          <span style="font-size:0.9rem;line-height:1;">Play</span>
+        `;
+        td.insertBefore(btn, td.firstChild);
+
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if ('speechSynthesis' in window) speechSynthesis.cancel();
+          const sentence = td.dataset.sentence || buildSentenceFromCell(td);
+          if (!sentence) return;
+          if (typeof speakText === 'function') {
+            speakText(sentence, 'de-DE');
+          } else {
+            const u = new SpeechSynthesisUtterance(sentence);
+            u.lang = 'de-DE';
+            speechSynthesis.speak(u);
+          }
+        });
+      });
+    }
+
+    function attachRobustSentenceHandlers() {
+      document.querySelectorAll('td.german').forEach(td => {
+        td.addEventListener('pointerdown', (ev) => {
+          td._lastPointer = { x: ev.clientX, y: ev.clientY };
+        });
+
+        td.addEventListener('click', (ev) => {
+          const now = Date.now();
+          if (now - lastWordClickTime < WORD_CLICK_SUPPRESSION_MS) return;
+
+          const coords = td._lastPointer || { x: ev.clientX, y: ev.clientY };
+          const el = document.elementFromPoint(coords.x, coords.y);
+          if (el && el.closest && el.closest('.word')) return;
+
+          const sentence = td.dataset.sentence || buildSentenceFromCell(td);
+          if (!sentence) return;
+          if (typeof speakText === 'function') {
+            speakText(sentence, 'de-DE');
+          } else {
+            const u = new SpeechSynthesisUtterance(sentence);
+            u.lang = 'de-DE';
+            speechSynthesis.speak(u);
+          }
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setupWordPopups();
+      initSentenceButtonsAndSentences();
+      attachRobustSentenceHandlers();
+      setTimeout(loadVoices, 500);
+    });
+  })();
+</script>
+</body>
+</html>

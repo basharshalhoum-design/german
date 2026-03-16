@@ -1,0 +1,268 @@
+﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verben Flashcards - Klassentreffen</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .flashcard {
+            width: 100%;
+            max-width: 400px;
+            min-height: 280px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .german-word {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: #0056b350;
+            transition: color 0.15s;
+        }
+        .german-word:hover {
+            color: #007bff;
+        }
+        .translation {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .example {
+            font-size: 1em;
+            color: #555;
+            font-style: italic;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: #999;
+        }
+        .example:hover {
+            color: #000;
+        }
+        .controls {
+            padding: 20px;
+            text-align: center;
+            background-color: #ffffff;
+            border-top: 1px solid #ddd;
+        }
+        #next-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+        #next-button:hover {
+            background-color: #1e7e34;
+        }
+        .progress-tracker {
+            color: #666;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <a href="index.html">🏠 Hauptmenü</a>
+        <span>Verben: Flashcards (1/3)</span>
+    </div>
+
+    <div class="content">
+        <div class="flashcard">
+            <div class="german-word" id="german-word">...</div>
+            <div class="translation" id="arabic-translation">...</div>
+
+            <!-- CLICK-TO-HEAR EXAMPLE -->
+            <div class="example" id="hint"
+                 onclick="playExampleAudio(this)"
+                 data-audio="">
+                ...
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="next-button">Next</button>
+        <div class="progress-tracker" id="progress-tracker">0 / 0</div>
+    </div>
+
+<script>
+/* -------------------------------
+   PART 1 — VERB DATA
+--------------------------------*/
+const verbData = [
+  { german: "kommen", arabic: "يأتي", example: "Hoffentlich <strong>kommt</strong> Maria." },
+  { german: "versprechen", arabic: "يَعِد", example: "Sie hat es nicht <strong>versprochen</strong>." },
+  { german: "schaffen", arabic: "يتمكن / ينجح", example: "Sie kommt, wenn sie es <strong>schafft</strong>." },
+  { german: "haben", arabic: "يملك", example: "Wenn Maria kommt, <strong>hat</strong> sie eine Nachricht." },
+  { german: "mögen", arabic: "يحب", example: "Ich <strong>mag</strong> Schwarzwälder Kirschtorte am liebsten." },
+  { german: "bestellen", arabic: "يطلب", example: "Ich <strong>bestelle</strong> ein Kännchen Kaffee." },
+  { german: "trinken", arabic: "يشرب", example: "Wenn ich Kaffee <strong>trinke</strong>, kann ich nicht schlafen." },
+  { german: "schlafen", arabic: "ينام", example: "Ich kann heute Nacht sicher sowieso nicht <strong>schlafen</strong>." },
+  { german: "tragen", arabic: "يرتدي", example: "Die Frau <strong>trägt</strong> einen Hut." },
+  { german: "stellen", arabic: "يضع", example: "Sie hat ihre Handtasche auf den Tisch <strong>gestellt</strong>." },
+  { german: "trinken", arabic: "يشرب", example: "Ich <strong>trinke</strong> den Kaffee vorsichtig." },
+  { german: "sein", arabic: "يكون", example: "Der Kaffee <strong>ist</strong> sehr heiß." },
+  { german: "sitzen", arabic: "يجلس", example: "Neben der Garderobe <strong>sitzt</strong> eine Mutter." },
+  { german: "reden", arabic: "يتحدث", example: "Sie <strong>redet</strong> ohne Pause." },
+  { german: "malen", arabic: "يرسم", example: "Das Kind <strong>malt</strong> auf die Tischdecke." },
+  { german: "bekommen", arabic: "يحصل على", example: "Die Tischdecke <strong>bekommt</strong> rote Striche." },
+  { german: "sehen", arabic: "يرى", example: "Was <strong>sieht</strong> die Bedienung wohl?" },
+  { german: "lesen", arabic: "يقرأ", example: "Mein Tischnachbar <strong>liest</strong> Zeitung." },
+  { german: "halten", arabic: "يمسك", example: "Er <strong>hält</strong> die Zeitung dicht vor seine Nase." },
+  { german: "warten", arabic: "ينتظر", example: "Vielleicht <strong>warten</strong> wir beide." },
+  { german: "rufen", arabic: "ينادي", example: "Ich <strong>rufe</strong> die Kellnerin." },
+  { german: "antworten", arabic: "يجيب", example: "„Wie immer!“, <strong>antworte</strong> ich." },
+  { german: "schmecken", arabic: "يكون طعمه", example: "Die Torte <strong>schmeckt</strong> besonders gut." },
+  { german: "wandern", arabic: "يتجه / ينتقل", example: "Mein Blick <strong>wandert</strong> zur Tür." },
+  { german: "gehen", arabic: "يذهب", example: "Dann <strong>gehe</strong> ich." },
+  { german: "bestellen", arabic: "يطلب", example: "Was denkt sie, wenn ich einen Kognak <strong>bestelle</strong>?" },
+  { german: "kommen", arabic: "يأتي", example: "Da <strong>kommt</strong> der Kognak." },
+  { german: "werden", arabic: "يصبح", example: "Nur nicht nervös <strong>werden</strong>!" },
+  { german: "bleiben", arabic: "يبقى", example: "Jetzt ruhig <strong>bleiben</strong>!" },
+  { german: "küsssen", arabic: "يقبّل", example: "Sie <strong>küsst</strong> mich flüchtig." },
+  { german: "dauern", arabic: "يستغرق", example: "Die Probe hat lange <strong>gedauert</strong>." },
+  { german: "schlagen", arabic: "ينبض", example: "Mein Puls <strong>schlägt</strong> 150." },
+  { german: "sagen", arabic: "يقول", example: "„Wie war’s denn?“, <strong>sage</strong> ich." },
+  { german: "schauen", arabic: "ينظر", example: "Ich <strong>schauen</strong> ihr in die Augen." },
+  { german: "nehmen", arabic: "يأخذ", example: "Sie <strong>nimmt</strong> ihren Mantel." },
+  { german: "gehen", arabic: "يذهب", example: "Sie <strong>geht</strong> langsam zur Tür." },
+  { german: "winken", arabic: "يلوّح", example: "Sie <strong>winkt</strong> der Kellnerin." },
+  { german: "bezahlen", arabic: "يدفع", example: "Sie <strong>bezahlt</strong>." },
+  { german: "finden", arabic: "يجد", example: "Was <strong>findet</strong> sie wohl?" },
+  { german: "funkeln", arabic: "يلمع", example: "Plötzlich <strong>funkeln</strong> ihre Augen." },
+  { german: "sprechen", arabic: "يتحدث", example: "Ich habe mit dem Regisseur <strong>gesprochen</strong>." },
+  { german: "bekommen", arabic: "يحصل على", example: "Du <strong>bekommst</strong> die Rolle!" }
+];
+
+/* -------------------------------
+   PART 2 — TTS + AUDIO
+--------------------------------*/
+let currentCardIndex = 0;
+const totalCards = verbData.length;
+let germanVoice = null;
+
+function loadVoices() {
+    const voices = speechSynthesis.getVoices();
+    germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
+}
+
+if ('speechSynthesis' in window) {
+    speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+}
+
+function speak(text) {
+    if (!('speechSynthesis' in window)) return;
+    if (speechSynthesis.speaking) speechSynthesis.cancel();
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "de-DE";
+    if (germanVoice) u.voice = germanVoice;
+    speechSynthesis.speak(u);
+}
+
+function playAudio(text) {
+    speak(text);
+}
+
+/* CLICK-TO-HEAR EXAMPLE SENTENCE */
+function playExampleAudio(el) {
+    const audioFile = el.dataset.audio;
+
+    if (audioFile && audioFile.trim() !== "") {
+        new Audio(audioFile).play();
+    } else {
+        // fallback: TTS reads the example sentence
+        speak(el.innerText.replace("Beispiel:", "").trim());
+    }
+}
+
+/* -------------------------------
+   PART 3 — FLASHCARD LOGIC
+--------------------------------*/
+const germanWordElement = document.getElementById('german-word');
+const arabicTranslationElement = document.getElementById('arabic-translation');
+const hintElement = document.getElementById('hint');
+const progressTrackerElement = document.getElementById('progress-tracker');
+const nextButton = document.getElementById('next-button');
+
+function loadCard(index) {
+    const data = verbData[index];
+    germanWordElement.textContent = data.german;
+    arabicTranslationElement.textContent = data.arabic;
+
+    hintElement.innerHTML = `Beispiel: ${data.example}`;
+    hintElement.dataset.audio = ""; // ready for MP3 later
+
+    progressTrackerElement.textContent = `${index + 1} / ${totalCards}`;
+}
+
+function nextCard() {
+    currentCardIndex = (currentCardIndex + 1) % totalCards;
+    loadCard(currentCardIndex);
+    playAudio(verbData[currentCardIndex].german);
+}
+
+nextButton.addEventListener('click', nextCard);
+
+germanWordElement.addEventListener('click', () => {
+    playAudio(verbData[currentCardIndex].german);
+});
+
+window.addEventListener('load', () => {
+    loadCard(currentCardIndex);
+    playAudio(verbData[currentCardIndex].german);
+});
+</script>
+
+</body>
+</html>

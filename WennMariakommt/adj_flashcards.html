@@ -1,0 +1,256 @@
+﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verben Flashcards - Klassentreffen</title>
+    <style>
+        /* Mobile-First Layout & Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        /* Main content area to center the card */
+        .content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /* Single-sided card */
+        .flashcard {
+            width: 100%;
+            max-width: 400px; /* One card per screen, slightly wider */
+            min-height: 280px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .flashcard .german-word {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 15px;
+            cursor: pointer; /* Indicates it's clickable for audio replay */
+            text-decoration: underline;
+            text-decoration-color: #0056b350;
+            transition: color 0.15s;
+        }
+        .flashcard .german-word:hover {
+            color: #007bff;
+        }
+        .flashcard .translation {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .flashcard .example {
+            font-size: 1em;
+            color: #555;
+            font-style: italic;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: #999;
+        }
+        .flashcard .example strong {
+            color: #000;
+        }
+        .flashcard .example:hover {
+            color: #000;
+        }
+        /* Controls area for button and progress */
+        .controls {
+            padding: 20px;
+            text-align: center;
+            background-color: #ffffff;
+            border-top: 1px solid #ddd;
+        }
+        #next-button {
+            background-color: #28a745; /* Changed color to distinguish from header */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+        #next-button:hover {
+            background-color: #1e7e34;
+        }
+        .progress-tracker {
+            color: #666;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html">🏠 Hauptmenü</a>
+        <span>Verben: Flashcards (1/3)</span>
+    </div>
+
+    <div class="content">
+        <div class="flashcard" role="region" aria-label="Flashcard">
+            <div class="german-word" id="german-word" role="button" aria-label="Deutsches Wort">...</div>
+            <div class="translation" id="arabic-translation" aria-live="polite">...</div>
+            <!-- Example is clickable and audio-ready -->
+            <div class="example" id="hint"
+                 onclick="playExampleAudio(this)"
+                 data-audio=""
+                 role="button"
+                 aria-label="Beispielsatz, anklicken zum Anhören">
+                ...
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="next-button" aria-label="Nächste Karte">Next</button>
+        <div class="progress-tracker" id="progress-tracker" aria-live="polite">0 / 0</div>
+    </div>
+
+    <script>
+        // --- DATA (kept as verbData intentionally) ---
+        const verbData = [
+  { german: "hoffentlich", arabic: "نأمل أن", example: "<strong>Hoffentlich</strong> kommt Maria." },
+  { german: "eigentlich", arabic: "في الحقيقة", example: "<strong>Eigentlich</strong> möchte ich ein Bier trinken." },
+  { german: "am liebsten", arabic: "أكثر شيء أحبّه", example: "Die Kirschtorte mag ich <strong>am liebsten</strong>." },
+  { german: "vorsichtig", arabic: "بحذر", example: "Ich trinke den Kaffee <strong>vorsichtig</strong>." },
+  { german: "heiß", arabic: "حار", example: "Der Kaffee ist sehr <strong>heiß</strong>." },
+  { german: "ohne Pause", arabic: "بدون توقف", example: "Die Mutter redet <strong>ohne Pause</strong>." },
+  { german: "sicher", arabic: "بالتأكيد", example: "Sie bestellt <strong>sicher</strong> ein Glas Tee." },
+  { german: "dicht", arabic: "قريب جدًا", example: "Er hält die Zeitung <strong>dicht</strong> vor seine Nase." },
+  { german: "besonders", arabic: "خصوصًا", example: "Die Torte schmeckt heute <strong>besonders</strong> gut." },
+  { german: "allein", arabic: "وحيدًا", example: "Ich esse nicht gern <strong>allein</strong>." },
+  { german: "bald", arabic: "قريبًا", example: "Wenn sie nicht <strong>bald</strong> kommt, gehe ich." },
+  { german: "egal", arabic: "لا يهم", example: "Was die Bedienung denkt, ist mir <strong>egal</strong>." },
+  { german: "nervös", arabic: "متوتر", example: "Nur nicht <strong>nervös</strong> werden!" },
+  { german: "ruhig", arabic: "هادئ", example: "Jetzt <strong>ruhig</strong> bleiben!" },
+  { german: "flüchtig", arabic: "بسرعة / بخفة", example: "Sie küsst mich <strong>flüchtig</strong> auf die Wange." },
+  { german: "langsam", arabic: "ببطء", example: "Sie steht <strong>langsam</strong> auf." },
+  { german: "traurig", arabic: "حزين", example: "Ihre Augen wirken immer ein bisschen <strong>traurig</strong>." },
+  { german: "plötzlich", arabic: "فجأة", example: "<strong>Plötzlich</strong> funkeln ihre Augen." },
+  { german: "schön", arabic: "جميل", example: "Am <strong>schönsten</strong> ist Maria, wenn sie aufgeregt ist." },
+  { german: "aufgeregt", arabic: "متحمس / متوتر", example: "Maria ist am schönsten, wenn sie <strong>aufgeregt</strong> ist." }
+];
+
+        let currentCardIndex = 0;
+        const totalCards = verbData.length;
+        let germanVoice = null;
+
+        // --- Web Speech API Setup (Only TTS) ---
+        function loadVoices() {
+            const voices = speechSynthesis.getVoices();
+            germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
+        }
+
+        if ('speechSynthesis' in window) {
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = loadVoices;
+            }
+            loadVoices();
+        }
+
+        // Core TTS function
+        function speak(text) {
+            if (!('speechSynthesis' in window)) return;
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "de-DE";
+            if (germanVoice) {
+                utterance.voice = germanVoice;
+            }
+            speechSynthesis.speak(utterance);
+        }
+
+        // Play noun/verb word via TTS (or MP3 later)
+        function playAudio(text) {
+            speak(text);
+        }
+
+        // Play example audio: MP3 if provided in data-audio, otherwise TTS
+        function playExampleAudio(el) {
+            const audioFile = el.dataset.audio;
+            if (audioFile && audioFile.trim() !== "") {
+                new Audio(audioFile).play();
+            } else {
+                // remove "Beispiel:" prefix if present and speak the rest
+                const text = el.innerText.replace(/^Beispiel:\s*/i, "").trim();
+                speak(text);
+            }
+        }
+
+        // --- Element Selectors ---
+        const germanWordElement = document.getElementById('german-word');
+        const arabicTranslationElement = document.getElementById('arabic-translation');
+        const hintElement = document.getElementById('hint');
+        const progressTrackerElement = document.getElementById('progress-tracker');
+        const nextButton = document.getElementById('next-button');
+
+        // Function to load a card's data into the UI
+        function loadCard(index) {
+            const data = verbData[index];
+            germanWordElement.textContent = data.german;
+            arabicTranslationElement.textContent = data.arabic;
+            hintElement.innerHTML = `Beispiel: ${data.example}`;
+            // ready for MP3 later; leave empty if none
+            hintElement.dataset.audio = data.audio || "";
+            progressTrackerElement.textContent = `${index + 1} / ${totalCards}`;
+        }
+
+        // Function to advance to the next card
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % totalCards;
+            loadCard(currentCardIndex);
+            playAudio(verbData[currentCardIndex].german);
+        }
+
+        // --- Event Listeners ---
+        nextButton.addEventListener('click', nextCard);
+
+        germanWordElement.addEventListener('click', () => {
+            playAudio(verbData[currentCardIndex].german);
+        });
+
+        // Load the very first card when the page opens (and play its audio)
+        window.addEventListener('load', () => {
+            loadCard(currentCardIndex);
+            playAudio(verbData[currentCardIndex].german);
+        });
+    </script>
+</body>
+</html>

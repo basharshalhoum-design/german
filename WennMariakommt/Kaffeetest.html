@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <title>Kaffeerösterei Münchhausen — Deutsch ↔ العربية (Wort-Popups)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f7f7f9;
+      --card:#fff;
+      --muted:#666;
+      --accent:#eef7ff;
+      --popup-bg:#222;
+      --popup-color:#fff;
+    }
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; margin:20px; background:var(--bg); color:#222; }
+    h2 { margin-bottom:8px; }
+    p.hint { color:var(--muted); margin-bottom:14px; }
+    .controls { margin:12px 0 18px 0; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    select, button { padding:8px 10px; font-size:0.95rem; border-radius:6px; border:1px solid #ddd; background:#fff; cursor:pointer; }
+    button:hover { filter:brightness(0.98); }
+    table { width:100%; border-collapse:collapse; background:var(--card); box-shadow:0 1px 0 rgba(0,0,0,0.04); }
+    th, td { border:1px solid #e6e6e6; padding:12px; vertical-align:top; text-align:left; }
+    th { background:#fafafa; font-weight:600; }
+    td.german { cursor:default; }
+    td.arabic { direction:rtl; font-size:1rem; color:#111; }
+   /* Replace existing .word rules with this */
+.word {
+  cursor: pointer;
+  position: relative;
+  display: inline;       /* inline so whitespace is real text nodes */
+  padding: 0 2px;        /* minimal padding only; avoid margins */
+  border-radius: 4px;
+  line-height: 1.4;
+  pointer-events: auto;  /* ensure spans receive clicks when clicked exactly */
+}
+.word:hover { background: var(--accent); }
+
+/* popup unchanged */
+.popup {
+  position:absolute;
+  top:-38px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--popup-bg);
+  color:var(--popup-color);
+  padding:6px 10px;
+  border-radius:6px;
+  font-size:13px;
+  white-space:nowrap;
+  display:none;
+  z-index:999;
+  box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  min-width:120px;
+  text-align:left;
+  pointer-events:auto;
+}
+.play-sentence-btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin-right:8px;
+  padding:6px 8px;
+  font-size:0.9rem;
+  border-radius:6px;
+  border:1px solid #d0d7de;
+  background:#fff;
+  color:#111;
+  cursor:pointer;
+}
+.play-sentence-btn:hover { background:#f0f8ff; }
+.play-sentence-btn:active { transform:translateY(1px); }
+.play-sentence-btn svg { width:14px; height:14px; vertical-align:middle; }
+
+
+  </style>
+</head>
+<body>
+  <h2>Kaffeerösterei Münchhausen — Deutsch ↔ العربية (Wort‑Popups)</h2>
+  <p class="hint">Klicke auf einen deutschen Satz (außer auf einzelne Wörter) um den ganzen Satz zu hören. Klicke auf ein Wort, um nur dieses Wort zu hören und die wörtliche sowie kontextbezogene arabische Übersetzung als Popup zu sehen.</p>
+
+  <div class="controls" aria-hidden="false">
+    <label for="voiceSelect">German voice:</label>
+    <select id="voiceSelect" aria-label="Stimmenauswahl"></select>
+    <button id="stopBtn" aria-label="Audio stoppen">Stop</button>
+    <button id="testBtn" aria-label="Audio testen">Test audio</button>
+  </div>
+
+  <table role="table" aria-label="Deutsch Arabisch Tabelle">
+    <thead>
+      <tr><th>Deutsch</th><th>العربية</th></tr>
+    </thead>
+    <tbody>
+
+      <!-- Row 1 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Vor" data-lit="قبل" data-ar="قبل">Vor</span>
+          <span class="word" data-de="50" data-lit="خمسون" data-ar="خمسين">50</span>
+          <span class="word" data-de="Jahren" data-lit="سنوات" data-ar="عامًا">Jahren</span>
+          <span class="word" data-de="gab" data-lit="أعطى" data-ar="كان">gab</span>
+          <span class="word" data-de="es" data-lit="هو" data-ar="يوجد">es</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="مدينة">der</span>
+          <span class="word" data-de="Hansestadt" data-lit="مدينة الهانزا" data-ar="مدينة الهانزا">Hansestadt</span>
+          <span class="word" data-de="Bremen" data-lit="بريمن" data-ar="بريمن">Bremen</span>
+          <span class="word" data-de="ungefähr" data-lit="تقريبًا" data-ar="حوالي">ungefähr</span>
+          <span class="word" data-de="300" data-lit="ثلاثمائة" data-ar="300">300</span>
+          <span class="word" data-de="traditionelle" data-lit="تقليدية" data-ar="تقليدية">traditionelle</span>
+          <span class="word" data-de="Kaffeeröstereien" data-lit="محامص القهوة" data-ar="محامص قهوة تقليدية">Kaffeeröstereien</span>.
+        </td>
+        <td class="arabic">قبل خمسين عامًا كان يوجد في مدينة بريمن حوالي 300 محمصة قهوة تقليدية.</td>
+      </tr>
+
+      <!-- Row 2 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Diese" data-lit="هذه" data-ar="هذه المحامص">Diese</span>
+          <span class="word" data-de="importierten" data-lit="استوردوا" data-ar="كانت تستورد">importierten</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="حبوب القهوة">die</span>
+          <span class="word" data-de="Kaffeebohnen" data-lit="حبوب القهوة" data-ar="حبوب القهوة">Kaffeebohnen</span>
+          <span class="word" data-de="selbst" data-lit="بنفسها" data-ar="بنفسها">selbst</span>,
+          <span class="word" data-de="stellten" data-lit="أنتجوا" data-ar="كانت تنتج">stellten</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="القهوة">den</span>
+          <span class="word" data-de="Kaffee" data-lit="القهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="tagefrisch" data-lit="طازج يوميًا" data-ar="طازجًا يوميًا">tagefrisch</span>
+          <span class="word" data-de="her" data-lit="هنا" data-ar="تنتجه">her</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="verkauften" data-lit="باعوا" data-ar="كانت تبيع">verkauften</span>
+          <span class="word" data-de="ihn" data-lit="إياه" data-ar="القهوة">ihn</span>
+          <span class="word" data-de="im" data-lit="في الـ" data-ar="في">im</span>
+          <span class="word" data-de="eigenen" data-lit="الخاص" data-ar="الخاص بها">eigenen</span>
+          <span class="word" data-de="Geschäft" data-lit="متجر" data-ar="متجرها">Geschäft</span>.
+        </td>
+        <td class="arabic">كانت هذه المحامص تستورد حبوب القهوة بنفسها، وتنتج القهوة طازجة يوميًا، وتبيعها في متجرها الخاص.</td>
+      </tr>
+
+      <!-- Row 3 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Heute" data-lit="اليوم" data-ar="اليوم">Heute</span>,
+          <span class="word" data-de="da" data-lit="لأن" data-ar="لأن">da</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="ـ">der</span>
+          <span class="word" data-de="Kaffee" data-lit="القهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="zumeist" data-lit="غالبًا" data-ar="غالبًا">zumeist</span>
+          <span class="word" data-de="von" data-lit="من" data-ar="من">von</span>
+          <span class="word" data-de="internationalen" data-lit="دولية" data-ar="شركات دولية">internationalen</span>
+          <span class="word" data-de="Kaffeegesellschaften" data-lit="شركات القهوة" data-ar="شركات القهوة العالمية">Kaffeegesellschaften</span>
+          <span class="word" data-de="produziert" data-lit="يُنتج" data-ar="يُنتج">produziert</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="Supermärkten" data-lit="سوبرماركت" data-ar="السوبرماركت">Supermärkten</span>
+          <span class="word" data-de="verkauft" data-lit="يُباع" data-ar="يُباع">verkauft</span>
+          <span class="word" data-de="wird" data-lit="يُصبح" data-ar="يتم">wird</span>,
+          <span class="word" data-de="sind" data-lit="هي" data-ar="لم يبقَ">sind</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="Deutschland" data-lit="ألمانيا" data-ar="ألمانيا">Deutschland</span>
+          <span class="word" data-de="nur" data-lit="فقط" data-ar="فقط">nur</span>
+          <span class="word" data-de="noch" data-lit="ما زال" data-ar="ما زال">noch</span>
+          <span class="word" data-de="eine" data-lit="واحدة" data-ar="عدد قليل">eine</span>
+          <span class="word" data-de="Handvoll" data-lit="حفنة" data-ar="قلة قليلة">Handvoll</span>
+          <span class="word" data-de="Kleinröstereien" data-lit="محامص صغيرة" data-ar="محامص صغيرة">Kleinröstereien</span>
+          <span class="word" data-de="übrig" data-lit="متبقية" data-ar="متبقية">übrig</span>
+          <span class="word" data-de="geblieben" data-lit="باقية" data-ar="باقية">geblieben</span>.
+        </td>
+        <td class="arabic">اليوم، وبسبب إنتاج القهوة من قبل شركات عالمية وبيعها في السوبرماركت، لم يبقَ في ألمانيا سوى عدد قليل من المحامص الصغيرة.</td>
+      </tr>
+
+      <!-- Row 4 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Eine" data-lit="واحدة" data-ar="إحداها">Eine</span>
+          <span class="word" data-de="davon" data-lit="من ذلك" data-ar="من بينها">davon</span>
+          <span class="word" data-de="ist" data-lit="هو" data-ar="هي">ist</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="ـ">die</span>
+          <span class="word" data-de="Kaffeerösterei" data-lit="محمصة القهوة" data-ar="محمصة القهوة">Kaffeerösterei</span>
+          <span class="word" data-de="Münchhausen" data-lit="مينشهاوزن" data-ar="مينشهاوزن">Münchhausen</span>.
+        </td>
+        <td class="arabic">إحداها هي محمصة القهوة مينشهاوزن.</td>
+      </tr>
+
+      <!-- Row 5 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Münchhausen" data-lit="مينشهاوزن" data-ar="مينشهاوزن">Münchhausen</span>
+          <span class="word" data-de="importiert" data-lit="يستورد" data-ar="تستورد">importiert</span>
+          <span class="word" data-de="seinen" data-lit="له" data-ar="قهوتها">seinen</span>
+          <span class="word" data-de="Kaffee" data-lit="قهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="direkt" data-lit="مباشرة" data-ar="مباشرة">direkt</span>
+          <span class="word" data-de="von" data-lit="من" data-ar="من">von</span>
+          <span class="word" data-de="Kleinbauern" data-lit="صغار المزارعين" data-ar="صغار المزارعين">Kleinbauern</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="Lateinamerika" data-lit="أمريكا اللاتينية" data-ar="أمريكا اللاتينية">Lateinamerika</span>.
+        </td>
+        <td class="arabic">مينشهاوزن تستورد قهوتها مباشرة من صغار المزارعين في أمريكا اللاتينية.</td>
+      </tr>
+
+      <!-- Row 6 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Dabei" data-lit="في ذلك" data-ar="وبذلك">Dabei</span>
+          <span class="word" data-de="wird" data-lit="يُراعى" data-ar="يُراعى">wird</span>
+          <span class="word" data-de="streng" data-lit="بصرامة" data-ar="بصرامة">streng</span>
+          <span class="word" data-de="auf" data-lit="على" data-ar="على">auf</span>
+          <span class="word" data-de="fairen" data-lit="عادل" data-ar="التجارة العادلة">fairen</span>
+          <span class="word" data-de="Handel" data-lit="التجارة" data-ar="التجارة">Handel</span>
+          <span class="word" data-de="geachtet" data-lit="أُعطي الاهتمام" data-ar="يُولى الاهتمام">geachtet</span>,
+          <span class="word" data-de="das" data-lit="هذا" data-ar="أي">das</span>
+          <span class="word" data-de="heißt" data-lit="يعني" data-ar="يعني">heißt</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Kaffeebauern" data-lit="مزارعو القهوة" data-ar="مزارعو القهوة">Kaffeebauern</span>
+          <span class="word" data-de="werden" data-lit="يُصبحون" data-ar="يُكافأون">werden</span>
+          <span class="word" data-de="für" data-lit="مقابل" data-ar="عن">für</span>
+          <span class="word" data-de="ihre" data-lit="ـهم" data-ar="عملهم">ihre</span>
+          <span class="word" data-de="anstrengende" data-lit="المجهد" data-ar="الشاق">anstrengende</span>
+          <span class="word" data-de="Arbeit" data-lit="العمل" data-ar="العمل">Arbeit</span>
+          <span class="word" data-de="angemessen" data-lit="بشكل مناسب" data-ar="بشكل مناسب">angemessen</span>
+          <span class="word" data-de="entlohnt" data-lit="يُكافأون" data-ar="يُكافأون">entlohnt</span>.
+        </td>
+        <td class="arabic">يُراعى في ذلك التجارة العادلة بصرامة، أي أن مزارعي القهوة يُكافأون بشكل مناسب على عملهم الشاق.</td>
+      </tr>
+
+      <!-- Row 7 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Damit" data-lit="وبذلك" data-ar="وبذلك">Damit</span>
+          <span class="word" data-de="unterstützt" data-lit="يدعم" data-ar="يدعم">unterstützt</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="المستورد">der</span>
+          <span class="word" data-de="Importeur" data-lit="المستورد" data-ar="المستورد">Importeur</span>
+          <span class="word" data-de="zugleich" data-lit="في الوقت نفسه" data-ar="في الوقت نفسه">zugleich</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="ـ">den</span>
+          <span class="word" data-de="Kaffeeanbau" data-lit="زراعة القهوة" data-ar="زراعة القهوة">Kaffeeanbau</span>
+          <span class="word" data-de="nach" data-lit="وفق" data-ar="وفق">nach</span>
+          <span class="word" data-de="ökologischen" data-lit="بيئي" data-ar="معايير بيئية">ökologischen</span>
+          <span class="word" data-de="Gesichtspunkten" data-lit="وجهات نظر" data-ar="معايير">Gesichtspunkten</span>.
+        </td>
+        <td class="arabic">وبذلك يدعم المستورد في الوقت نفسه زراعة القهوة وفقًا لمعايير بيئية.</td>
+      </tr>
+
+      <!-- Row 8 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Kaffee" data-lit="قهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="aus" data-lit="من" data-ar="من">aus</span>
+          <span class="word" data-de="Großplantagen" data-lit="المزارع الكبيرة" data-ar="المزارع الكبيرة">Großplantagen</span>,
+          <span class="word" data-de="oft" data-lit="غالبًا" data-ar="غالبًا">oft</span>
+          <span class="word" data-de="mit" data-lit="بـ" data-ar="مع">mit</span>
+          <span class="word" data-de="Pestiziden" data-lit="المبيدات" data-ar="المبيدات">Pestiziden</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="Insektiziden" data-lit="مبيدات الحشرات" data-ar="مبيدات الحشرات">Insektiziden</span>
+          <span class="word" data-de="belastet" data-lit="مُلوثة" data-ar="ملوثة">belastet</span>,
+          <span class="word" data-de="ist" data-lit="هي" data-ar="رغم أن">ist</span>
+          <span class="word" data-de="zwar" data-lit="بالرغم" data-ar="بالرغم">zwar</span>
+          <span class="word" data-de="billiger" data-lit="أرخص" data-ar="أرخص">billiger</span>,
+          <span class="word" data-de="aber" data-lit="لكن" data-ar="لكن">aber</span>
+          <span class="word" data-de="Qualität" data-lit="الجودة" data-ar="الجودة">Qualität</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="Reinheit" data-lit="النقاء" data-ar="النقاء">Reinheit</span>
+          <span class="word" data-de="des" data-lit="الـ" data-ar="ـ">des</span>
+          <span class="word" data-de="Kaffees" data-lit="القهوة" data-ar="القهوة">Kaffees</span>
+          <span class="word" data-de="werden" data-lit="تُعطى" data-ar="تُعطى">werden</span>
+          <span class="word" data-de="bei" data-lit="في" data-ar="في">bei</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Kaffeerösterei" data-lit="محمصة القهوة" data-ar="محمصة القهوة">Kaffeerösterei</span>
+          <span class="word" data-de="Münchhausen" data-lit="مينشهاوزن" data-ar="مينشهاوزن">Münchhausen</span>
+          <span class="word" data-de="ganz" data-lit="تمامًا" data-ar="تمامًا">ganz</span>
+          <span class="word" data-de="großgeschrieben" data-lit="تُعطى أهمية كبيرة" data-ar="تُعطى أهمية كبيرة">großgeschrieben</span>.
+        </td>
+        <td class="arabic">القهوة من المزارع الكبيرة، التي غالبًا ما تكون ملوثة بالمبيدات ومبيدات الحشرات، أرخص بالتأكيد، لكن الجودة ونقاء القهوة يحظيان بأهمية كبيرة في محمصة مينشهاوزن.</td>
+      </tr>
+
+      <!-- Row 9 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Der" data-lit="الـ" data-ar="الـ">Der</span>
+          <span class="word" data-de="Kaffee" data-lit="قهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="wird" data-lit="يُصنع" data-ar="يُصنع">wird</span>
+          <span class="word" data-de="nach" data-lit="وفق" data-ar="وفق">nach</span>
+          <span class="word" data-de="alter" data-lit="قديم" data-ar="قديم">alter</span>
+          <span class="word" data-de="Familientradition" data-lit="تقليد عائلي" data-ar="تقليد عائلي">Familientradition</span>
+          <span class="word" data-de="hergestellt" data-lit="مصنوع" data-ar="يُنتج">hergestellt</span>.
+        </td>
+        <td class="arabic">تُنتج القهوة وفق تقليد عائلي قديم.</td>
+      </tr>
+
+      <!-- Row 10 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Die" data-lit="الـ" data-ar="الـ">Die</span>
+          <span class="word" data-de="Rezeptur" data-lit="الوصفة" data-ar="الوصفة">Rezeptur</span>
+          <span class="word" data-de="ist" data-lit="هي" data-ar="هي">ist</span>
+          <span class="word" data-de="die" data-lit="نفس" data-ar="نفس">die</span>
+          <span class="word" data-de="gleiche" data-lit="نفس" data-ar="نفس">gleiche</span>
+          <span class="word" data-de="wie" data-lit="كما" data-ar="كما">wie</span>
+          <span class="word" data-de="vor" data-lit="قبل" data-ar="قبل">vor</span>
+          <span class="word" data-de="einem" data-lit="ـ" data-ar="ـ">einem</span>
+          <span class="word" data-de="halben" data-lit="نصف" data-ar="نصف">halben</span>
+          <span class="word" data-de="Jahrhundert" data-lit="قرن" data-ar="نصف قرن">Jahrhundert</span>:
+        </td>
+        <td class="arabic">الوصفة هي نفسها كما كانت قبل نصف قرن:</td>
+      </tr>
+
+      <!-- Row 11 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Täglich" data-lit="يوميًا" data-ar="يوميًا">Täglich</span>
+          <span class="word" data-de="werden" data-lit="تُحمص" data-ar="تُحمص">werden</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Kaffeebohnen" data-lit="حبوب القهوة" data-ar="حبوب القهوة">Kaffeebohnen</span>
+          <span class="word" data-de="in" data-lit="بـ" data-ar="بـ">in</span>
+          <span class="word" data-de="kleinen" data-lit="صغيرة" data-ar="بكميات صغيرة">kleinen</span>
+          <span class="word" data-de="Mengen" data-lit="كميات" data-ar="كميات">Mengen</span>
+          <span class="word" data-de="frisch" data-lit="طازجة" data-ar="طازجة">frisch</span>
+          <span class="word" data-de="geröstet" data-lit="محمصة" data-ar="محمصة">geröstet</span>,
+          <span class="word" data-de="gerade" data-lit="تمامًا" data-ar="تمامًا">gerade</span>
+          <span class="word" data-de="so" data-lit="هكذا" data-ar="بقدر">so</span>
+          <span class="word" data-de="viele" data-lit="كمية" data-ar="بقدر">viele</span>
+          <span class="word" data-de="wie" data-lit="كما" data-ar="كما">wie</span>
+          <span class="word" data-de="an" data-lit="في" data-ar="في">an</span>
+          <span class="word" data-de="einem" data-lit="يوم" data-ar="يوم">einem</span>
+          <span class="word" data-de="Tag" data-lit="يوم" data-ar="يوم">Tag</span>
+          <span class="word" data-de="verkauft" data-lit="تُباع" data-ar="تُباع">verkauft</span>
+          <span class="word" data-de="werden" data-lit="تُصبح" data-ar="تُباع">werden</span>.
+        </td>
+        <td class="arabic">تُحمص حبوب القهوة يوميًا بكميات صغيرة وطازجة، تمامًا بقدر ما يُباع في يوم واحد.</td>
+      </tr>
+
+      <!-- Row 12 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Denn" data-lit="لأن" data-ar="لأن">Denn</span>
+          <span class="word" data-de="nur" data-lit="فقط" data-ar="فقط">nur</span>
+          <span class="word" data-de="so" data-lit="بهذه الطريقة" data-ar="بهذه الطريقة">so</span>
+          <span class="word" data-de="behalten" data-lit="تحافظ" data-ar="تحافظ">behalten</span>
+          <span class="word" data-de="sie" data-lit="هي" data-ar="الحبوب">sie</span>
+          <span class="word" data-de="ihr" data-lit="ـها" data-ar="نكهتها">ihr</span>
+          <span class="word" data-de="Aroma" data-lit="النكهة" data-ar="نكهتها">Aroma</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Kaffee" data-lit="قهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="verliert" data-lit="يفقد" data-ar="لا يفقد">verliert</span>
+          <span class="word" data-de="nicht" data-lit="لا" data-ar="لا">nicht</span>
+          <span class="word" data-de="an" data-lit="في" data-ar="من">an</span>
+          <span class="word" data-de="Geschmack" data-lit="الطعم" data-ar="طعمه">Geschmack</span>.
+        </td>
+        <td class="arabic">لأن بهذه الطريقة فقط تحافظ الحبوب على نكهتها ولا تفقد القهوة طعمها.</td>
+      </tr>
+
+      <!-- Row 13 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Zuerst" data-lit="أولاً" data-ar="أولًا">Zuerst</span>
+          <span class="word" data-de="werden" data-lit="تُحمص" data-ar="تُحمص">werden</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Kaffeebohnen" data-lit="حبوب القهوة" data-ar="حبوب القهوة">Kaffeebohnen</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="التي">in</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="الـ">den</span>
+          <span class="word" data-de="50er" data-lit="الخمسينيات" data-ar="الخمسينيات">50er</span>
+          <span class="word" data-de="Jahren" data-lit="سنوات" data-ar="السنوات">Jahren</span>
+          <span class="word" data-de="angeschafften" data-lit="المشتراة" data-ar="المشتراة">angeschafften</span>
+          <span class="word" data-de="Rösttrommel" data-lit="أسطوانة التحميص" data-ar="أسطوانة التحميص">Rösttrommel</span>
+          <span class="word" data-de="ungefähr" data-lit="تقريبًا" data-ar="حوالي">ungefähr</span>
+          <span class="word" data-de="zehn" data-lit="عشر" data-ar="عشر">zehn</span>
+          <span class="word" data-de="Minuten" data-lit="دقائق" data-ar="دقائق">Minuten</span>
+          <span class="word" data-de="lang" data-lit="طويل" data-ar="طول">lang</span>
+          <span class="word" data-de="bei" data-lit="عند" data-ar="عند">bei</span>
+          <span class="word" data-de="Temperaturen" data-lit="درجات حرارة" data-ar="درجات حرارة">Temperaturen</span>
+          <span class="word" data-de="von" data-lit="من" data-ar="أكثر من">von</span>
+          <span class="word" data-de="über" data-lit="أكثر من" data-ar="أكثر من">über</span>
+          <span class="word" data-de="200" data-lit="مئتان" data-ar="200">200</span>
+          <span class="word" data-de="Grad" data-lit="درجة" data-ar="درجة">Grad</span>
+          <span class="word" data-de="Celsius" data-lit="مئوية" data-ar="مئوية">Celsius</span>
+          <span class="word" data-de="geröstet" data-lit="محمصة" data-ar="محمصة">geröstet</span>.
+        </td>
+        <td class="arabic">أولًا تُحمص حبوب القهوة في أسطوانة التحميص التي اشتُريت في الخمسينيات لحوالي عشر دقائق عند درجات حرارة تزيد عن 200 درجة مئوية.</td>
+      </tr>
+
+      <!-- Row 14 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Dabei" data-lit="خلال ذلك" data-ar="خلال ذلك">Dabei</span>
+          <span class="word" data-de="verlieren" data-lit="تفقد" data-ar="تفقد">verlieren</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Kaffeebohnen" data-lit="حبوب القهوة" data-ar="حبوب القهوة">Kaffeebohnen</span>
+          <span class="word" data-de="zwar" data-lit="بالرغم" data-ar="بالرغم">zwar</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="ثلث">ein</span>
+          <span class="word" data-de="Sechstel" data-lit="سدس" data-ar="سدس">Sechstel</span>
+          <span class="word" data-de="ihres" data-lit="ـها" data-ar="وزنها">ihres</span>
+          <span class="word" data-de="Gewichts" data-lit="الوزن" data-ar="وزنها">Gewichts</span>,
+          <span class="word" data-de="ihr" data-lit="ـها" data-ar="حجمها">ihr</span>
+          <span class="word" data-de="Volumen" data-lit="الحجم" data-ar="حجمها">Volumen</span>
+          <span class="word" data-de="vergrößert" data-lit="يزداد" data-ar="يزداد">vergrößert</span>
+          <span class="word" data-de="sich" data-lit="نفسه" data-ar="بـ">sich</span>
+          <span class="word" data-de="aber" data-lit="لكن" data-ar="لكن">aber</span>
+          <span class="word" data-de="gleichzeitig" data-lit="في نفس الوقت" data-ar="في الوقت نفسه">gleichzeitig</span>
+          <span class="word" data-de="um" data-lit="بـ" data-ar="بنحو">um</span>
+          <span class="word" data-de="etwa" data-lit="حوالي" data-ar="حوالي">etwa</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="ثلث">ein</span>
+          <span class="word" data-de="Drittel" data-lit="ثلث" data-ar="ثلث">Drittel</span>.
+        </td>
+        <td class="arabic">خلال ذلك تفقد الحبوب سدس وزنها، لكن حجمها يزداد في الوقت نفسه بحوالي ثلث.</td>
+      </tr>
+
+      <!-- Row 15 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Sind" data-lit="هل" data-ar="إذا كانت">Sind</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Bohnen" data-lit="الحبوب" data-ar="الحبوب">Bohnen</span>
+          <span class="word" data-de="dunkel" data-lit="داكنة" data-ar="داكنة">dunkel</span>
+          <span class="word" data-de="genug" data-lit="بما فيه الكفاية" data-ar="بما فيه الكفاية">genug</span>
+          <span class="word" data-de="-" data-lit="-" data-ar="-">-</span>
+          <span class="word" data-de="sie" data-lit="هم" data-ar="يجب ألا">sie</span>
+          <span class="word" data-de="dürfen" data-lit="يجب" data-ar="يجب ألا">dürfen</span>
+          <span class="word" data-de="genauso" data-lit="تمامًا" data-ar="تمامًا">genauso</span>
+          <span class="word" data-de="wenig" data-lit="قليل" data-ar="قليل">wenig</span>
+          <span class="word" data-de="zu" data-lit="أن" data-ar="أن">zu</span>
+          <span class="word" data-de="dunkel" data-lit="داكن" data-ar="داكنة">dunkel</span>
+          <span class="word" data-de="sein" data-lit="يكون" data-ar="تكون">sein</span>,
+          <span class="word" data-de="werden" data-lit="تُلقى" data-ar="تُسكب">werden</span>
+          <span class="word" data-de="sie" data-lit="هم" data-ar="هي">sie</span>
+          <span class="word" data-de="auf" data-lit="على" data-ar="على">auf</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="طاولة">den</span>
+          <span class="word" data-de="Verlesetisch" data-lit="طاولة الفرز" data-ar="طاولة الفرز">Verlesetisch</span>
+          <span class="word" data-de="geschüttet" data-lit="تُسكب" data-ar="تُسكب">geschüttet</span>,
+          <span class="word" data-de="wo" data-lit="حيث" data-ar="حيث">wo</span>
+          <span class="word" data-de="von" data-lit="من" data-ar="يدوياً">von</span>
+          <span class="word" data-de="Hand" data-lit="يد" data-ar="يدويًا">Hand</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="guten" data-lit="الجيدة" data-ar="الجيدة">guten</span>
+          <span class="word" data-de="von" data-lit="من" data-ar="من">von</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="السيئة">den</span>
+          <span class="word" data-de="schlechten" data-lit="السيئة" data-ar="السيئة">schlechten</span>
+          <span class="word" data-de="Kaffeebohnen" data-lit="حبوب القهوة" data-ar="حبوب القهوة">Kaffeebohnen</span>
+          <span class="word" data-de="getrennt" data-lit="مفصولة" data-ar="مفصولة">getrennt</span>
+          <span class="word" data-de="werden" data-lit="تُصبح" data-ar="تُفصل">werden</span>.
+        </td>
+        <td class="arabic">عندما تصبح الحبوب داكنة بما فيه الكفاية — ولا يجب أن تكون داكنة جدًا — تُسكب على طاولة الفرز حيث تُفصل الحبوب الجيدة عن السيئة يدويًا.</td>
+      </tr>
+
+      <!-- Row 16 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Danach" data-lit="بعد ذلك" data-ar="بعد ذلك">Danach</span>
+          <span class="word" data-de="erst" data-lit="فقط" data-ar="بعدها فقط">erst</span>
+          <span class="word" data-de="werden" data-lit="تُصنع" data-ar="تُصنع">werden</span>
+          <span class="word" data-de="aus" data-lit="من" data-ar="من">aus</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="الـ">den</span>
+          <span class="word" data-de="gerösteten" data-lit="المحمصة" data-ar="المحمصة">gerösteten</span>
+          <span class="word" data-de="Kaffeebohnen" data-lit="حبوب القهوة" data-ar="حبوب القهوة">Kaffeebohnen</span>
+          <span class="word" data-de="verschiedene" data-lit="مختلفة" data-ar="خلطات مختلفة">verschiedene</span>
+          <span class="word" data-de="Mischungen" data-lit="خلطات" data-ar="خلطات">Mischungen</span>
+          <span class="word" data-de="hergestellt" data-lit="مصنوعة" data-ar="تُصنع">hergestellt</span>,
+          <span class="word" data-de="die" data-lit="التي" data-ar="التي">die</span>
+          <span class="word" data-de="dann" data-lit="ثم" data-ar="ثم">dann</span>
+          <span class="word" data-de="im" data-lit="في الـ" data-ar="في">im</span>
+          <span class="word" data-de="Kontor" data-lit="المكتب التجاري" data-ar="مكتب البيع">Kontor</span>,
+          <span class="word" data-de="dem" data-lit="الـ" data-ar="الـ">dem</span>
+          <span class="word" data-de="Geschäftsraum" data-lit="غرفة المتجر" data-ar="غرفة المتجر">Geschäftsraum</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Rösterei" data-lit="المحمصة" data-ar="المحمصة">Rösterei</span>,
+          <span class="word" data-de="fast" data-lit="تقريبًا" data-ar="تقريبًا">fast</span>
+          <span class="word" data-de="ausschließlich" data-lit="حصريًا" data-ar="بالدرجة الأولى">ausschließlich</span>
+          <span class="word" data-de="an" data-lit="إلى" data-ar="إلى">an</span>
+          <span class="word" data-de="langjährige" data-lit="طويلة الأمد" data-ar="العملاء الدائمين">langjährige</span>
+          <span class="word" data-de="Stammkunden" data-lit="العملاء الدائمون" data-ar="العملاء الدائمين">Stammkunden</span>
+          <span class="word" data-de="verkauft" data-lit="يُباع" data-ar="يُباع">verkauft</span>
+          <span class="word" data-de="werden" data-lit="تُصبح" data-ar="تُباع">werden</span>.
+        </td>
+        <td class="arabic">بعد ذلك تُصنع خلطات مختلفة من الحبوب المحمصة، وتُباع في مكتب البيع التابع للمحمصة بشكل أساسي للعملاء الدائمين.</td>
+      </tr>
+
+      <!-- Row 17 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Aber" data-lit="لكن" data-ar="لكن">Aber</span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضًا">auch</span>
+          <span class="word" data-de="über" data-lit="عبر" data-ar="عبر">über</span>
+          <span class="word" data-de="das" data-lit="الـ" data-ar="الـ">das</span>
+          <span class="word" data-de="Internet" data-lit="الإنترنت" data-ar="الإنترنت">Internet</span>
+          <span class="word" data-de="vertreibt" data-lit="يوزع" data-ar="تبيع">vertreibt</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الـ">die</span>
+          <span class="word" data-de="Kaffeerösterei" data-lit="محمصة القهوة" data-ar="المحمصة">Kaffeerösterei</span>
+          <span class="word" data-de="Münchhausen" data-lit="مينشهاوزن" data-ar="مينشهاوزن">Münchhausen</span>
+          <span class="word" data-de="ihr" data-lit="ـها" data-ar="قهوتها">ihr</span>
+          <span class="word" data-de="Kaffeeangebot" data-lit="عرض القهوة" data-ar="عرض القهوة">Kaffeeangebot</span>
+          <span class="word" data-de="deutschlandweit" data-lit="في جميع أنحاء ألمانيا" data-ar="في جميع أنحاء ألمانيا">deutschlandweit</span>.
+        </td>
+        <td class="arabic">كما تبيع محمصة مينشهاوزن قهوتها عبر الإنترنت في جميع أنحاء ألمانيا.</td>
+      </tr>
+
+      <!-- Row 18 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Bis" data-lit="حتى" data-ar="حتى">Bis</span>
+          <span class="word" data-de="zu" data-lit="إلى" data-ar="حتى">zu</span>
+          <span class="word" data-de="seinem" data-lit="له" data-ar="حتى">seinem</span>
+          <span class="word" data-de="Tod" data-lit="الوفاة" data-ar="وفاته">Tod</span>
+          <span class="word" data-de="kurz" data-lit="قريبًا" data-ar="قُبيل">kurz</span>
+          <span class="word" data-de="vor" data-lit="قبل" data-ar="قبل">vor</span>
+          <span class="word" data-de="seinem" data-lit="له" data-ar="عيد">seinem</span>
+          <span class="word" data-de="dreiundneunzigsten" data-lit="الثالث والتسعين" data-ar="الثالث والتسعين">dreiundneunzigsten</span>
+          <span class="word" data-de="Geburtstag" data-lit="عيد الميلاد" data-ar="عيد ميلاده">Geburtstag</span>
+          <span class="word" data-de="führte" data-lit="قاد" data-ar="كان يدير">führte</span>
+          <span class="word" data-de="August" data-lit="أوغست" data-ar="أوغست">August</span>
+          <span class="word" data-de="Münchhausen" data-lit="مينشهاوزن" data-ar="مينشهاوزن">Münchhausen</span>
+          <span class="word" data-de="seinen" data-lit="له" data-ar="مشروعه">seinen</span>
+          <span class="word" data-de="Familienbetrieb" data-lit="المشروع العائلي" data-ar="المشروع العائلي">Familienbetrieb</span>.
+        </td>
+        <td class="arabic">حتى وفاته قبيل عيد ميلاده الثالث والتسعين، كان أوغوست مينشهاوزن يدير المشروع العائلي.</td>
+      </tr>
+
+      <!-- Row 19 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Dann" data-lit="ثم" data-ar="بعد ذلك">Dann</span>
+          <span class="word" data-de="übernahm" data-lit="تولت" data-ar="تولت">übernahm</span>
+          <span class="word" data-de="seine" data-lit="ـه" data-ar="ابنته">seine</span>
+          <span class="word" data-de="Tochter" data-lit="ابنة" data-ar="ابنته">Tochter</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الشركة">die</span>
+          <span class="word" data-de="Firma" data-lit="شركة" data-ar="الشركة">Firma</span>,
+          <span class="word" data-de="inzwischen" data-lit="في الوقت الحالي" data-ar="في الوقت الحالي">inzwischen</span>
+          <span class="word" data-de="ist" data-lit="هي" data-ar="الآن">ist</span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضًا">auch</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="الحفيدة">die</span>
+          <span class="word" data-de="Enkelin" data-lit="الحفيدة" data-ar="الحفيدة">Enkelin</span>
+          <span class="word" data-de="beteiligt" data-lit="مشاركة" data-ar="مشاركة">beteiligt</span>.
+        </td>
+        <td class="arabic">بعد ذلك تولت ابنته إدارة الشركة، والآن تشارك الحفيدة أيضًا في العمل.</td>
+      </tr>
+
+      <!-- Row 20 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Die" data-lit="الـ" data-ar="النساء">Die</span>
+          <span class="word" data-de="Frauen" data-lit="النساء" data-ar="النساء">Frauen</span>
+          <span class="word" data-de="planen" data-lit="يخططن" data-ar="يخططن">planen</span>
+          <span class="word" data-de=",aus" data-lit="، أن" data-ar="أن">,aus</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="Kaffeerösterei" data-lit="محمصة القهوة" data-ar="المحمصة">Kaffeerösterei</span>
+          <span class="word" data-de="ein" data-lit="واحد" data-ar="متحف">ein</span>
+          <span class="word" data-de="Museum" data-lit="متحف" data-ar="متحف">Museum</span>
+          <span class="word" data-de="zu" data-lit="لـ" data-ar="لـ">zu</span>
+          <span class="word" data-de="machen" data-lit="يجعلن" data-ar="تحويل">machen</span>,
+          <span class="word" data-de="um" data-lit="لكي" data-ar="لكي">um</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="للأجيال القادمة">der</span>
+          <span class="word" data-de="Nachwelt" data-lit="الأجيال القادمة" data-ar="الأجيال القادمة">Nachwelt</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="فن">die</span>
+          <span class="word" data-de="traditionelle" data-lit="التقليدي" data-ar="التقليدي">traditionelle</span>
+          <span class="word" data-de="Kunst" data-lit="فن" data-ar="فن">Kunst</span>
+          <span class="word" data-de="des" data-lit="الـ" data-ar="تحميص">des</span>
+          <span class="word" data-de="Kaffeeröstens" data-lit="تحميص القهوة" data-ar="تحميص القهوة">Kaffeeröstens</span>
+          <span class="word" data-de="zeigen" data-lit="تُظهر" data-ar="تعرض">zeigen</span>
+          <span class="word" data-de="zu" data-lit="لـ" data-ar="لـ">zu</span>
+          <span class="word" data-de="können" data-lit="القدرة" data-ar="أن تتمكن">können</span>.
+        </td>
+        <td class="arabic">تخطط النساء لتحويل المحمصة إلى متحف لعرض فن تحميص القهوة التقليدي للأجيال القادمة.</td>
+      </tr>
+
+      <!-- Row 21 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Dann" data-lit="ثم" data-ar="حينئذ">Dann</span>
+          <span class="word" data-de="hätte" data-lit="سيكون" data-ar="سيكون">hätte</span>
+          <span class="word" data-de="diese" data-lit="هذه" data-ar="هذه المؤسسة">diese</span>
+          <span class="word" data-de="Institution" data-lit="مؤسسة" data-ar="المؤسسة">Institution</span>
+          <span class="word" data-de="eine" data-lit="واحدة" data-ar="فرصة">eine</span>
+          <span class="word" data-de="reelle" data-lit="حقيقية" data-ar="حقيقية">reelle</span>
+          <span class="word" data-de="Chance" data-lit="فرصة" data-ar="فرصة">Chance</span>,
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="Zukunft" data-lit="المستقبل" data-ar="المستقبل">Zukunft</span>
+          <span class="word" data-de="fortzubestehen" data-lit="الاستمرار" data-ar="الاستمرار">fortzubestehen</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="zukünftigen" data-lit="المستقبلية" data-ar="للأجيال القادمة">zukünftigen</span>
+          <span class="word" data-de="Generationen" data-lit="أجيال" data-ar="الأجيال">Generationen</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="الـ">den</span>
+          <span class="word" data-de="Charme" data-lit="سحر" data-ar="سحر">Charme</span>
+          <span class="word" data-de="und" data-lit="و" data-ar="و">und</span>
+          <span class="word" data-de="die" data-lit="الـ" data-ar="والتقنية">die</span>
+          <span class="word" data-de="Technik" data-lit="تقنية" data-ar="التقنية">Technik</span>
+          <span class="word" data-de="der" data-lit="الـ" data-ar="الـ">der</span>
+          <span class="word" data-de="traditionellen" data-lit="التقليدية" data-ar="التقليدية">traditionellen</span>
+          <span class="word" data-de="Kaffeeherstellung" data-lit="صناعة القهوة" data-ar="صناعة القهوة">Kaffeeherstellung</span>
+          <span class="word" data-de="zu" data-lit="لـ" data-ar="لـ">zu</span>
+          <span class="word" data-de="erhalten" data-lit="الحفاظ" data-ar="الحفاظ">erhalten</span>.
+        </td>
+        <td class="arabic">حينئذ سيكون لهذه المؤسسة فرصة حقيقية للاستمرار في المستقبل والحفاظ على سحر وتقنية صناعة القهوة التقليدية للأجيال القادمة.</td>
+      </tr>
+
+      <!-- Row 22 -->
+      <tr>
+        <td class="german">
+          <span class="word" data-de="Selbstverständlich" data-lit="بطبيعة الحال" data-ar="بطبيعة الحال">Selbstverständlich</span>
+          <span class="word" data-de="wird" data-lit="سيكون" data-ar="سيظل">wird</span>
+          <span class="word" data-de="es" data-lit="هو" data-ar="من الممكن">es</span>
+          <span class="word" data-de="auch" data-lit="أيضًا" data-ar="أيضًا">auch</span>
+          <span class="word" data-de="in" data-lit="في" data-ar="في">in</span>
+          <span class="word" data-de="Zukunft" data-lit="المستقبل" data-ar="المستقبل">Zukunft</span>
+          <span class="word" data-de="möglich" data-lit="ممكن" data-ar="ممكن">möglich</span>
+          <span class="word" data-de="sein" data-lit="أن يكون" data-ar="أن يكون">sein</span>,
+          <span class="word" data-de="im" data-lit="في الـ" data-ar="في">im</span>
+          <span class="word" data-de="Museums-Bistro" data-lit="مقهى المتحف" data-ar="مقهى المتحف">Museums-Bistro</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="الزوار">den</span>
+          <span class="word" data-de="Kaffee" data-lit="قهوة" data-ar="القهوة">Kaffee</span>
+          <span class="word" data-de="zu" data-lit="لـ" data-ar="للاستمتاع">zu</span>
+          <span class="word" data-de="genießen" data-lit="الاستمتاع" data-ar="الاستمتاع">genießen</span>
+          <span class="word" data-de="oder" data-lit="أو" data-ar="أو">oder</span>
+          <span class="word" data-de="für" data-lit="لـ" data-ar="لـ">für</span>
+          <span class="word" data-de="den" data-lit="الـ" data-ar="الاستخدام">den</span>
+          <span class="word" data-de="häuslichen" data-lit="المنزلي" data-ar="المنزلي">häuslichen</span>
+          <span class="word" data-de="Bedarf" data-lit="الحاجة" data-ar="الاحتياج">Bedarf</span>
+          <span class="word" data-de="zu" data-lit="لـ" data-ar="لشراء">zu</span>
+          <span class="word" data-de="erwerben" data-lit="شراء" data-ar="شراء">erwerben</span>.
+        </td>
+        <td class="arabic">وبطبيعة الحال سيظل بإمكان الزوار في مقهى المتحف الاستمتاع بالقهوة أو شراؤها للاستخدام المنزلي.</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <p class="note">Hinweis: Klicke auf ein Wort, um die Wort‑Aussprache und die Popup‑Übersetzung zu sehen. Klicke auf eine deutsche Zelle (außer auf Wörter) um den ganzen Satz anzuhören.</p>
+
+<script>
+/* Robust word vs sentence click handling using elementFromPoint */
+const voiceSelect = document.getElementById('voiceSelect');
+const stopBtn = document.getElementById('stopBtn');
+const testBtn = document.getElementById('testBtn');
+let voices = [];
+let currentPopup = null;
+let lastWordClickTime = 0;
+const WORD_CLICK_SUPPRESSION_MS = 600;
+
+function loadVoices() {
+  voices = speechSynthesis.getVoices() || [];
+  voiceSelect.innerHTML = '';
+  voices.forEach((v, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${v.name} (${v.lang})`;
+    voiceSelect.appendChild(opt);
+  });
+  const deIndex = voices.findIndex(v => /^de(-|_)?/i.test(v.lang));
+  if (deIndex >= 0) voiceSelect.value = deIndex;
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+function speakText(text, lang='de-DE') {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const idx = parseInt(voiceSelect.value);
+  if (!isNaN(idx) && voices[idx]) {
+    u.voice = voices[idx];
+    u.lang = voices[idx].lang || lang;
+  } else {
+    u.lang = lang;
+  }
+  u.rate = 1.0;
+  u.pitch = 1.0;
+  speechSynthesis.speak(u);
+}
+
+/* Ensure there is a real space text node between adjacent .word spans */
+function ensureSpacesBetweenWords() {
+  document.querySelectorAll('td.german').forEach(td => {
+    // collapse multiple text nodes and ensure single spaces between words
+    const nodes = Array.from(td.childNodes);
+    for (let i = 0; i < nodes.length - 1; i++) {
+      const cur = nodes[i];
+      const next = nodes[i + 1];
+      if (cur.nodeType === Node.ELEMENT_NODE && cur.classList.contains('word')) {
+        // if next is element.word or punctuation without leading space, ensure a space text node exists
+        if (!(next.nodeType === Node.TEXT_NODE && /^\s/.test(next.nodeValue))) {
+          td.insertBefore(document.createTextNode(' '), next);
+          // update nodes array to reflect insertion
+          nodes.splice(i + 1, 0, td.childNodes[i + 1]);
+        }
+      }
+    }
+  });
+}
+
+/* Setup word popups and word-only audio */
+function setupWordPopups() {
+  document.querySelectorAll('.word').forEach(word => {
+    const de = word.dataset.de || word.textContent.trim();
+    const lit = word.dataset.lit || '';
+    const ar = word.dataset.ar || '';
+
+    const popup = document.createElement('div');
+    popup.className = 'popup';
+    popup.setAttribute('role','dialog');
+    popup.setAttribute('aria-live','polite');
+    popup.innerHTML = `<b>${escapeHtml(de)}</b><span style="font-size:12px;opacity:0.9;display:block;margin-bottom:4px;">wörtlich: ${escapeHtml(lit)}</span><span style="font-size:12px;opacity:0.95;display:block;">Kontext: ${escapeHtml(ar)}</span>`;
+    word.appendChild(popup);
+
+    word.addEventListener('click', (e) => {
+      e.stopPropagation(); // avoid bubbling
+      // speak only the word
+      speakText(de, 'de-DE');
+      lastWordClickTime = Date.now();
+      if (currentPopup && currentPopup !== popup) currentPopup.style.display = 'none';
+      popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+      currentPopup = popup;
+    });
+  });
+}
+
+/* New robust sentence handler using elementFromPoint */
+function attachSentenceHandlers() {
+  document.querySelectorAll('td.german').forEach(td => {
+    // Use pointerdown to capture coordinates reliably on touch and mouse
+    td.addEventListener('pointerdown', (ev) => {
+      // store coordinates on pointerdown; actual action on click to allow suppression window
+      td._lastPointer = { x: ev.clientX, y: ev.clientY };
+    });
+
+    td.addEventListener('click', (ev) => {
+      const now = Date.now();
+      // suppress if a word was clicked very recently
+      if (now - lastWordClickTime < WORD_CLICK_SUPPRESSION_MS) return;
+
+      // get coordinates from pointerdown if available, otherwise from click event
+      const coords = td._lastPointer || { x: ev.clientX, y: ev.clientY };
+      // element at the exact pixel clicked
+      const el = document.elementFromPoint(coords.x, coords.y);
+
+      // If elementFromPoint is inside a .word, treat as word click (do nothing here)
+      if (el && el.closest && el.closest('.word')) {
+        return;
+      }
+
+      // Otherwise speak the full sentence
+      const text = td.textContent.trim();
+      if (!text) return;
+      speakText(text, 'de-DE');
+    });
+  });
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, function(m) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+  });
+}
+
+// Hide popup when clicking outside
+document.addEventListener('click', () => {
+  if (currentPopup) { currentPopup.style.display = 'none'; currentPopup = null; }
+});
+
+// Stop and test buttons
+stopBtn.addEventListener('click', () => speechSynthesis.cancel());
+testBtn.addEventListener('click', () => speakText('Dies ist ein Audiotest auf Deutsch.', 'de-DE'));
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  ensureSpacesBetweenWords();
+  setupWordPopups();
+  attachSentenceHandlers();
+  setTimeout(loadVoices, 500);
+});
+</script>
+
+<script>
+/* Robust fix: build clean sentence text (using data-de for words), add play button, and use dataset.sentence for playback */
+
+(function() {
+  // Build a clean sentence string from a td.german element
+  function buildSentenceFromCell(td) {
+    const parts = [];
+    td.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        // keep text nodes (spaces, punctuation)
+        parts.push(node.nodeValue);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const el = node;
+        // skip any existing play buttons
+        if (el.classList && el.classList.contains('play-sentence-btn')) {
+          return;
+        }
+        // if this is a word span, use its data-de (guaranteed clean)
+        if (el.classList && el.classList.contains('word')) {
+          const w = (el.dataset && el.dataset.de) ? el.dataset.de : el.textContent.trim();
+          parts.push(w);
+        } else {
+          // other elements (rare) — use their visible text
+          parts.push(el.textContent);
+        }
+      }
+    });
+    // join and normalize whitespace
+    const raw = parts.join('');
+    return (raw || '').replace(/\s+/g, ' ').trim();
+  }
+
+  // Insert play button and store clean sentence
+  function initSentenceButtonsAndSentences() {
+    const germanCells = document.querySelectorAll('td.german');
+    germanCells.forEach(td => {
+      // Build and store clean sentence
+      td.dataset.sentence = buildSentenceFromCell(td);
+
+      // Avoid adding duplicate buttons
+      if (td.querySelector('.play-sentence-btn')) return;
+
+      // Create button
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'play-sentence-btn';
+      btn.setAttribute('aria-label', 'Play sentence');
+      btn.title = 'Play sentence';
+      btn.innerHTML = `
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" style="width:14px;height:14px;">
+          <path fill="currentColor" d="M8 5v14l11-7z"></path>
+        </svg>
+        <span style="font-size:0.9rem;line-height:1;margin-left:6px;">Play</span>
+      `;
+
+      // Insert button at the start of the cell
+      td.insertBefore(btn, td.firstChild);
+
+      // Click handler: speak the stored sentence text
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // don't trigger cell/word handlers
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        const sentence = td.dataset.sentence || buildSentenceFromCell(td);
+        if (!sentence) return;
+        if (typeof speakText === 'function') {
+          speakText(sentence, 'de-DE');
+        } else {
+          const u = new SpeechSynthesisUtterance(sentence);
+          u.lang = 'de-DE';
+          speechSynthesis.speak(u);
+        }
+      });
+    });
+  }
+
+  // Update sentence click handler to use dataset.sentence and elementFromPoint logic
+  function attachRobustSentenceHandlers() {
+    document.querySelectorAll('td.german').forEach(td => {
+      // pointerdown to capture coordinates
+      td.addEventListener('pointerdown', (ev) => {
+        td._lastPointer = { x: ev.clientX, y: ev.clientY };
+      });
+
+      td.addEventListener('click', (ev) => {
+        // Use elementFromPoint to detect exact target
+        const coords = td._lastPointer || { x: ev.clientX, y: ev.clientY };
+        const el = document.elementFromPoint(coords.x, coords.y);
+        // If click was on or inside a .word, do nothing here (word handler will run)
+        if (el && el.closest && el.closest('.word')) return;
+
+        // Speak the stored clean sentence (rebuild if missing)
+        const sentence = td.dataset.sentence || buildSentenceFromCell(td);
+        if (!sentence) return;
+        if (typeof speakText === 'function') {
+          speakText(sentence, 'de-DE');
+        } else {
+          const u = new SpeechSynthesisUtterance(sentence);
+          u.lang = 'de-DE';
+          speechSynthesis.speak(u);
+        }
+      });
+    });
+  }
+
+  // Rebuild stored sentences when needed (call this if you dynamically change the table)
+  function refreshAllSentences() {
+    document.querySelectorAll('td.german').forEach(td => {
+      td.dataset.sentence = buildSentenceFromCell(td);
+    });
+  }
+
+  // Initialize after DOM ready
+  document.addEventListener('DOMContentLoaded', () => {
+    initSentenceButtonsAndSentences();
+    attachRobustSentenceHandlers();
+    // If your word popups are added after this script runs, call refreshAllSentences() afterwards.
+  });
+
+  // Expose refresh function for manual re-run if you modify the DOM later
+  window.refreshSentenceData = refreshAllSentences;
+})();
+</script>
+
+
+
+
+
+</body>
+</html>

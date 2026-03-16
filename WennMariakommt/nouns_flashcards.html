@@ -1,0 +1,254 @@
+﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Nomen Flashcards - Unverpackt</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #0056b3;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .flashcard {
+            width: 100%;
+            max-width: 480px;
+            min-height: 300px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            padding: 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .german-word {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: #0056b350;
+            transition: color 0.15s;
+        }
+        .german-word:hover { color: #007bff; }
+        .translation {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .example {
+            font-size: 1em;
+            color: #555;
+            font-style: italic;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-color: #999;
+        }
+        .example:hover { color: #000; }
+        .controls {
+            padding: 20px;
+            text-align: center;
+            background-color: #ffffff;
+            border-top: 1px solid #ddd;
+        }
+        #next-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 10px;
+        }
+        #next-button:hover { background-color: #1e7e34; }
+        .progress-tracker {
+            color: #666;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        /* small responsive tweak */
+        @media (max-width: 420px) {
+            .flashcard { padding: 18px; }
+            .german-word { font-size: 1.8em; }
+            .translation { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html">🏠 Hauptmenü</a>
+        <span>Nomen: Flashcards</span>
+    </div>
+
+    <div class="content">
+        <div class="flashcard" role="region" aria-label="Flashcard">
+            <div class="german-word" id="german-word" role="button" aria-label="Deutsches Wort">...</div>
+            <div class="translation" id="arabic-translation" aria-live="polite">...</div>
+
+            <!-- Clickable example sentence (plays audio or TTS) -->
+            <div class="example" id="hint"
+                 onclick="playExampleAudio(this)"
+                 data-audio=""
+                 role="button"
+                 aria-label="Beispielsatz, anklicken zum Anhören">
+                ...
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="next-button" aria-label="Nächste Karte">Next</button>
+        <div class="progress-tracker" id="progress-tracker" aria-live="polite">0 / 0</div>
+    </div>
+
+<script>
+/* -------------------------------
+   DATA (kept as verbData intentionally)
+--------------------------------*/
+const verbData = [
+  { german: "Nachricht", arabic: "رسالة", example: "Wenn Maria kommt, hat sie eine <strong>Nachricht</strong>." },
+  { german: "Durst", arabic: "عطش", example: "Ich habe <strong>Durst</strong>." },
+  { german: "Speisekarte", arabic: "قائمة الطعام", example: "Was steht auf der <strong>Speisekarte</strong>?" },
+  { german: "Bedienung", arabic: "النادلة", example: "Die <strong>Bedienung</strong> steht neben mir." },
+  { german: "Kännchen", arabic: "إبريق صغير", example: "Ich bestelle ein <strong>Kännchen</strong> Kaffee." },
+  { german: "Kirschtorte", arabic: "كيكة الكرز", example: "Ich esse ein Stück <strong>Kirschtorte</strong>." },
+  { german: "Nacht", arabic: "ليل", example: "Ich kann heute <strong>Nacht</strong> nicht schlafen." },
+  { german: "Eisbecher", arabic: "كأس آيس كريم", example: "Die Frau isst einen <strong>Eisbecher</strong>." },
+  { german: "Handtasche", arabic: "حقيبة يد", example: "Sie stellt ihre <strong>Handtasche</strong> auf den Tisch." },
+  { german: "Garderobe", arabic: "علاقة الملابس", example: "Neben der <strong>Garderobe</strong> sitzt eine Mutter." },
+  { german: "Kind", arabic: "طفل", example: "Das <strong>Kind</strong> malt auf die Tischdecke." },
+  { german: "Buntstift", arabic: "قلم تلوين", example: "Es malt mit einem <strong>Buntstift</strong>." },
+  { german: "Tischdecke", arabic: "مفرش الطاولة", example: "Die <strong>Tischdecke</strong> bekommt rote Striche." },
+  { german: "Tee", arabic: "شاي", example: "Maria bestellt sicher ein Glas <strong>Tee</strong>." },
+  { german: "Zeitung", arabic: "جريدة", example: "Mein Nachbar liest <strong>Zeitung</strong>." },
+  { german: "Brille", arabic: "نظارة", example: "Er hat seine <strong>Brille</strong> vergessen." },
+  { german: "Fenster", arabic: "نافذة", example: "Am Tisch vor dem <strong>Fenster</strong> sitzt ein Mädchen." },
+  { german: "Träne", arabic: "دمعة", example: "Sind das <strong>Tränen</strong> in ihren Augen?" },
+  { german: "Kellnerin", arabic: "نادلَة", example: "Ich rufe die <strong>Kellnerin</strong>." },
+  { german: "Hunger", arabic: "جوع", example: "Eigentlich habe ich keinen <strong>Hunger</strong> mehr." },
+  { german: "Traum", arabic: "حلم", example: "Wenn sie nicht kommt, ist mein <strong>Traum</strong> zu Ende." },
+  { german: "Kognak", arabic: "كونياك", example: "Ich bestelle einen <strong>Kognak</strong>." },
+  { german: "Probe", arabic: "بروفة", example: "Die <strong>Probe</strong> hat lange gedauert." },
+  { german: "Wange", arabic: "خد", example: "Sie küsst mich auf die <strong>Wange</strong>." },
+  { german: "Puls", arabic: "نبض", example: "Mein <strong>Puls</strong> schlägt 150." },
+  { german: "Augen", arabic: "عيون", example: "Ich schaue ihr in die <strong>Augen</strong>." },
+  { german: "Mantel", arabic: "معطف", example: "Sie nimmt ihren <strong>Mantel</strong>." },
+  { german: "Regisseur", arabic: "مخرج", example: "Ich habe mit dem <strong>Regisseur</strong> gesprochen." },
+  { german: "Rolle", arabic: "دور تمثيلي", example: "Du bekommst die <strong>Rolle</strong>!" }
+];
+
+/* -------------------------------
+   TTS + Click-to-Hear
+--------------------------------*/
+let currentCardIndex = 0;
+const totalCards = verbData.length;
+let germanVoice = null;
+
+function loadVoices() {
+    const voices = speechSynthesis.getVoices();
+    germanVoice = voices.find(v => v.lang === "de-DE" || v.lang.startsWith("de"));
+}
+if ('speechSynthesis' in window) {
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    loadVoices();
+}
+
+function speak(text) {
+    if (!('speechSynthesis' in window)) return;
+    if (speechSynthesis.speaking) speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "de-DE";
+    if (germanVoice) u.voice = germanVoice;
+    speechSynthesis.speak(u);
+}
+
+function playAudio(text) {
+    speak(text);
+}
+
+/* Play example audio: MP3 if provided in data-audio, otherwise TTS */
+function playExampleAudio(el) {
+    const audioFile = el.dataset.audio;
+    if (audioFile && audioFile.trim() !== "") {
+        new Audio(audioFile).play();
+    } else {
+        const text = el.innerText.replace(/^Beispiel:\s*/i, "").trim();
+        speak(text);
+    }
+}
+
+/* -------------------------------
+   UI Logic (uses verbData)
+--------------------------------*/
+const germanWordElement = document.getElementById('german-word');
+const arabicTranslationElement = document.getElementById('arabic-translation');
+const hintElement = document.getElementById('hint');
+const progressTrackerElement = document.getElementById('progress-tracker');
+const nextButton = document.getElementById('next-button');
+
+function loadCard(index) {
+    const data = verbData[index];
+    germanWordElement.textContent = data.german;
+    arabicTranslationElement.textContent = data.arabic;
+    hintElement.innerHTML = `Beispiel: ${data.example}`;
+    hintElement.dataset.audio = data.audio || "";
+    progressTrackerElement.textContent = `${index + 1} / ${totalCards}`;
+}
+
+function nextCard() {
+    currentCardIndex = (currentCardIndex + 1) % totalCards;
+    loadCard(currentCardIndex);
+    playAudio(verbData[currentCardIndex].german);
+}
+
+/* Event listeners */
+nextButton.addEventListener('click', nextCard);
+
+germanWordElement.addEventListener('click', () => {
+    playAudio(verbData[currentCardIndex].german);
+});
+
+/* Initialize first card on load */
+window.addEventListener('load', () => {
+    loadCard(currentCardIndex);
+    playAudio(verbData[currentCardIndex].german);
+});
+</script>
+</body>
+</html>
